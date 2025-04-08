@@ -8,7 +8,12 @@ import {
   Box,
 } from "@mui/material";
 import useGameContext from "../../../hooks/useGameContext";
-import { BROWN, TITLE_STYLE } from "../../../config/general";
+import {
+  TITLE_STYLE,
+  VILLAIN_RED,
+  HERO_BLUE,
+  BROWN,
+} from "../../../config/general";
 import { ROUND_DRAW_MESSAGE, ROUND_WIN_MESSAGE } from "../../../config/game";
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import heroIcon from "../../../assets/hero-icon.png";
@@ -22,13 +27,13 @@ const NextRoundDialog = ({
   onClose: () => void;
 }) => {
   const { roundWinner, sides, goToNextRound } = useGameContext();
-  let textMsg = "";
+  let textMsg = ROUND_DRAW_MESSAGE;
+  let headerColor = BROWN;
 
-  if (roundWinner !== null) {
-    textMsg =
-      roundWinner === "draw"
-        ? ROUND_DRAW_MESSAGE
-        : ROUND_WIN_MESSAGE.replace("{WINNER}", sides[roundWinner].name);
+  if (roundWinner !== null && roundWinner !== "draw") {
+    textMsg = ROUND_WIN_MESSAGE.replace("{WINNER}", sides[roundWinner].name);
+    headerColor =
+      sides[roundWinner].type === "heroes" ? HERO_BLUE : VILLAIN_RED;
   }
 
   const nextRoundHandler = () => {
@@ -40,7 +45,7 @@ const NextRoundDialog = ({
     <Dialog open={isOpen} maxWidth="sm" fullWidth>
       <DialogTitle
         sx={{
-          background: BROWN,
+          background: headerColor,
           color: "#fff",
           textAlign: "center",
           ...TITLE_STYLE,

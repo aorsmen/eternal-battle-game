@@ -1,4 +1,4 @@
-import { Typography, Stack, Box, Paper, Button, Fade } from "@mui/material";
+import { Typography, Stack, Box, Paper } from "@mui/material";
 import useGameContext from "../../../hooks/useGameContext";
 import { HandSidesType } from "../../../types/game.types";
 import { TITLE_STYLE, VILLAIN_RED, HERO_BLUE } from "../../../config/general";
@@ -6,9 +6,8 @@ import heroIcon from "../../../assets/hero-icon.png";
 import villainIcon from "../../../assets/villain-icon.png";
 
 const SideBoard = ({ side }: { side: HandSidesType }) => {
-  const { sides, setRoundScore, battles } = useGameContext();
+  const { sides } = useGameContext();
   const { name, score, type } = sides[side];
-  const isRoundEnded = battles.player.length === 5;
 
   return (
     <>
@@ -46,19 +45,6 @@ const SideBoard = ({ side }: { side: HandSidesType }) => {
             <Typography sx={{ fontSize: "28px" }} color="secondary">
               {score}
             </Typography>
-            {side === "player" && (
-              <Fade in={isRoundEnded}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  size="small"
-                  sx={{ marginInlineEnd: "auto !important" }}
-                  onClick={setRoundScore}
-                >
-                  End Round
-                </Button>
-              </Fade>
-            )}
           </Stack>
         </Paper>
       )}

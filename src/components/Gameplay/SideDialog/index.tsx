@@ -14,6 +14,7 @@ import { GameSideTypes } from "../../../types/game.types";
 import heroesImage from "../../../assets/heroes.png";
 import villainsImage from "../../../assets/villains.png";
 import { BROWN, TITLE_STYLE } from "../../../config/general";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const DEFAULT_INPUTS = {
   name: "",
@@ -104,24 +105,24 @@ const SideDialog = () => {
           <Stack direction="row" spacing={3} sx={{ paddingTop: "20px" }}>
             <ButtonBase
               onClick={() => selectSideHandler("heroes")}
-              sx={{ flex: 1 }}
+              sx={{ flex: 1, overflow: "hidden", borderRadius: "5px" }}
             >
-              <Avatar
-                variant="rounded"
-                src={heroesImage}
+              <LazyLoadImage
                 alt="Heroes"
-                sx={{ width: "100%", height: "100%" }}
+                height={414}
+                src={heroesImage}
+                width={414}
               />
             </ButtonBase>
             <ButtonBase
               onClick={() => selectSideHandler("villains")}
-              sx={{ flex: 1 }}
+              sx={{ flex: 1, overflow: "hidden", borderRadius: "5px" }}
             >
-              <Avatar
-                variant="rounded"
-                src={villainsImage}
+              <LazyLoadImage
                 alt="Villains"
-                sx={{ width: "100%", height: "100%" }}
+                height={414}
+                src={villainsImage}
+                width={414}
               />
             </ButtonBase>
           </Stack>

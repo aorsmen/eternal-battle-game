@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useCallback } from "react";
 import {
   GameContextType,
   BattleResultType,
@@ -93,7 +93,7 @@ const GameContextProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const drawCard = () => {
+  const drawCard = useCallback(() => {
     const player = sides.player.type;
     const computer = sides.computer.type;
 
@@ -141,7 +141,7 @@ const GameContextProvider = ({ children }: { children: React.ReactNode }) => {
         };
       });
     }
-  };
+  }, [decks, sides]);
 
   const revealCard = (index: number) => {
     setHands((prev) => {
@@ -187,16 +187,16 @@ const GameContextProvider = ({ children }: { children: React.ReactNode }) => {
     });
   };
 
-  const prepareRound = () => {
-    let count = 0;
+  // const prepareRound = () => {
+  //   let count = 0;
 
-    while (count < 5) {
-      drawCard();
-      count++;
-    }
-  };
+  //   while (count < 5) {
+  //     drawCard();
+  //     count++;
+  //   }
+  // };
 
-  const setRoundScore = () => {
+  const setRoundScore = useCallback(() => {
     const playerScore = battles.player.reduce((acc, item) => {
       if (item.result === "win") {
         return acc + 1;
@@ -228,7 +228,7 @@ const GameContextProvider = ({ children }: { children: React.ReactNode }) => {
         score: prev.computer.score + computerScore,
       },
     }));
-  };
+  }, [battles]);
 
   const goToNextRound = () => {
     setHands(initState.hands);
@@ -238,8 +238,20 @@ const GameContextProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   useEffect(() => {
+    if (battles.player.length === 5) {
+      setRoundScore();
+    }
+  }, [battles.player, setRoundScore]);
+
+  useEffect(() => {
+    if (hands.player.length < 5) {
+      drawCard();
+    }
+  }, [hands.player, drawCard]);
+
+  useEffect(() => {
     if (sides.player.type !== null && roundWinner === null) {
-      prepareRound();
+      drawCard();
     }
   }, [sides.player.type, roundWinner]);
 
