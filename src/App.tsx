@@ -7,6 +7,7 @@ import { gameTheme } from "./config/general";
 const Home = lazy(() => import("./views/Home"));
 const Herodex = lazy(() => import("./views/Herodex"));
 const Gameplay = lazy(() => import("./views/Gameplay"));
+const Credits = lazy(() => import("./views/Credits"));
 
 const queryClient = new QueryClient();
 
@@ -20,6 +21,7 @@ const App = () => {
             <Route index element={<Home />} />
             <Route path="herodex" element={<Herodex />} />
             <Route path="battle" element={<Gameplay />} />
+            <Route path="credits" element={<Credits />} />
           </Routes>
         </BrowserRouter>
       </QueryClientProvider>

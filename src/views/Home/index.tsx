@@ -21,6 +21,11 @@ const Home = () => {
           HERODEX
         </Link>
       </MenuItem>
+      <MenuItem>
+        <Link component={routerLink} to="/credits" sx={{ ...TITLE_STYLE }}>
+          CREDITS
+        </Link>
+      </MenuItem>
     </Stack>
   );
 };

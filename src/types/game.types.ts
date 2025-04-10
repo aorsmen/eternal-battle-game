@@ -16,6 +16,9 @@ export type BattleItemType = {
   result: BattleResultType;
   isEnded: boolean;
 };
+export type BattleObjectType = {
+  [key in string]: BattleItemType;
+};
 
 export type GameContextType = {
   sides: GameSidesObjectType;
@@ -28,8 +31,8 @@ export type GameContextType = {
     computer: HeroDataType[];
   };
   battles: {
-    player: BattleItemType[];
-    computer: BattleItemType[];
+    player: BattleObjectType;
+    computer: BattleObjectType;
   };
   currentBattle: number | undefined;
   roundWinner: HandSidesType | "draw" | null;

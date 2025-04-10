@@ -42,8 +42,8 @@ const initState: GameContextType = {
     computer: [],
   },
   battles: {
-    player: [],
-    computer: [],
+    player: {},
+    computer: {},
   },
   currentBattle: undefined,
   roundWinner: null,
@@ -176,8 +176,8 @@ const GameContextProvider = ({ children }: { children: React.ReactNode }) => {
 
     setBattles((prev) => {
       const newResults = {
-        player: [...prev.player],
-        computer: [...prev.computer],
+        player: { ...prev.player },
+        computer: { ...prev.computer },
       };
 
       newResults.player[index] = { result: pResult, isEnded: true };
@@ -197,15 +197,16 @@ const GameContextProvider = ({ children }: { children: React.ReactNode }) => {
   // };
 
   const setRoundScore = useCallback(() => {
-    const playerScore = battles.player.reduce((acc, item) => {
-      if (item.result === "win") {
+    console.log(battles);
+    const playerScore = Object.keys(battles.player).reduce((acc, inx) => {
+      if (battles.player[inx].result === "win") {
         return acc + 1;
       }
       return acc;
     }, 0);
 
-    const computerScore = battles.computer.reduce((acc, item) => {
-      if (item.result === "win") {
+    const computerScore = Object.keys(battles.computer).reduce((acc, inx) => {
+      if (battles.computer[inx].result === "win") {
         return acc + 1;
       }
       return acc;
@@ -238,7 +239,8 @@ const GameContextProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   useEffect(() => {
-    if (battles.player.length === 5) {
+    const batLen = Object.keys(battles.player).length;
+    if (batLen === 5) {
       setRoundScore();
     }
   }, [battles.player, setRoundScore]);

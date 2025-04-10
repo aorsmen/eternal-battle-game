@@ -3,7 +3,7 @@ import { Link as RouterLink } from "react-router";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { BG_COLOR, TITLE_STYLE } from "../../../config/general";
 
-const GameHeader = () => {
+const Header = ({ title }: { title: string }) => {
   return (
     <Box sx={{ height: "64px" }}>
       <AppBar position="fixed">
@@ -17,7 +17,7 @@ const GameHeader = () => {
               <ArrowBackIcon sx={{ color: BG_COLOR }} />
             </Link>
             <Typography variant="h1" sx={{ fontSize: "24px", ...TITLE_STYLE }}>
-              BATTLE
+              {title}
             </Typography>
           </Stack>
         </Toolbar>
@@ -26,4 +26,4 @@ const GameHeader = () => {
   );
 };
 
-export default GameHeader;
+export default Header;
