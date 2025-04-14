@@ -42,7 +42,7 @@ const NextRoundDialog = ({
   };
 
   return (
-    <Dialog open={isOpen} maxWidth="sm" fullWidth>
+    <Dialog open={isOpen} maxWidth="xs" fullWidth>
       <DialogTitle
         sx={{
           background: headerColor,

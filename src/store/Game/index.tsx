@@ -187,17 +187,7 @@ const GameContextProvider = ({ children }: { children: React.ReactNode }) => {
     });
   };
 
-  // const prepareRound = () => {
-  //   let count = 0;
-
-  //   while (count < 5) {
-  //     drawCard();
-  //     count++;
-  //   }
-  // };
-
   const setRoundScore = useCallback(() => {
-    console.log(battles);
     const playerScore = Object.keys(battles.player).reduce((acc, inx) => {
       if (battles.player[inx].result === "win") {
         return acc + 1;

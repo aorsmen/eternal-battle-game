@@ -1,4 +1,4 @@
-import { styled, Typography, Box } from "@mui/material";
+import { styled, Typography } from "@mui/material";
 import { YELLOW } from "../../config/general";
 
 export const TitleStyle = styled(Typography)({
@@ -10,12 +10,8 @@ export const TitleStyle = styled(Typography)({
 });
 
 export const TextStyle = styled(Typography)({
-  fontSize: "28x",
+  fontSize: "22px",
   marginBottom: "6px",
   textAlign: "center",
   color: "#fff",
-});
-
-export const SectionStyle = styled(Box)({
-  margin: "32px auto 0",
 });

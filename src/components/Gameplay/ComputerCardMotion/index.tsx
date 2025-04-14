@@ -68,7 +68,7 @@ const ComputerCardMotion = ({
   }, [result]);
 
   return (
-    <CardSpot ref={cardRef}>
+    <CardSpot data-testid="computer-card-wrapper" ref={cardRef}>
       {isRevealed ? (
         <HeroCard data={data} />
       ) : (

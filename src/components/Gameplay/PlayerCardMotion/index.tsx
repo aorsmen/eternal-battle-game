@@ -69,7 +69,11 @@ const PlayerCardMotion = ({
   };
 
   return (
-    <CardSpot ref={cardRef} onClick={!isFlipped ? flipCard : undefined}>
+    <CardSpot
+      data-testid="player-card-wrapper"
+      ref={cardRef}
+      onClick={!isFlipped ? flipCard : undefined}
+    >
       {isRevealed ? (
         <HeroCard data={data} />
       ) : (

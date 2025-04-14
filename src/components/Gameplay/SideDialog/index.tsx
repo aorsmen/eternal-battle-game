@@ -5,7 +5,6 @@ import {
   DialogContent,
   ButtonBase,
   Stack,
-  Avatar,
   TextField,
   Typography,
 } from "@mui/material";
@@ -38,17 +37,10 @@ const SideDialog = () => {
       setErrors(DEFAULT_ERRORS);
       setInputs(DEFAULT_INPUTS);
     } else {
-      if (inputs.name === "") {
-        setErrors((prev) => ({
-          ...prev,
-          name: "Name is required",
-        }));
-      }
-
       if (inputs.name.length < 3) {
         setErrors((prev) => ({
           ...prev,
-          name: "Name must be at least 3 characters",
+          name: "Please enter a proper name",
         }));
       }
     }

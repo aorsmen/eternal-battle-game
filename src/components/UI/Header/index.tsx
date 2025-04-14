@@ -13,6 +13,7 @@ const Header = ({ title }: { title: string }) => {
               component={RouterLink}
               to="/"
               sx={{ display: "flex", alignItems: "center" }}
+              title="Back"
             >
               <ArrowBackIcon sx={{ color: BG_COLOR }} />
             </Link>

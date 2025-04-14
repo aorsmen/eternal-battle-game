@@ -3,6 +3,7 @@ import { Link as routerLink } from "react-router";
 import logo from "../../assets/logo.png";
 import { LogoWrapper, MenuItem } from "./styled.components";
 import { BG_COLOR, TITLE_STYLE } from "../../config/general";
+import { HOME_PAGE_CONTENT } from "../../config/pages";
 
 const Home = () => {
   return (
@@ -11,21 +12,13 @@ const Home = () => {
       sx={{ height: "100dvh", width: "100%", backgroundColor: BG_COLOR }}
     >
       <LogoWrapper src={logo} />
-      <MenuItem>
-        <Link component={routerLink} to="/battle" sx={{ ...TITLE_STYLE }}>
-          BATTLE
-        </Link>
-      </MenuItem>
-      <MenuItem>
-        <Link component={routerLink} to="/herodex" sx={{ ...TITLE_STYLE }}>
-          HERODEX
-        </Link>
-      </MenuItem>
-      <MenuItem>
-        <Link component={routerLink} to="/credits" sx={{ ...TITLE_STYLE }}>
-          CREDITS
-        </Link>
-      </MenuItem>
+      {HOME_PAGE_CONTENT.map((item) => (
+        <MenuItem key={item.text}>
+          <Link component={routerLink} to={item.link} sx={{ ...TITLE_STYLE }}>
+            {item.text}
+          </Link>
+        </MenuItem>
+      ))}
     </Stack>
   );
 };

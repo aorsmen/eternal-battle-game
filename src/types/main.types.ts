@@ -84,8 +84,7 @@ export type HeroDataType = {
     lg: string;
   };
   used?: boolean;
-  revealed?: boolean;
-  bgColor: string;
+  bgColor?: string;
 };
 
 export type MainContextType = {

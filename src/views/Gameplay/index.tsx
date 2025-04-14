@@ -1,10 +1,9 @@
 import { Stack } from "@mui/material";
 import SideDialog from "../../components/Gameplay/SideDialog";
 import GameContextProvider from "../../store/Game";
-import SideHands from "../../components/Gameplay/SideHands";
 import Header from "../../components/UI/Header";
-import { GameWrapper, BoardWrapper } from "./styled.components";
-import SideBoard from "../../components/Gameplay/SideBoard";
+import { GameWrapper } from "./styled.components";
+import GameBoard from "../../components/Gameplay/GameBoard";
 
 const Gameplay = () => {
   return (
@@ -17,11 +16,7 @@ const Gameplay = () => {
           justifyContent="center"
           sx={{ height: "calc(100% - 64px)" }}
         >
-          <BoardWrapper>
-            <SideBoard side="computer" />
-            <SideHands />
-            <SideBoard side="player" />
-          </BoardWrapper>
+          <GameBoard />
         </Stack>
       </GameWrapper>
       <SideDialog />

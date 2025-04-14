@@ -69,7 +69,14 @@ export const InfoWrapper = ({ text }: { text: string }) => {
       }}
     >
       {text !== "-" && (
-        <Typography sx={{ fontSize: "12px", fontStyle: "italic" }}>
+        <Typography
+          sx={{
+            fontSize: "12px",
+            fontStyle: "italic",
+            overflow: "auto",
+            height: "60px",
+          }}
+        >
           {text}
         </Typography>
       )}
@@ -135,25 +142,27 @@ export const ImagePreview = ({
         sx={{ position: "absolute", top: "7px", right: "10px", color: BROWN }}
         onClick={onOpen}
       />
-      <Fade in={show}>
-        <Paper
-          sx={{
-            height: "350px",
-            width: "250px",
-            position: "absolute",
-            left: 0,
-            top: 0,
-          }}
-          onClick={onClose}
-          onMouseLeave={onClose}
-        >
-          <LazyLoadImage alt={alt} height={350} src={src} width={250} />
-          <CloseIcon
-            fontSize="small"
-            sx={{ position: "absolute", top: "10px", right: "10px" }}
-          />
-        </Paper>
-      </Fade>
+      {show && (
+        <Fade in={show}>
+          <Paper
+            sx={{
+              height: "350px",
+              width: "250px",
+              position: "absolute",
+              left: 0,
+              top: 0,
+            }}
+            onClick={onClose}
+            onMouseLeave={onClose}
+          >
+            <LazyLoadImage alt={alt} height={350} src={src} width={250} />
+            <CloseIcon
+              fontSize="small"
+              sx={{ position: "absolute", top: "10px", right: "10px" }}
+            />
+          </Paper>
+        </Fade>
+      )}
     </>
   );
 };

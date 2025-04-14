@@ -15,11 +15,16 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "types": ["vite/client", "vitest/globals", "vitest"]
+    "types": [
+      "vite/client",
+      "vitest/globals",
+      "vitest",
+      "@testing-library/jest-dom"
+    ]
   },
   "include": ["src"],
-  "exclude": ["**/*.test*", "node_modules"],
+  "exclude": ["**/*.test.tsx", "**/*.test.ts", "node_modules"],
   "linterOptions": {
-    "exclude": ["**/*.test*"]
+    "exclude": ["**/*.test.tsx", "**/*.test.ts"]
   }
 }

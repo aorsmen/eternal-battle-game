@@ -1,13 +1,17 @@
 import { Typography, Stack, Box, Paper } from "@mui/material";
-import useGameContext from "../../../hooks/useGameContext";
-import { HandSidesType } from "../../../types/game.types";
+import { GameSidesItemType, HandSidesType } from "../../../types/game.types";
 import { TITLE_STYLE, VILLAIN_RED, HERO_BLUE } from "../../../config/general";
 import heroIcon from "../../../assets/hero-icon.png";
 import villainIcon from "../../../assets/villain-icon.png";
 
-const SideBoard = ({ side }: { side: HandSidesType }) => {
-  const { sides } = useGameContext();
-  const { name, score, type } = sides[side];
+const SideBoard = ({
+  side,
+  data,
+}: {
+  side: HandSidesType;
+  data: GameSidesItemType;
+}) => {
+  const { name, score, type } = data;
 
   return (
     <>
