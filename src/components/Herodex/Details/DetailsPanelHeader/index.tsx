@@ -8,7 +8,7 @@ const DetailsPanelHeader = ({ title }: { title: string }) => {
   return (
     <HeaderWrapper>
       <Typography sx={{ color: "#fff" }}>{title}</Typography>
-      <IconButton onClick={() => setNodeDetails("")}>
+      <IconButton onClick={() => setNodeDetails("")} aria-label="close">
         <CloseIcon fontSize="small" sx={{ color: "#fff" }} />
       </IconButton>
     </HeaderWrapper>

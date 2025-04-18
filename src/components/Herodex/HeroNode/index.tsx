@@ -8,7 +8,7 @@ import useMainContext from "../../../hooks/useMainContext";
 import HeroCard from "../../HeroCard";
 
 const HeroNode = (props: NodeProps<HeroNodeType>) => {
-  const { data, id, selected, dragging } = props;
+  const { data, id, selected } = props;
   const { setNodeDetails, removeHero, setCompare, compareList } =
     useMainContext();
 
@@ -53,7 +53,7 @@ const HeroNode = (props: NodeProps<HeroNodeType>) => {
               }}
             />
           </Box>
-          <IconButton onClick={() => setNodeDetails(id)}>
+          <IconButton onClick={() => setNodeDetails(id)} aria-label="details">
             <InfoIcon
               fontSize="small"
               sx={{
@@ -61,7 +61,7 @@ const HeroNode = (props: NodeProps<HeroNodeType>) => {
               }}
             />
           </IconButton>
-          <IconButton onClick={deleteNodeHandler}>
+          <IconButton onClick={deleteNodeHandler} aria-label="remove">
             <DeleteOutlineIcon
               fontSize="small"
               sx={{

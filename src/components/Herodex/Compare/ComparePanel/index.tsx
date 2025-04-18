@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { AppBar, Stack, Button, Slide } from "@mui/material";
+import { Paper, Stack, Button, Slide } from "@mui/material";
 import useMainContext from "../../../../hooks/useMainContext";
 import HeroAvatar from "../../HeroAvatar";
 import CompareDialog from "../CompareDialog";
@@ -22,14 +22,16 @@ const ComparePanel = () => {
         mountOnEnter
         unmountOnExit
       >
-        <AppBar
-          position="fixed"
+        <Paper
           sx={{
+            position: "fixed",
             top: "auto",
             bottom: 0,
             background: "#fff",
             color: "#000",
             padding: "10px 20px",
+            width: "100%",
+            zIndex: 1000,
           }}
         >
           <Stack
@@ -72,7 +74,7 @@ const ComparePanel = () => {
               </Button>
             </Stack>
           </Stack>
-        </AppBar>
+        </Paper>
       </Slide>
       {isComparing && (
         <CompareDialog

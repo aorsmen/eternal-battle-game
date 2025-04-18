@@ -1,5 +1,5 @@
 import { GameContextType } from "../types/game.types";
-import { HeroDataType } from "../types/main.types";
+import { HeroDataType, MainContextType } from "../types/main.types";
 
 export const TEST_HERO_DATA: HeroDataType = {
   id: "107",
@@ -72,6 +72,74 @@ export const TEST_HERO_DATA: HeroDataType = {
   },
 };
 
+export const TEST_HERO_DATA_2: HeroDataType = {
+  id: "106",
+  name: "Black Panther",
+  slug: "106-black-panther",
+  powerstats: {
+    intelligence: 88,
+    strength: 16,
+    speed: 30,
+    durability: 60,
+    power: 41,
+    combat: 100,
+  },
+  skills: {
+    attackPower: 52,
+    acuracy: 88,
+    attackSpeed: 57,
+    defenseRating: 63,
+    evasion: 73,
+    survival: 83,
+  },
+  appearance: {
+    gender: "Male",
+    race: "Human",
+    height: ["6'0", "183 cm"],
+    weight: ["200 lb", "90 kg"],
+    eyeColor: "Brown",
+    hairColor: "Black",
+  },
+  biography: {
+    fullName: "T'Challa",
+    alterEgos: "No alter egos found.",
+    aliases: [
+      "Mr. Okonkwo",
+      "The Man Without Fear",
+      "Luke Charles",
+      "Black Leopard",
+      "the Client",
+      "Coal Tiger",
+      "has impersonated Daredevil and others on occasion",
+    ],
+    placeOfBirth: "Wakanda, Africa",
+    firstAppearance: "Fantastic Four Vol. 1 #52 (1966)",
+    publisher: "Marvel Comics",
+    alignment: "good",
+  },
+  work: {
+    occupation:
+      "King and Chieftain of Wakanda, scientist; former school teacher",
+    base: "Wakanda, Mobile",
+  },
+  connections: {
+    groupAffiliation:
+      "Formerly Fantastic Four, Secret Avengers, Avengers, Pendragons, Queen's Vengeance, former Fantastic Force financier",
+    relatives:
+      "Bashenga (paternal ancestor, deceased), Azzuri the Wise (paternal grandfather, deceased), Nanali (paternal grandmother, deceased), Chanda (paternal grandfather, presumably deceased), T?Chaka (father, deceased), S'Yan (uncle, deceased), N?Yami (mother, deceased), Ramonda (stepmother), Hunter (adopted brother), Jakarra (half-brother), Shuri (sister), Ororo Munroe (wife), Joshua Itobo, Ishanta, Zuni, M'Koni, T'Shan (cousins), Wheeler (cousin by marriage, deceased), Billy Wheeler (1st cousin once removed)",
+  },
+  images: {
+    xs: "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/xs/106-black-panther.jpg",
+    sm: "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/sm/106-black-panther.jpg",
+    md: "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/md/106-black-panther.jpg",
+    lg: "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/lg/106-black-panther.jpg",
+  },
+  values: {
+    attack: 5,
+    defense: 6,
+  },
+};
+
 export const TEST_GAME_CONTEXT: GameContextType = {
   sides: {
     player: {
@@ -105,4 +173,43 @@ export const TEST_GAME_CONTEXT: GameContextType = {
   setBattleResult: () => {},
   setRoundScore: () => {},
   goToNextRound: () => {},
+};
+
+export const TEST_HERO_NODE_DATA = {
+  id: TEST_HERO_DATA.id,
+  data: {
+    label: TEST_HERO_DATA.name,
+    details: TEST_HERO_DATA,
+  },
+  type: "heroNode",
+  positionAbsoluteX: 0,
+  positionAbsoluteY: 0,
+  selected: false,
+  selectable: true,
+  draggable: true,
+  deletable: true,
+  isConnectable: true,
+  dragging: false,
+  zIndex: 0,
+  width: 270,
+  height: 370,
+};
+
+export const TEST_MAIN_CONTEXT: MainContextType = {
+  nodes: [],
+  edges: [],
+  heroesData: [TEST_HERO_DATA],
+  heroesIsLoading: false,
+  nodeDetails: "",
+  compareList: [],
+  onNodesChange: () => {},
+  onEdgesChange: () => {},
+  setReactFlowInstance: () => {},
+  setNodes: () => {},
+  setEdges: () => {},
+  addHero: () => {},
+  removeHero: () => {},
+  setNodeDetails: () => {},
+  getHeroById: () => null,
+  setCompare: () => {},
 };

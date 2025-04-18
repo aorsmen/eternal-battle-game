@@ -112,10 +112,16 @@ const CompareDialog = ({
       setStatGraphs(statGraphData);
       setSkillGraphs(skillGraphData);
     }
-  }, []);
+  }, [compareList]);
 
   return (
-    <Dialog onClose={onClose} open={isOpen} maxWidth="lg" fullWidth>
+    <Dialog
+      onClose={onClose}
+      open={isOpen}
+      maxWidth="lg"
+      fullWidth
+      data-testid="compare-dialog"
+    >
       <DialogTitle sx={{ m: 0, p: 2, background: BROWN, color: "#fff" }}>
         Compare
       </DialogTitle>
@@ -127,6 +133,7 @@ const CompareDialog = ({
           top: 8,
           color: "#fff",
         }}
+        aria-label="Close"
       >
         <CloseIcon />
       </IconButton>
@@ -150,6 +157,7 @@ const CompareDialog = ({
                     fontSize: "12px",
                     marginBlock: "10px 0",
                     textAlign: "center",
+                    color: graphColors[inx].stroke,
                   }}
                 >
                   {hero?.name}
@@ -173,12 +181,19 @@ const CompareDialog = ({
               }}
             >
               <Typography sx={{ textAlign: "center" }}>STATS</Typography>
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer
+                width="100%"
+                height="100%"
+                minWidth={300}
+                minHeight={300}
+                aspect={1}
+              >
                 <RadarChart
                   cx="50%"
                   cy="50%"
                   outerRadius="80%"
                   data={statGraphs}
+                  title="Stats"
                 >
                   <PolarGrid />
                   <PolarAngleAxis dataKey="subject" />
@@ -217,6 +232,7 @@ const CompareDialog = ({
                   cy="50%"
                   outerRadius="80%"
                   data={skillGraphs}
+                  title="Skills"
                 >
                   <PolarGrid />
                   <PolarAngleAxis dataKey="subject" />

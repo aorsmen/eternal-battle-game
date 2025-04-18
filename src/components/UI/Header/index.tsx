@@ -3,7 +3,13 @@ import { Link as RouterLink } from "react-router";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { BG_COLOR, TITLE_STYLE } from "../../../config/general";
 
-const Header = ({ title }: { title: string }) => {
+const Header = ({
+  title,
+  children,
+}: {
+  title: string;
+  children?: React.ReactNode;
+}) => {
   return (
     <Box sx={{ height: "64px" }}>
       <AppBar position="fixed">
@@ -20,6 +26,7 @@ const Header = ({ title }: { title: string }) => {
             <Typography variant="h1" sx={{ fontSize: "24px", ...TITLE_STYLE }}>
               {title}
             </Typography>
+            {children}
           </Stack>
         </Toolbar>
       </AppBar>
