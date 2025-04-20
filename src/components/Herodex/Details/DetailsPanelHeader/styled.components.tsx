@@ -1,7 +1,12 @@
 import { Stack } from "@mui/material";
-import { BROWN } from "../../../../config/general";
 
-export const HeaderWrapper = ({ children }: { children: React.ReactNode }) => {
+export const HeaderWrapper = ({
+  children,
+  bg,
+}: {
+  children: React.ReactNode;
+  bg: string;
+}) => {
   return (
     <Stack
       alignItems="center"
@@ -10,7 +15,7 @@ export const HeaderWrapper = ({ children }: { children: React.ReactNode }) => {
       sx={{
         width: "100%",
         height: "64px",
-        background: BROWN,
+        background: bg,
         paddingInline: "10px",
       }}
     >

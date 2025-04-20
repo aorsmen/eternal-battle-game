@@ -3,6 +3,7 @@ import { GameSidesItemType, HandSidesType } from "../../../types/game.types";
 import { TITLE_STYLE, VILLAIN_RED, HERO_BLUE } from "../../../config/general";
 import heroIcon from "../../../assets/hero-icon.png";
 import villainIcon from "../../../assets/villain-icon.png";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const SideBoard = ({
   side,
@@ -33,10 +34,12 @@ const SideBoard = ({
               alignItems="center"
               spacing={2}
             >
-              <Box sx={{ width: "24px", height: "40px" }}>
-                <img
-                  src={type === "heroes" ? heroIcon : villainIcon}
+              <Box sx={{ width: "42px", height: "42px" }}>
+                <LazyLoadImage
                   alt={type || ""}
+                  height={42}
+                  width={42}
+                  src={type === "heroes" ? heroIcon : villainIcon}
                 />
               </Box>
               <Typography

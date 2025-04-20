@@ -1,13 +1,22 @@
 import { Stack, Typography, Box, Paper, Fade } from "@mui/material";
-import { BROWN, YELLOW_LIGHT, YELLOW_DARK } from "../../config/general";
+import {
+  YELLOW_LIGHT,
+  YELLOW_DARK,
+  HERO_BLUE_DARK,
+  VILLAIN_RED_DARK,
+} from "../../config/general";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import CloseIcon from "@mui/icons-material/Close";
+import heroIcon from "../../assets/hero-dark-mini-icon.png";
+import villainIcon from "../../assets/villain-dark-mini-icon.png";
 
 export const HeroCardWrapper = ({
   children,
+  alignment,
 }: {
   children: React.ReactNode;
+  alignment: "good" | "bad";
 }) => {
   return (
     <Stack
@@ -17,7 +26,9 @@ export const HeroCardWrapper = ({
         position: "relative",
         backgroundColor: YELLOW_DARK,
         borderRadius: "5px",
-        border: `10px solid ${BROWN}`,
+        border: `10px solid ${
+          alignment === "good" ? HERO_BLUE_DARK : VILLAIN_RED_DARK
+        }`,
       }}
     >
       {children}
@@ -126,12 +137,14 @@ export const ImagePreview = ({
   alt,
   src,
   show,
+  alignment,
   onOpen,
   onClose,
 }: {
   alt: string;
   src: string;
   show: boolean;
+  alignment: "good" | "bad";
   onOpen: () => void;
   onClose: () => void;
 }) => {
@@ -139,7 +152,12 @@ export const ImagePreview = ({
     <>
       <VisibilityIcon
         fontSize="small"
-        sx={{ position: "absolute", top: "7px", right: "10px", color: BROWN }}
+        sx={{
+          position: "absolute",
+          top: "7px",
+          right: "10px",
+          color: alignment === "good" ? HERO_BLUE_DARK : VILLAIN_RED_DARK,
+        }}
         onClick={onOpen}
       />
       {show && (
@@ -164,5 +182,32 @@ export const ImagePreview = ({
         </Fade>
       )}
     </>
+  );
+};
+
+export const AlignmentWrapper = ({
+  alignment,
+}: {
+  alignment: "good" | "bad";
+}) => {
+  return (
+    <Stack
+      direction="row"
+      alignItems="center"
+      justifyContent="space-between"
+      sx={{ height: "32px" }}
+    >
+      <Typography sx={{ fontSize: "12px" }}>
+        {`${alignment === "good" ? "Hero" : "Villain"}`}
+      </Typography>
+      <Box sx={{ width: "24px", height: "24px" }}>
+        <LazyLoadImage
+          alt={alignment === "good" ? "Hero" : "Villain"}
+          height={24}
+          width={24}
+          src={alignment === "good" ? heroIcon : villainIcon}
+        />
+      </Box>
+    </Stack>
   );
 };

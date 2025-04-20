@@ -18,6 +18,7 @@ import { ROUND_DRAW_MESSAGE, ROUND_WIN_MESSAGE } from "../../../config/game";
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import heroIcon from "../../../assets/hero-icon.png";
 import villainIcon from "../../../assets/villain-icon.png";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const NextRoundDialog = ({
   isOpen,
@@ -57,12 +58,14 @@ const NextRoundDialog = ({
       <DialogContent>
         {roundWinner !== null && roundWinner !== "draw" && (
           <Stack alignItems="center">
-            <Box sx={{ width: "36px", height: "60px", marginTop: "25px" }}>
-              <img
+            <Box sx={{ width: "60px", height: "60px", marginTop: "25px" }}>
+              <LazyLoadImage
+                alt={sides[roundWinner].type || ""}
+                height={60}
+                width={60}
                 src={
                   sides[roundWinner].type === "heroes" ? heroIcon : villainIcon
                 }
-                alt={sides[roundWinner].type || ""}
               />
             </Box>
           </Stack>

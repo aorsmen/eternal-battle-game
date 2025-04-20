@@ -5,7 +5,7 @@ import HeroCard from "../../HeroCard";
 import { HeroCardBack } from "./styled.components";
 import useGameContext from "../../../hooks/useGameContext";
 import { BattleResultType } from "../../../types/game.types";
-import { VILLAIN_RED, HERO_BLUE } from "../../../config/general";
+import { VILLAIN_RED_DARK, HERO_BLUE_DARK } from "../../../config/general";
 
 const PlayerCardMotion = ({
   index,
@@ -37,7 +37,7 @@ const PlayerCardMotion = ({
     if (result === "win") {
       gsap.to(cardRef.current, {
         boxShadow: `0 0 5px 5px ${
-          alignment === "good" ? HERO_BLUE : VILLAIN_RED
+          alignment === "good" ? HERO_BLUE_DARK : VILLAIN_RED_DARK
         }`,
         duration: 0.5,
         repeat: 3,

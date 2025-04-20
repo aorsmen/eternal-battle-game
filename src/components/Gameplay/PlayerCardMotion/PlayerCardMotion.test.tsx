@@ -12,7 +12,7 @@ const TEST_GAME_CTX = {
   value: TEST_GAME_CONTEXT,
 };
 
-const clickHandler = vi.fn();
+const mockClickHandler = vi.fn();
 
 test("Should render the player card back", () => {
   renderGameContext(
@@ -21,7 +21,7 @@ test("Should render the player card back", () => {
       isFlipped={false}
       isRevealed={false}
       result="draw"
-      onClick={clickHandler}
+      onClick={mockClickHandler}
     />,
     {
       providerProps: TEST_GAME_CTX,
@@ -41,7 +41,7 @@ test("Should render the player card data", () => {
       isFlipped={true}
       isRevealed={true}
       result="draw"
-      onClick={clickHandler}
+      onClick={mockClickHandler}
     />,
     {
       providerProps: TEST_GAME_CTX,
@@ -69,7 +69,7 @@ test("Should render the preview image", () => {
       isFlipped={true}
       isRevealed={true}
       result="draw"
-      onClick={clickHandler}
+      onClick={mockClickHandler}
     />,
     {
       providerProps: TEST_GAME_CTX,
@@ -95,7 +95,7 @@ test("Should render attack/defense correctly", () => {
       isFlipped={true}
       isRevealed={true}
       result="draw"
-      onClick={clickHandler}
+      onClick={mockClickHandler}
     />,
     {
       providerProps: TEST_GAME_CTX,
@@ -117,7 +117,7 @@ test("Should call the correct function when click the player card", () => {
       isFlipped={false}
       isRevealed={false}
       result="draw"
-      onClick={clickHandler}
+      onClick={mockClickHandler}
     />,
     {
       providerProps: TEST_GAME_CTX,
@@ -131,5 +131,5 @@ test("Should call the correct function when click the player card", () => {
 
   fireEvent.click(cardBtn);
 
-  expect(clickHandler).toHaveBeenCalledTimes(1);
+  expect(mockClickHandler).toHaveBeenCalledTimes(1);
 });

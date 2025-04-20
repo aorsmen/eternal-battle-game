@@ -11,9 +11,9 @@ export const BROWN = "#78371c";
 export const BROWN_DARK = "#29221f";
 export const BROWN_LIGHT = "#dc6f18";
 
-export const VILLAIN_RED = "#a9332c";
+export const VILLAIN_RED = "#d34038";
 export const VILLAIN_RED_DARK = "#62201a";
-export const HERO_BLUE = "#1c8db9";
+export const HERO_BLUE = "#0a79bf";
 export const HERO_BLUE_DARK = "#154376";
 
 export const gameTheme = createTheme({

@@ -13,16 +13,19 @@ const TEST_GAME_CTX = {
   value: TEST_GAME_CONTEXT,
 };
 
-const closeHandler = vi.fn();
-const nextRoundHandler = vi.fn();
+const mockCloseHandler = vi.fn();
+const MockNextRoundHandler = vi.fn();
 
-TEST_GAME_CONTEXT.goToNextRound = nextRoundHandler;
+TEST_GAME_CONTEXT.goToNextRound = MockNextRoundHandler;
 
 test("Should not render the dialog", () => {
-  renderGameContext(<NextRoundDialog isOpen={false} onClose={closeHandler} />, {
-    providerProps: TEST_GAME_CTX,
-    withRouter: false,
-  });
+  renderGameContext(
+    <NextRoundDialog isOpen={false} onClose={mockCloseHandler} />,
+    {
+      providerProps: TEST_GAME_CTX,
+      withRouter: false,
+    }
+  );
 
   const title = screen.queryByText(/round result/i);
 
@@ -30,10 +33,13 @@ test("Should not render the dialog", () => {
 });
 
 test("Should render the dialog, content and draw message correctly", () => {
-  renderGameContext(<NextRoundDialog isOpen={true} onClose={closeHandler} />, {
-    providerProps: TEST_GAME_CTX,
-    withRouter: false,
-  });
+  renderGameContext(
+    <NextRoundDialog isOpen={true} onClose={mockCloseHandler} />,
+    {
+      providerProps: TEST_GAME_CTX,
+      withRouter: false,
+    }
+  );
 
   const title = screen.getByText(/round result/i);
   const nextBtn = screen.getByRole("button", {
@@ -49,10 +55,13 @@ test("Should render the dialog, content and draw message correctly", () => {
 test("Should render the dialog, content and win message correctly", () => {
   TEST_GAME_CONTEXT.roundWinner = "player";
 
-  renderGameContext(<NextRoundDialog isOpen={true} onClose={closeHandler} />, {
-    providerProps: TEST_GAME_CTX,
-    withRouter: false,
-  });
+  renderGameContext(
+    <NextRoundDialog isOpen={true} onClose={mockCloseHandler} />,
+    {
+      providerProps: TEST_GAME_CTX,
+      withRouter: false,
+    }
+  );
 
   const title = screen.getByText(/round result/i);
   const nextBtn = screen.getByRole("button", {
@@ -68,10 +77,13 @@ test("Should render the dialog, content and win message correctly", () => {
 });
 
 test("Should call the correct function when click the button", () => {
-  renderGameContext(<NextRoundDialog isOpen={true} onClose={closeHandler} />, {
-    providerProps: TEST_GAME_CTX,
-    withRouter: false,
-  });
+  renderGameContext(
+    <NextRoundDialog isOpen={true} onClose={mockCloseHandler} />,
+    {
+      providerProps: TEST_GAME_CTX,
+      withRouter: false,
+    }
+  );
 
   const nextBtn = screen.getByRole("button", {
     name: /next round/i,
@@ -81,5 +93,5 @@ test("Should call the correct function when click the button", () => {
 
   fireEvent.click(nextBtn);
 
-  expect(nextRoundHandler).toHaveBeenCalledTimes(1);
+  expect(MockNextRoundHandler).toHaveBeenCalledTimes(1);
 });

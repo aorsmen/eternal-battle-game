@@ -15,10 +15,13 @@ const mockSetNodeDetailsHandler = vi.fn();
 TEST_MAIN_CONTEXT.setNodeDetails = mockSetNodeDetailsHandler;
 
 test("Should render title and close button", () => {
-  renderMainContext(<DetailsPanelHeader title="test title" />, {
-    providerProps: TEST_MAIN_CTX,
-    withRouter: false,
-  });
+  renderMainContext(
+    <DetailsPanelHeader title="test title" alignment="good" />,
+    {
+      providerProps: TEST_MAIN_CTX,
+      withRouter: false,
+    }
+  );
 
   const title = screen.getByText(/test title/i);
   const closeBtn = screen.getByRole("button", {
@@ -30,10 +33,13 @@ test("Should render title and close button", () => {
 });
 
 test("Should call the correct function when click the close button", () => {
-  renderMainContext(<DetailsPanelHeader title="test title" />, {
-    providerProps: TEST_MAIN_CTX,
-    withRouter: false,
-  });
+  renderMainContext(
+    <DetailsPanelHeader title="test title" alignment="good" />,
+    {
+      providerProps: TEST_MAIN_CTX,
+      withRouter: false,
+    }
+  );
 
   const closeBtn = screen.getByRole("button", {
     name: /close/i,

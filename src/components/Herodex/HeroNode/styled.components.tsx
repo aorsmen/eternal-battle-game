@@ -1,5 +1,5 @@
 import { Stack } from "@mui/material";
-import { BROWN } from "../../../config/general";
+import { VILLAIN_RED_DARK, HERO_BLUE_DARK } from "../../../config/general";
 
 export const HeroNodeWrapper = ({
   children,
@@ -21,8 +21,10 @@ export const HeroNodeWrapper = ({
 
 export const HeroNodeToolbar = ({
   children,
+  alignment,
 }: {
   children: React.ReactNode;
+  alignment: "good" | "bad";
 }) => {
   return (
     <Stack
@@ -35,7 +37,7 @@ export const HeroNodeToolbar = ({
         right: 0,
         width: "100%",
         transform: "translateY(calc(-100% - 5px))",
-        background: BROWN,
+        background: alignment === "good" ? HERO_BLUE_DARK : VILLAIN_RED_DARK,
         borderRadius: "3px",
       }}
     >

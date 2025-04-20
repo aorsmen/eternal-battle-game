@@ -9,6 +9,7 @@ import {
   InfoWrapper,
   ImageWrapper,
   ImagePreview,
+  AlignmentWrapper,
 } from "./styled.components";
 import "./HeroCard.css";
 
@@ -17,7 +18,7 @@ const HeroCard = ({ data }: { data: HeroDataType }) => {
   const { name, images, biography, values, work } = data;
 
   return (
-    <HeroCardWrapper>
+    <HeroCardWrapper alignment={biography.alignment}>
       <HeroCardHeader name={name} />
       <HeroCardBody>
         <ImageWrapper alt={name} src={images.md} plc={images.xs} />
@@ -25,14 +26,11 @@ const HeroCard = ({ data }: { data: HeroDataType }) => {
           alt={name}
           src={images.md}
           show={imgPreview}
+          alignment={biography.alignment}
           onClose={() => setImgPreview(false)}
           onOpen={() => setImgPreview(true)}
         />
-        <Typography
-          sx={{ fontSize: "12px", marginBlock: "5px", textAlign: "left" }}
-        >
-          {`${biography.alignment === "good" ? "Hero" : "Villain"}`}
-        </Typography>
+        <AlignmentWrapper alignment={biography.alignment} />
         <InfoWrapper text={work.occupation} />
       </HeroCardBody>
       <HeroCardFooter>

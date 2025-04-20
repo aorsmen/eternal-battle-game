@@ -11,9 +11,9 @@ const TEST_GAME_CTX = {
   value: TEST_GAME_CONTEXT,
 };
 
-const sideSelectionHandler = vi.fn();
+const mockSideSelectionHandler = vi.fn();
 
-TEST_GAME_CONTEXT.setSideSelection = sideSelectionHandler;
+TEST_GAME_CONTEXT.setSideSelection = mockSideSelectionHandler;
 
 test("Should not render the dialog", () => {
   renderGameContext(<SideDialog />, {
@@ -92,7 +92,7 @@ test("Should call the function and close the dialog when select a side", async (
     fireEvent.click(heroBtn);
   });
 
-  expect(sideSelectionHandler).toHaveBeenCalled(1);
+  expect(mockSideSelectionHandler).toHaveBeenCalled(1);
 
   waitFor(() => {
     const title = screen.queryByText(/player info/i);

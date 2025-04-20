@@ -31,7 +31,7 @@ const HeroNode = (props: NodeProps<HeroNodeType>) => {
   return (
     <HeroNodeWrapper>
       {selected && (
-        <HeroNodeToolbar>
+        <HeroNodeToolbar alignment={data.details.biography.alignment}>
           <Box sx={{ marginRight: "auto", paddingInline: "9px" }}>
             <FormControlLabel
               control={

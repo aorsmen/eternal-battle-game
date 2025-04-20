@@ -19,9 +19,9 @@ const TEST_GAME_CTX = {
   value: TEST_GAME_CONTEXT,
 };
 
-const nextRoundHandler = vi.fn();
+const mockNextRoundHandler = vi.fn();
 
-TEST_GAME_CONTEXT.goToNextRound = nextRoundHandler;
+TEST_GAME_CONTEXT.goToNextRound = mockNextRoundHandler;
 
 test("Should render player and computer card back", () => {
   renderGameContext(<SideHands />, {
@@ -232,5 +232,5 @@ test("Should call the correct function when click the button", () => {
 
   fireEvent.click(nextBtn);
 
-  expect(nextRoundHandler).toHaveBeenCalledTimes(1);
+  expect(mockNextRoundHandler).toHaveBeenCalledTimes(1);
 });
