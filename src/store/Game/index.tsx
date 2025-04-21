@@ -26,11 +26,13 @@ const initState: GameContextType = {
       name: "",
       type: null,
       score: 0,
+      lastScore: null,
     },
     computer: {
       name: "",
       type: null,
       score: 0,
+      lastScore: null,
     },
   },
   decks: {
@@ -46,13 +48,25 @@ const initState: GameContextType = {
     computer: {},
   },
   currentBattle: undefined,
+  currentRound: 0,
   roundWinner: null,
+  rounds: [
+    {
+      result: null,
+      battles: [],
+      isStarted: false,
+      isEnded: false,
+    },
+  ],
+  isGameOver: false,
   setSideSelection: () => {},
   drawCard: () => {},
   revealCard: () => {},
   setBattleResult: () => {},
   setRoundScore: () => {},
   goToNextRound: () => {},
+  completeRound: () => {},
+  startNewRound: () => {},
 };
 
 export const GameContext = createContext(initState);
@@ -64,6 +78,9 @@ const GameContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [currentBattle, setCurrentBattle] = useState(initState.currentBattle);
   const [battles, setBattles] = useState(initState.battles);
   const [roundWinner, setRoundWinner] = useState(initState.roundWinner);
+  const [rounds, setRounds] = useState(initState.rounds);
+  const [currentRound, setCurrentRound] = useState(initState.currentRound);
+  const [isGameOver, setIsGameOver] = useState(initState.isGameOver);
 
   const { data } = useQuery({
     queryKey: ["hero-data"],
@@ -88,6 +105,7 @@ const GameContextProvider = ({ children }: { children: React.ReactNode }) => {
           name: computerName,
           type: computer,
           score: 0,
+          lastScore: null,
         },
       });
     }
@@ -210,22 +228,99 @@ const GameContextProvider = ({ children }: { children: React.ReactNode }) => {
       winner = "computer";
     }
 
-    setRoundWinner(winner);
+    setRounds((prev) => {
+      const newRounds = [...prev];
+      const currentBattles = hands.player.map((hand, inx) => {
+        let result: HandSidesType | "draw" = "draw";
+
+        if (battles.player[inx].result === "win") {
+          result = "player";
+        } else if (battles.computer[inx].result === "win") {
+          result = "computer";
+        }
+
+        return {
+          winner: result,
+          cards: {
+            player: hand.id,
+            computer: hands.computer[inx].id,
+          },
+        };
+      });
+      const newRound = {
+        ...newRounds[currentRound],
+        result: winner,
+        battles: currentBattles,
+        isEnded: true,
+      };
+      newRounds[currentRound] = newRound;
+
+      return newRounds;
+    });
     setSides((prev) => ({
       ...prev,
-      player: { ...prev.player, score: prev.player.score + playerScore },
+      player: { ...prev.player, lastScore: playerScore },
       computer: {
         ...prev.computer,
-        score: prev.computer.score + computerScore,
+        lastScore: computerScore,
       },
     }));
-  }, [battles]);
+  }, [battles, hands, currentRound]);
 
   const goToNextRound = () => {
     setHands(initState.hands);
     setBattles(initState.battles);
     setCurrentBattle(initState.currentBattle);
+    setCurrentRound((prev) => prev + 1);
+    setRounds((prev) => {
+      const newRounds = [...prev];
+      newRounds.push({
+        result: null,
+        battles: [],
+        isStarted: false,
+        isEnded: false,
+      });
+
+      return newRounds;
+    });
     setRoundWinner(null);
+  };
+
+  const completeRound = () => {
+    setRoundWinner((prev) => {
+      if (prev === null) {
+        return rounds[currentRound].result;
+      }
+
+      return prev;
+    });
+    setSides((prev) => {
+      const newPlayerScore = prev.player.score + (prev.player.lastScore || 0);
+      const newComputerScore =
+        prev.computer.score + (prev.computer.lastScore || 0);
+
+      return {
+        ...prev,
+        player: { ...prev.player, score: newPlayerScore, lastScore: null },
+        computer: {
+          ...prev.computer,
+          score: newComputerScore,
+          lastScore: null,
+        },
+      };
+    });
+    if (currentRound === 4) {
+      setIsGameOver(true);
+    }
+  };
+
+  const startNewRound = () => {
+    setRounds((prev) => {
+      const newRounds = [...prev];
+      newRounds[currentRound].isStarted = true;
+
+      return newRounds;
+    });
   };
 
   useEffect(() => {
@@ -236,16 +331,22 @@ const GameContextProvider = ({ children }: { children: React.ReactNode }) => {
   }, [battles.player, setRoundScore]);
 
   useEffect(() => {
-    if (hands.player.length < 5) {
+    if (
+      hands.player.length < 5 &&
+      sides.player.type !== null &&
+      roundWinner === null &&
+      rounds[currentRound].isStarted
+    ) {
       drawCard();
     }
-  }, [hands.player, drawCard]);
-
-  useEffect(() => {
-    if (sides.player.type !== null && roundWinner === null) {
-      drawCard();
-    }
-  }, [sides.player.type, roundWinner]);
+  }, [
+    sides.player.type,
+    hands.player,
+    drawCard,
+    rounds,
+    currentRound,
+    roundWinner,
+  ]);
 
   useEffect(() => {
     if (data) {
@@ -268,13 +369,18 @@ const GameContextProvider = ({ children }: { children: React.ReactNode }) => {
         hands,
         battles,
         currentBattle,
+        currentRound,
         roundWinner,
+        rounds,
+        isGameOver,
         setSideSelection,
         drawCard,
         revealCard,
         setBattleResult,
         setRoundScore,
         goToNextRound,
+        completeRound,
+        startNewRound,
       }}
     >
       {children}

@@ -32,7 +32,12 @@ const SideDialog = () => {
 
   const selectSideHandler = (side: GameSideTypes) => {
     if (inputs.name !== "" && side) {
-      setSideSelection({ name: inputs.name, type: side, score: 0 });
+      setSideSelection({
+        name: inputs.name,
+        type: side,
+        score: 0,
+        lastScore: 0,
+      });
       setIsOpen(false);
       setErrors(DEFAULT_ERRORS);
       setInputs(DEFAULT_INPUTS);

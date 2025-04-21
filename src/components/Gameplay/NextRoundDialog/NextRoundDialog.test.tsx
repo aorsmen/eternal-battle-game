@@ -52,7 +52,7 @@ test("Should render the dialog, content and draw message correctly", () => {
   expect(drawMsg).toBeInTheDocument();
 });
 
-test("Should render the dialog, content and win message correctly", () => {
+test("Should render the dialog, icon and win message correctly", () => {
   TEST_GAME_CONTEXT.roundWinner = "player";
 
   renderGameContext(
@@ -70,10 +70,14 @@ test("Should render the dialog, content and win message correctly", () => {
   const winMsg = screen.getByText(
     ROUND_WIN_MESSAGE.replace("{WINNER}", TEST_GAME_CONTEXT.sides.player.name)
   );
+  const icon = screen.getByRole("img", {
+    name: TEST_GAME_CONTEXT.sides.player.type,
+  });
 
   expect(title).toBeInTheDocument();
   expect(nextBtn).toBeInTheDocument();
   expect(winMsg).toBeInTheDocument();
+  expect(icon).toBeInTheDocument();
 });
 
 test("Should call the correct function when click the button", () => {

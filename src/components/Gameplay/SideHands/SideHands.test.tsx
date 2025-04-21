@@ -234,3 +234,45 @@ test("Should call the correct function when click the button", () => {
 
   expect(mockNextRoundHandler).toHaveBeenCalledTimes(1);
 });
+
+const mockCloseHandler = vi.fn();
+
+test("Should not render the round start dialog", () => {
+  renderGameContext(<SideHands />, {
+    providerProps: TEST_GAME_CTX,
+    withRouter: false,
+  });
+
+  const round = screen.queryByText(/round 1/i);
+
+  expect(round).not.toBeInTheDocument();
+});
+
+test("Should render the start round dialog correctly and auto close the dialog", () => {
+  TEST_GAME_CONTEXT.roundWinner = null;
+  TEST_GAME_CONTEXT.rounds = [
+    ...[
+      {
+        result: null,
+        battles: [],
+        isStarted: false,
+        isEnded: false,
+      },
+    ],
+  ];
+
+  renderGameContext(<SideHands />, {
+    providerProps: TEST_GAME_CTX,
+    withRouter: false,
+  });
+
+  const round = screen.getByText(/round 1/i);
+
+  expect(round).toBeInTheDocument();
+
+  waitFor(() => {
+    const round = screen.queryByText(/round 1/i);
+
+    expect(round).not.toBeInTheDocument();
+  });
+});

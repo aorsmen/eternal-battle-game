@@ -9,13 +9,18 @@ const useGameContext = (): GameContextType => {
     hands,
     battles,
     currentBattle,
+    currentRound,
     roundWinner,
+    rounds,
+    isGameOver,
     setSideSelection,
     drawCard,
     revealCard,
     setBattleResult,
     setRoundScore,
     goToNextRound,
+    completeRound,
+    startNewRound,
   } = useContext(GameContext);
 
   return {
@@ -24,13 +29,18 @@ const useGameContext = (): GameContextType => {
     hands,
     battles,
     currentBattle,
+    currentRound,
     roundWinner,
+    rounds,
+    isGameOver,
     setSideSelection,
     drawCard,
     revealCard,
     setBattleResult,
     setRoundScore,
     goToNextRound,
+    completeRound,
+    startNewRound,
   };
 };
 

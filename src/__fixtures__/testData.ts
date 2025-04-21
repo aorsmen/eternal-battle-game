@@ -146,11 +146,13 @@ export const TEST_GAME_CONTEXT: GameContextType = {
       name: "test user 1",
       type: "heroes",
       score: 0,
+      lastScore: 0,
     },
     computer: {
       name: "test user 2",
       type: "villains",
       score: 0,
+      lastScore: 0,
     },
   },
   decks: {
@@ -166,13 +168,17 @@ export const TEST_GAME_CONTEXT: GameContextType = {
     computer: {},
   },
   currentBattle: undefined,
+  currentRound: 0,
   roundWinner: null,
+  rounds: [],
   setSideSelection: () => {},
   drawCard: () => {},
   revealCard: () => {},
   setBattleResult: () => {},
   setRoundScore: () => {},
   goToNextRound: () => {},
+  completeRound: () => {},
+  startNewRound: () => {},
 };
 
 export const TEST_HERO_NODE_DATA = {
@@ -213,3 +219,36 @@ export const TEST_MAIN_CONTEXT: MainContextType = {
   getHeroById: () => null,
   setCompare: () => {},
 };
+
+export const TEST_END_GAME_ROUNDS = [
+  {
+    result: null,
+    battles: [],
+    isStarted: true,
+    isEnded: true,
+  },
+  {
+    result: null,
+    battles: [],
+    isStarted: true,
+    isEnded: true,
+  },
+  {
+    result: null,
+    battles: [],
+    isStarted: true,
+    isEnded: true,
+  },
+  {
+    result: null,
+    battles: [],
+    isStarted: true,
+    isEnded: true,
+  },
+  {
+    result: null,
+    battles: [],
+    isStarted: true,
+    isEnded: true,
+  },
+];

@@ -11,9 +11,15 @@ import GameBoard from ".";
 import {
   TEST_GAME_CONTEXT,
   TEST_HERO_DATA,
+  TEST_END_GAME_ROUNDS,
 } from "../../../__fixtures__/testData";
 import { vi } from "vitest";
-import { ROUND_DRAW_MESSAGE, ROUND_WIN_MESSAGE } from "../../../config/game";
+import {
+  ROUND_DRAW_MESSAGE,
+  ROUND_WIN_MESSAGE,
+  GAME_DRAW_MESSAGE,
+  GAME_WIN_MESSAGE,
+} from "../../../config/game";
 
 const TEST_GAME_CTX = {
   value: TEST_GAME_CONTEXT,
@@ -256,4 +262,62 @@ test("Should render player info in the side board", () => {
   expect(name).toBeInTheDocument();
   expect(score).toBeInTheDocument();
   expect(avatar).toBeInTheDocument();
+});
+
+test("Should render the end game animation and the draw end message correctly", () => {
+  TEST_GAME_CONTEXT.rounds = TEST_END_GAME_ROUNDS;
+  TEST_GAME_CONTEXT.sides.player.score = 0;
+
+  renderGameContext(<GameBoard />, {
+    providerProps: TEST_GAME_CTX,
+    withRouter: false,
+  });
+
+  const title = screen.getByText(/draw!/i);
+  const endMsg = screen.getByText(GAME_DRAW_MESSAGE);
+
+  expect(title).toBeInTheDocument();
+  expect(endMsg).toBeInTheDocument();
+});
+
+test("Should render the end game animation, icon and victory end message correctly", () => {
+  TEST_GAME_CONTEXT.sides.player.score = 1;
+
+  renderGameContext(<GameBoard />, {
+    providerProps: TEST_GAME_CTX,
+    withRouter: false,
+  });
+
+  const title = screen.getByText(/victory!/i);
+  const endMsg = screen.getByText(
+    GAME_WIN_MESSAGE.replace("{WINNER}", TEST_GAME_CONTEXT.sides.player.name)
+  );
+  const icon = screen.getAllByRole("img", {
+    name: TEST_GAME_CONTEXT.sides.player.type,
+  });
+
+  expect(title).toBeInTheDocument();
+  expect(endMsg).toBeInTheDocument();
+  expect(icon).toHaveLength(2);
+});
+
+test("Should render the end game animation, icon and failed end message correctly", () => {
+  TEST_GAME_CONTEXT.sides.computer.score = 2;
+
+  renderGameContext(<GameBoard />, {
+    providerProps: TEST_GAME_CTX,
+    withRouter: false,
+  });
+
+  const title = screen.getByText(/defeat!/i);
+  const endMsg = screen.getByText(
+    GAME_WIN_MESSAGE.replace("{WINNER}", TEST_GAME_CONTEXT.sides.computer.name)
+  );
+  const icon = screen.getAllByRole("img", {
+    name: TEST_GAME_CONTEXT.sides.computer.type,
+  });
+
+  expect(title).toBeInTheDocument();
+  expect(endMsg).toBeInTheDocument();
+  expect(icon).toHaveLength(2);
 });

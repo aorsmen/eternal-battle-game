@@ -1,18 +1,34 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import useGameContext from "../../../hooks/useGameContext";
 import { SideHandGrid } from "./styled.components";
 import SingleBattle from "../SingleBattle";
 import NextRoundDialog from "../NextRoundDialog";
+import RoundStartDialog from "../RoundStartDialog";
 
 const SideHands = () => {
-  const { hands, roundWinner } = useGameContext();
-  const [isOpen, setIsOpen] = useState(false);
+  const { hands, roundWinner, rounds, currentRound, sides } = useGameContext();
+  const [nextIsOpen, setNextIsOpen] = useState(false);
+  const [startIsOpen, setStartIsOpen] = useState(false);
+
+  const startRoundHandler = useCallback(() => {
+    setStartIsOpen(false);
+  }, []);
 
   useEffect(() => {
     if (roundWinner !== null) {
-      setIsOpen(true);
+      if (rounds && rounds.length < 5) {
+        setNextIsOpen(true);
+      }
+    } else {
+      if (
+        rounds.length > 0 &&
+        !rounds[currentRound].isStarted &&
+        sides.player.type !== null
+      ) {
+        setStartIsOpen(true);
+      }
     }
-  }, [roundWinner]);
+  }, [roundWinner, rounds, currentRound, sides.player.type]);
 
   return (
     <>
@@ -21,7 +37,11 @@ const SideHands = () => {
           <SingleBattle key={index} index={index} />
         ))}
       </SideHandGrid>
-      <NextRoundDialog isOpen={isOpen} onClose={() => setIsOpen(false)} />
+      <NextRoundDialog
+        isOpen={nextIsOpen}
+        onClose={() => setNextIsOpen(false)}
+      />
+      <RoundStartDialog isOpen={startIsOpen} onClose={startRoundHandler} />
     </>
   );
 };

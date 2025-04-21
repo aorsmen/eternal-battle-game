@@ -86,6 +86,7 @@ export const InfoWrapper = ({ text }: { text: string }) => {
             fontStyle: "italic",
             overflow: "auto",
             height: "60px",
+            textAlign: "center",
           }}
         >
           {text}
