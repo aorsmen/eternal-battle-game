@@ -267,6 +267,7 @@ test("Should render player info in the side board", () => {
 test("Should render the end game animation and the draw end message correctly", () => {
   TEST_GAME_CONTEXT.rounds = TEST_END_GAME_ROUNDS;
   TEST_GAME_CONTEXT.sides.player.score = 0;
+  TEST_GAME_CONTEXT.isGameOver = true;
 
   renderGameContext(<GameBoard />, {
     providerProps: TEST_GAME_CTX,

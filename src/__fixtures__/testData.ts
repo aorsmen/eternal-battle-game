@@ -171,6 +171,7 @@ export const TEST_GAME_CONTEXT: GameContextType = {
   currentRound: 0,
   roundWinner: null,
   rounds: [],
+  isGameOver: false,
   setSideSelection: () => {},
   drawCard: () => {},
   revealCard: () => {},
