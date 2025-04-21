@@ -4,12 +4,12 @@ import gsap from "gsap";
 import { HandSidesType } from "../../../types/game.types";
 import {
   TITLE_STYLE,
-  VILLAIN_RED,
-  HERO_BLUE,
   YELLOW,
   VICTORY_COLOR,
   DEFEAT_COLOR,
   BROWN_LIGHT,
+  HERO_BLUE,
+  VILLAIN_RED,
 } from "../../../config/general";
 import { GAME_DRAW_MESSAGE, GAME_WIN_MESSAGE } from "../../../config/game";
 import useGameContext from "../../../hooks/useGameContext";
@@ -17,10 +17,29 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import heroIcon from "../../../assets/hero-icon.png";
 import villainIcon from "../../../assets/villain-icon.png";
 
+type ParticleType = {
+  id: number;
+  x: number;
+  y: number;
+  scale: number;
+  delay: number;
+};
+
+const generateParticles = (count: number): ParticleType[] =>
+  Array.from({ length: count }, (_, i) => ({
+    id: i,
+    x: Math.random() * 200 - 100,
+    y: Math.random() * 200 - 100,
+    scale: Math.random() * 0.5 + 0.5,
+    delay: Math.random() * 0.3,
+  }));
+
 const EndGameAnimation = ({ onClose }: { onClose: () => void }) => {
   const overlayRef = useRef(null);
   const heroRef = useRef(null);
   const textRef = useRef(null);
+  const particlesRef = useRef<ParticleType[]>([]);
+  const particles = generateParticles(100);
   const { sides } = useGameContext();
   let textMsg = GAME_DRAW_MESSAGE;
   let textColor = BROWN_LIGHT;
@@ -67,6 +86,29 @@ const EndGameAnimation = ({ onClose }: { onClose: () => void }) => {
       { opacity: 0 },
       { opacity: 1, duration: 1, ease: "power2.out" }
     );
+
+    if (gameWinner === "player") {
+      particles.forEach((p, i) => {
+        gsap.fromTo(
+          particlesRef.current[i],
+          {
+            x: 0,
+            y: 0,
+            opacity: 1,
+            scale: 1,
+          },
+          {
+            x: p.x,
+            y: p.y,
+            scale: p.scale,
+            opacity: 0,
+            duration: 2,
+            delay: p.delay,
+            ease: "power2.out",
+          }
+        );
+      });
+    }
   }, []);
 
   return (
@@ -85,6 +127,24 @@ const EndGameAnimation = ({ onClose }: { onClose: () => void }) => {
         zIndex: 999,
       }}
     >
+      {particles.map((p, i) => (
+        <Box
+          key={p.id}
+          ref={(el) => {
+            particlesRef.current[i] = el as ParticleType;
+          }}
+          style={{
+            position: "absolute",
+            width: "3px",
+            height: "3px",
+            backgroundColor: i % 2 === 0 ? HERO_BLUE : VILLAIN_RED,
+            borderRadius: "50%",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+          }}
+        />
+      ))}
       <Typography
         sx={{
           ...TITLE_STYLE,
