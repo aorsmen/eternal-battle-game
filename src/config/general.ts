@@ -45,3 +45,5 @@ export const TITLE_STYLE = {
   fontStyle: "normal",
   letterSpacing: 3,
 };
+
+export const DEFEAT_STYLE = { opacity: 0.3, filter: "grayscale(1)" };

@@ -1,4 +1,4 @@
-import { GameContextType } from "../types/game.types";
+import { GameContextType, RoundItemType } from "../types/game.types";
 import { HeroDataType, MainContextType } from "../types/main.types";
 
 export const TEST_HERO_DATA: HeroDataType = {

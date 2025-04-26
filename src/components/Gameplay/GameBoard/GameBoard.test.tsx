@@ -322,3 +322,54 @@ test("Should render the end game animation, icon and failed end message correctl
   expect(endMsg).toBeInTheDocument();
   expect(icon).toHaveLength(2);
 });
+
+test("Should not render the game summary dialog", () => {
+  renderGameContext(<GameBoard />, {
+    providerProps: TEST_GAME_CTX,
+    withRouter: false,
+  });
+
+  const title = screen.queryByRole("heading", { name: /game summary/i });
+
+  expect(title).not.toBeInTheDocument();
+});
+
+test("Should render the game summary dialog, title and close button", () => {
+  renderGameContext(<GameBoard />, {
+    providerProps: TEST_GAME_CTX,
+    withRouter: false,
+  });
+
+  const summaryBtn = screen.getByRole("button", { name: /game summary/i });
+
+  expect(summaryBtn).toBeInTheDocument();
+
+  fireEvent.click(summaryBtn);
+
+  const title = screen.getByRole("heading", { name: /game summary/i });
+  const closeBtn = screen.getByRole("button", {
+    name: /close/i,
+  });
+
+  expect(title).toBeInTheDocument();
+  expect(closeBtn).toBeInTheDocument();
+});
+
+test("Should render all the round wrappers in the game summary", () => {
+  renderGameContext(<GameBoard />, {
+    providerProps: TEST_GAME_CTX,
+    withRouter: false,
+  });
+
+  const summaryBtn = screen.getByRole("button", { name: /game summary/i });
+
+  expect(summaryBtn).toBeInTheDocument();
+
+  fireEvent.click(summaryBtn);
+
+  for (let i = 0; i < 5; i++) {
+    const roundTitle = screen.getByText(`Round ${i + 1}`);
+
+    expect(roundTitle).toBeInTheDocument();
+  }
+});

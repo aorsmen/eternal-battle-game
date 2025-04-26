@@ -76,7 +76,7 @@ export const InfoWrapper = ({ text }: { text: string }) => {
         borderRadius: "4px",
         backgroundColor: YELLOW_LIGHT,
         flex: 1,
-        padding: "10px",
+        padding: "5px",
       }}
     >
       {text !== "-" && (
@@ -87,6 +87,8 @@ export const InfoWrapper = ({ text }: { text: string }) => {
             overflow: "auto",
             height: "60px",
             textAlign: "center",
+            scrollbarColor: `${YELLOW_DARK} ${YELLOW_LIGHT}`,
+            scrollbarWidth: "thin",
           }}
         >
           {text}

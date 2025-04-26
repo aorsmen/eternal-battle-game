@@ -14,7 +14,7 @@ const SideBoard = ({
 }: {
   side: HandSidesType;
   data: GameSidesItemType;
-  onComplete: () => void;
+  onComplete?: () => void;
 }) => {
   const { name, score, type, lastScore } = data;
   const pointRef = useRef(null);

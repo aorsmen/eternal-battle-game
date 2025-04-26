@@ -22,7 +22,7 @@ export type BattleObjectType = {
 export type RoundBattleItemType = {
   winner: HandSidesType | "draw";
   cards: {
-    [key in HandSidesType]: string;
+    [key in HandSidesType]: HeroDataType;
   };
 };
 export type RoundItemType = {

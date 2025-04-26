@@ -242,8 +242,8 @@ const GameContextProvider = ({ children }: { children: React.ReactNode }) => {
         return {
           winner: result,
           cards: {
-            player: hand.id,
-            computer: hands.computer[inx].id,
+            player: hand,
+            computer: hands.computer[inx],
           },
         };
       });

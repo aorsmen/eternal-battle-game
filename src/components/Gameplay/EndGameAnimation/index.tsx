@@ -1,4 +1,4 @@
-import { Stack, Typography, Box } from "@mui/material";
+import { Stack, Typography, Box, Button } from "@mui/material";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { HandSidesType } from "../../../types/game.types";
@@ -166,9 +166,19 @@ const EndGameAnimation = ({ onClose }: { onClose: () => void }) => {
           />
         </Box>
       )}
-      <Typography ref={textRef} sx={{ color: YELLOW, fontSize: "24px" }}>
-        {textMsg}
-      </Typography>
+      <Stack
+        ref={textRef}
+        alignItems="center"
+        justifyContent="center"
+        spacing={2}
+      >
+        <Typography sx={{ color: YELLOW, fontSize: "24px" }}>
+          {textMsg}
+        </Typography>
+        <Button variant="contained" color="primary" onClick={onClose}>
+          Game Summary
+        </Button>
+      </Stack>
     </Stack>
   );
 };

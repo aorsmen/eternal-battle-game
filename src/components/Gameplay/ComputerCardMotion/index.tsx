@@ -5,7 +5,11 @@ import HeroCard from "../../HeroCard";
 import { HeroCardBack } from "./styled.components";
 import useGameContext from "../../../hooks/useGameContext";
 import { BattleResultType } from "../../../types/game.types";
-import { VILLAIN_RED_DARK, HERO_BLUE_DARK } from "../../../config/general";
+import {
+  VILLAIN_RED_DARK,
+  HERO_BLUE_DARK,
+  DEFEAT_STYLE,
+} from "../../../config/general";
 
 const ComputerCardMotion = ({
   index,
@@ -59,8 +63,7 @@ const ComputerCardMotion = ({
         repeat: 5,
         yoyo: true,
       }).to(cardRef.current, {
-        opacity: 0.3,
-        filter: "grayscale(1)",
+        ...DEFEAT_STYLE,
         duration: 1,
         ease: "power2.in",
       });
