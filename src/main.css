@@ -4,4 +4,7 @@ html body {
 
 img {
   max-width: 100%;
+  display: block;
+  width: auto;
+  height: auto;
 }

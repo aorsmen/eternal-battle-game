@@ -4,9 +4,7 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 
 export const LogoWrapper = ({ src }: { src: string }) => {
   return (
-    <Box
-      sx={{ width: "80%", maxWidth: "500px", "& img": { maxWidth: "100%" } }}
-    >
+    <Box sx={{ width: "80%", maxWidth: "500px" }}>
       <LazyLoadImage alt="Eternal Battle" height={500} src={src} width={500} />
     </Box>
   );
