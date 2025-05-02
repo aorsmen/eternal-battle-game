@@ -21,6 +21,7 @@ const useGameContext = (): GameContextType => {
     goToNextRound,
     completeRound,
     startNewRound,
+    startNewGame,
   } = useContext(GameContext);
 
   return {
@@ -41,6 +42,7 @@ const useGameContext = (): GameContextType => {
     goToNextRound,
     completeRound,
     startNewRound,
+    startNewGame,
   };
 };
 

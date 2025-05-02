@@ -15,6 +15,7 @@ export type GameSidesObjectType = {
 export type BattleItemType = {
   result: BattleResultType;
   isEnded: boolean;
+  isDead: boolean;
 };
 export type BattleObjectType = {
   [key in string]: BattleItemType;
@@ -57,4 +58,5 @@ export type GameContextType = {
   goToNextRound: () => void;
   completeRound: () => void;
   startNewRound: () => void;
+  startNewGame: () => void;
 };

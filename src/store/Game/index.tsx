@@ -67,6 +67,7 @@ const initState: GameContextType = {
   goToNextRound: () => {},
   completeRound: () => {},
   startNewRound: () => {},
+  startNewGame: () => {},
 };
 
 export const GameContext = createContext(initState);
@@ -181,6 +182,8 @@ const GameContextProvider = ({ children }: { children: React.ReactNode }) => {
     const cValues = hands.computer[index].values;
     let pResult: BattleResultType = "draw";
     let cResult: BattleResultType = "draw";
+    const pIsDead = cValues.attack >= pValues.defense;
+    const cIsDead = pValues.attack >= cValues.defense;
 
     if (pValues.attack >= cValues.defense && pValues.defense > cValues.attack) {
       pResult = "win";
@@ -198,8 +201,16 @@ const GameContextProvider = ({ children }: { children: React.ReactNode }) => {
         computer: { ...prev.computer },
       };
 
-      newResults.player[index] = { result: pResult, isEnded: true };
-      newResults.computer[index] = { result: cResult, isEnded: true };
+      newResults.player[index] = {
+        result: pResult,
+        isEnded: true,
+        isDead: pIsDead,
+      };
+      newResults.computer[index] = {
+        result: cResult,
+        isEnded: true,
+        isDead: cIsDead,
+      };
 
       return newResults;
     });
@@ -323,6 +334,37 @@ const GameContextProvider = ({ children }: { children: React.ReactNode }) => {
     });
   };
 
+  const prepareDecks = () => {
+    const heroList = data.filter(
+      (hr: HeroDataType) => hr.biography.alignment === "good"
+    );
+    const villainList = data.filter(
+      (hr: HeroDataType) => hr.biography.alignment === "bad"
+    );
+
+    setDecks({ heroes: heroList, villains: villainList });
+  };
+
+  const startNewGame = () => {
+    setSides((prev) => {
+      const playerSide = { ...initState.sides.player, name: prev.player.name };
+      const computerSide = {
+        ...initState.sides.computer,
+        name: prev.computer.name,
+      };
+
+      return { player: playerSide, computer: computerSide };
+    });
+    prepareDecks();
+    setHands(initState.hands);
+    setCurrentBattle(initState.currentBattle);
+    setBattles(initState.battles);
+    setRoundWinner(initState.roundWinner);
+    setRounds(initState.rounds);
+    setCurrentRound(initState.currentRound);
+    setIsGameOver(initState.isGameOver);
+  };
+
   useEffect(() => {
     const batLen = Object.keys(battles.player).length;
     if (batLen === 5) {
@@ -350,14 +392,7 @@ const GameContextProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (data) {
-      const heroList = data.filter(
-        (hr: HeroDataType) => hr.biography.alignment === "good"
-      );
-      const villainList = data.filter(
-        (hr: HeroDataType) => hr.biography.alignment === "bad"
-      );
-
-      setDecks({ heroes: heroList, villains: villainList });
+      prepareDecks();
     }
   }, [data]);
 
@@ -381,6 +416,7 @@ const GameContextProvider = ({ children }: { children: React.ReactNode }) => {
         goToNextRound,
         completeRound,
         startNewRound,
+        startNewGame,
       }}
     >
       {children}

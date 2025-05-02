@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -26,19 +26,21 @@ const DEFAULT_ERRORS = {
 
 const SideDialog = () => {
   const { setSideSelection, sides } = useGameContext();
-  const [isOpen, setIsOpen] = useState(sides.player.type === null);
+  // const [isOpen, setIsOpen] = useState(sides.player.type === null);
   const [inputs, setInputs] = useState(DEFAULT_INPUTS);
   const [errors, setErrors] = useState(DEFAULT_ERRORS);
+  const isOpen = sides.player.type === null;
+  const hasName = sides.player.name !== "";
 
   const selectSideHandler = (side: GameSideTypes) => {
-    if (inputs.name !== "" && side) {
+    if ((inputs.name !== "" || hasName) && side) {
       setSideSelection({
-        name: inputs.name,
+        name: inputs.name || sides.player.name,
         type: side,
         score: 0,
         lastScore: 0,
       });
-      setIsOpen(false);
+      // setIsOpen(false);
       setErrors(DEFAULT_ERRORS);
       setInputs(DEFAULT_INPUTS);
     } else {
@@ -66,36 +68,43 @@ const SideDialog = () => {
       </DialogTitle>
       <DialogContent>
         <form>
-          <Stack
-            direction="row"
-            justifyContent="center"
-            sx={{ margin: "25px auto" }}
-          >
-            <TextField
-              id="player-name"
-              label="Player Name"
-              variant="filled"
-              fullWidth
-              sx={{ maxWidth: "50%" }}
-              error={errors.name !== ""}
-              helperText={errors.name}
-              onChange={(event) => {
-                const name = event.target.value.trim();
+          {!hasName && (
+            <Stack
+              direction="row"
+              justifyContent="center"
+              sx={{ marginTop: "25px" }}
+            >
+              <TextField
+                id="player-name"
+                label="Player Name"
+                variant="filled"
+                fullWidth
+                sx={{ maxWidth: "50%" }}
+                error={errors.name !== ""}
+                helperText={errors.name}
+                onChange={(event) => {
+                  const name = event.target.value.trim();
 
-                setInputs((prev) => ({
-                  ...prev,
-                  name: name,
-                }));
+                  setInputs((prev) => ({
+                    ...prev,
+                    name: name,
+                  }));
 
-                setErrors((prev) => ({
-                  ...prev,
-                  name: "",
-                }));
-              }}
-            />
-          </Stack>
+                  setErrors((prev) => ({
+                    ...prev,
+                    name: "",
+                  }));
+                }}
+              />
+            </Stack>
+          )}
           <Typography
-            sx={{ ...TITLE_STYLE, textAlign: "center", fontSize: "20px" }}
+            sx={{
+              ...TITLE_STYLE,
+              textAlign: "center",
+              fontSize: "20px",
+              marginTop: "25px",
+            }}
           >
             Choose your side
           </Typography>

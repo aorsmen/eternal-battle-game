@@ -39,8 +39,8 @@ const EndGameAnimation = ({ onClose }: { onClose: () => void }) => {
   const heroRef = useRef(null);
   const textRef = useRef(null);
   const particlesRef = useRef<ParticleType[]>([]);
-  const particles = generateParticles(100);
-  const { sides } = useGameContext();
+  const particles = generateParticles(500);
+  const { sides, startNewGame } = useGameContext();
   let textMsg = GAME_DRAW_MESSAGE;
   let textColor = BROWN_LIGHT;
   let gameWinner: HandSidesType | "draw" = "draw";
@@ -135,8 +135,8 @@ const EndGameAnimation = ({ onClose }: { onClose: () => void }) => {
           }}
           style={{
             position: "absolute",
-            width: "3px",
-            height: "3px",
+            width: "5px",
+            height: "5px",
             backgroundColor: i % 2 === 0 ? HERO_BLUE : VILLAIN_RED,
             borderRadius: "50%",
             top: "50%",
@@ -175,9 +175,19 @@ const EndGameAnimation = ({ onClose }: { onClose: () => void }) => {
         <Typography sx={{ color: YELLOW, fontSize: "24px" }}>
           {textMsg}
         </Typography>
-        <Button variant="contained" color="primary" onClick={onClose}>
-          Game Summary
-        </Button>
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="center"
+          spacing={1}
+        >
+          <Button variant="contained" color="primary" onClick={onClose}>
+            Game Summary
+          </Button>
+          <Button variant="contained" color="warning" onClick={startNewGame}>
+            Start New Game
+          </Button>
+        </Stack>
       </Stack>
     </Stack>
   );
