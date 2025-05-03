@@ -26,7 +26,6 @@ const DEFAULT_ERRORS = {
 
 const SideDialog = () => {
   const { setSideSelection, sides } = useGameContext();
-  // const [isOpen, setIsOpen] = useState(sides.player.type === null);
   const [inputs, setInputs] = useState(DEFAULT_INPUTS);
   const [errors, setErrors] = useState(DEFAULT_ERRORS);
   const isOpen = sides.player.type === null;
@@ -40,7 +39,6 @@ const SideDialog = () => {
         score: 0,
         lastScore: 0,
       });
-      // setIsOpen(false);
       setErrors(DEFAULT_ERRORS);
       setInputs(DEFAULT_INPUTS);
     } else {

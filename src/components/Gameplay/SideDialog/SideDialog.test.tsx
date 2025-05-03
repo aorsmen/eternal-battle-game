@@ -15,6 +15,13 @@ const mockSideSelectionHandler = vi.fn();
 
 TEST_GAME_CONTEXT.setSideSelection = mockSideSelectionHandler;
 
+const TEST_PLAYER_OBJECT = {
+  name: "",
+  type: null,
+  score: 0,
+  lastScore: null,
+};
+
 test("Should not render the dialog", () => {
   renderGameContext(<SideDialog />, {
     providerProps: TEST_GAME_CTX,
@@ -26,8 +33,29 @@ test("Should not render the dialog", () => {
   expect(title).not.toBeInTheDocument();
 });
 
-test("Should render the dialog, name input and selections", () => {
+test("Should render the dialog and selections but not the name input", () => {
   TEST_GAME_CONTEXT.sides.player.type = null;
+
+  renderGameContext(<SideDialog />, {
+    providerProps: TEST_GAME_CTX,
+    withRouter: false,
+  });
+
+  const title = screen.getByText(/player info/i);
+  const hero = screen.getByRole("img", { name: /heroes/i });
+  const villain = screen.getByRole("img", { name: /villains/i });
+  const input = screen.queryByRole("textbox", {
+    name: /player name/i,
+  });
+
+  expect(title).toBeInTheDocument();
+  expect(hero).toBeInTheDocument();
+  expect(villain).toBeInTheDocument();
+  expect(input).not.toBeInTheDocument();
+});
+
+test("Should render the dialog, name input and selections", () => {
+  TEST_GAME_CONTEXT.sides.player.name = "";
 
   renderGameContext(<SideDialog />, {
     providerProps: TEST_GAME_CTX,

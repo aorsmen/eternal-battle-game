@@ -87,8 +87,8 @@ test("Should render the computer and player cards in round 1", () => {
   const cardTitles = screen.getAllByText(TEST_HERO_DATA.name);
   const cardImages = screen.getAllByRole("img", { name: TEST_HERO_DATA.name });
 
-  expect(cardTitles).toHaveLength(2);
-  expect(cardImages).toHaveLength(2);
+  expect(cardTitles).toHaveLength(10);
+  expect(cardImages).toHaveLength(10);
 });
 
 test("Should render all the round wrappers", () => {

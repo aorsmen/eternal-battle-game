@@ -180,6 +180,7 @@ export const TEST_GAME_CONTEXT: GameContextType = {
   goToNextRound: () => {},
   completeRound: () => {},
   startNewRound: () => {},
+  startNewGame: () => {},
 };
 
 export const TEST_HERO_NODE_DATA = {
@@ -221,35 +222,17 @@ export const TEST_MAIN_CONTEXT: MainContextType = {
   setCompare: () => {},
 };
 
+export const TEST_END_GAME_ROUND = {
+  result: null,
+  battles: [],
+  isStarted: true,
+  isEnded: true,
+};
+
 export const TEST_END_GAME_ROUNDS = [
-  {
-    result: null,
-    battles: [],
-    isStarted: true,
-    isEnded: true,
-  },
-  {
-    result: null,
-    battles: [],
-    isStarted: true,
-    isEnded: true,
-  },
-  {
-    result: null,
-    battles: [],
-    isStarted: true,
-    isEnded: true,
-  },
-  {
-    result: null,
-    battles: [],
-    isStarted: true,
-    isEnded: true,
-  },
-  {
-    result: null,
-    battles: [],
-    isStarted: true,
-    isEnded: true,
-  },
+  TEST_END_GAME_ROUND,
+  TEST_END_GAME_ROUND,
+  TEST_END_GAME_ROUND,
+  TEST_END_GAME_ROUND,
+  TEST_END_GAME_ROUND,
 ];
