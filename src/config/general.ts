@@ -47,3 +47,11 @@ export const TITLE_STYLE = {
 };
 
 export const DEFEAT_STYLE = { opacity: 0.3, filter: "grayscale(1)" };
+export const HERO_CARD_WIDTH = {
+  lg: 270,
+  sm: 182,
+};
+export const HERO_CARD_HEIGHT = {
+  lg: 370,
+  sm: 250,
+};

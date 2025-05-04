@@ -1,4 +1,11 @@
-import { Checkbox, Box, IconButton, FormControlLabel } from "@mui/material";
+import {
+  Checkbox,
+  Box,
+  IconButton,
+  FormControlLabel,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { NodeProps } from "@xyflow/react";
 import { HeroNodeWrapper, HeroNodeToolbar } from "./styled.components";
 import { HeroNodeType } from "../../../types/node.types";
@@ -8,6 +15,9 @@ import useMainContext from "../../../hooks/useMainContext";
 import HeroCard from "../../HeroCard";
 
 const HeroNode = (props: NodeProps<HeroNodeType>) => {
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up("lg"));
+  const windowSize = matches ? "lg" : "sm";
   const { data, id, selected } = props;
   const { setNodeDetails, removeHero, setCompare, compareList } =
     useMainContext();
@@ -29,7 +39,7 @@ const HeroNode = (props: NodeProps<HeroNodeType>) => {
   const isComparing = compareList.includes(id);
 
   return (
-    <HeroNodeWrapper>
+    <HeroNodeWrapper size={windowSize}>
       {selected && (
         <HeroNodeToolbar alignment={data.details.biography.alignment}>
           <Box sx={{ marginRight: "auto", paddingInline: "9px" }}>

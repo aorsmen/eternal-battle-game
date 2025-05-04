@@ -1,18 +1,31 @@
 import { Box, styled } from "@mui/material";
+import { HERO_CARD_WIDTH, HERO_CARD_HEIGHT } from "../../../config/general";
 
-export const CardSpot = styled(Box)({
+export const CardSpot = styled(Box)(({ theme }) => ({
   position: "relative",
-  height: "370px",
-  width: "270px",
-});
+  [theme.breakpoints.up("lg")]: {
+    height: `${HERO_CARD_HEIGHT.lg}px`,
+    width: `${HERO_CARD_WIDTH.lg}px`,
+  },
+  [theme.breakpoints.down("lg")]: {
+    height: `${HERO_CARD_HEIGHT.sm}px`,
+    width: `${HERO_CARD_WIDTH.sm}px`,
+  },
+}));
 
-export const HeroCardBack = ({ alignment }: { alignment: "good" | "bad" }) => {
+export const HeroCardBack = ({
+  alignment,
+  size,
+}: {
+  alignment: "good" | "bad";
+  size: "sm" | "lg";
+}) => {
   return (
     <Box
       className={`card-back${alignment === "good" ? " hero" : " villain"}`}
       sx={{
-        width: "270px",
-        height: "370px",
+        width: `${HERO_CARD_WIDTH[size]}px`,
+        height: `${HERO_CARD_HEIGHT[size]}px`,
         borderRadius: "5px",
       }}
       data-testid="computer-card-back"

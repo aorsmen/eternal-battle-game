@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
+import { useMediaQuery, useTheme } from "@mui/material";
 import { ReactFlowProvider } from "@xyflow/react";
 import {
   useNodesState,
@@ -11,6 +12,7 @@ import { MainContextType } from "../../types/main.types";
 import { useQuery } from "@tanstack/react-query";
 import { APIS } from "../../config/api";
 import { calculateSkills, calculateValues } from "../../helpers/hero";
+import { HERO_CARD_WIDTH, HERO_CARD_HEIGHT } from "../../config/general";
 
 const initialNodes: Node[] = [];
 const initialEdges: Edge[] = [];
@@ -44,6 +46,9 @@ const MainContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [nodeDetails, setNodeDetails] = useState(initState.nodeDetails);
   const [heroesData, setHeroesData] = useState(initState.heroesData);
   const [compareList, setCompareList] = useState(initState.compareList);
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up("lg"));
+  const windowSize = matches ? "lg" : "sm";
 
   const { data, isLoading: heroesIsLoading } = useQuery({
     queryKey: ["hero-data"],
@@ -84,8 +89,8 @@ const MainContextProvider = ({ children }: { children: React.ReactNode }) => {
               details: hero,
             },
             type: "heroNode",
-            width: 270,
-            height: 370,
+            width: HERO_CARD_WIDTH[windowSize],
+            height: HERO_CARD_HEIGHT[windowSize],
           });
         }
 
