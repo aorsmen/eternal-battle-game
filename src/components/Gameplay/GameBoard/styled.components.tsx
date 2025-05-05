@@ -1,5 +1,6 @@
 import { styled, Box } from "@mui/material";
 
-export const BoardWrapper = styled(Box)({
-  width: "1414px",
-});
+export const BoardWrapper = styled(Box)(({ theme }) => ({
+  width: "100%",
+  maxWidth: "1414px",
+}));

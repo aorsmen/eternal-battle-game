@@ -33,19 +33,11 @@ test("Should render combobox and buttons in the nodeIndex", () => {
     withRouter: true,
   });
 
-  const combobox = screen.getByRole("combobox", {
-    name: /select a hero/i,
-  });
-  const openBtn = screen.getByRole("button", {
-    name: /open/i,
-  });
-  const addBtn = screen.getByRole("button", {
-    name: /add/i,
+  const searchBtn = screen.getByRole("button", {
+    name: /search/i,
   });
 
-  expect(combobox).toBeInTheDocument();
-  expect(openBtn).toBeInTheDocument();
-  expect(addBtn).toBeInTheDocument();
+  expect(searchBtn).toBeInTheDocument();
 });
 
 test("Should render the board", () => {

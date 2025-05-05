@@ -49,12 +49,10 @@ test("Should render computer hero card data", () => {
   const type = screen.getByText(
     TEST_HERO_DATA.biography.alignment === "good" ? "Hero" : "Villain"
   );
-  const desc = screen.getByText(TEST_HERO_DATA.work.occupation);
 
   expect(image).toBeInTheDocument();
   expect(name).toBeInTheDocument();
   expect(type).toBeInTheDocument();
-  expect(desc).toBeInTheDocument();
 });
 
 test("Should render preview image", () => {

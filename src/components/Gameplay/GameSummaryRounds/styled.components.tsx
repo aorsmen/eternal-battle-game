@@ -6,10 +6,12 @@ export const RoundWrapper = ({
   index,
   active,
   children,
+  isMobile,
 }: {
   index: number;
   active: number;
   children: React.ReactNode;
+  isMobile: boolean;
 }) => {
   return (
     <Box
@@ -21,7 +23,7 @@ export const RoundWrapper = ({
     >
       <Box
         sx={{
-          marginBottom: "10px",
+          marginBottom: isMobile ? 0 : "10px",
           height: "30px",
         }}
       >
@@ -29,7 +31,7 @@ export const RoundWrapper = ({
           sx={{
             ...TITLE_STYLE,
             color: YELLOW,
-            fontSize: "18px",
+            fontSize: isMobile ? "14px" : "18px",
             background: BG_COLOR,
           }}
           className="round-title"

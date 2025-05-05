@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { Box } from "@mui/material";
+import { Box, useMediaQuery, useTheme } from "@mui/material";
 import useGameContext from "../../../hooks/useGameContext";
 import PlayerCardMotion from "../PlayerCardMotion";
 import ComputerCardMotion from "../ComputerCardMotion";
 import { BattleControls } from "./styled.components";
 
 const SingleBattle = ({ index }: { index: number }) => {
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up("lg"));
   const [isRevealed, setIsRevealed] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
   const { hands, currentBattle, battles, setBattleResult, revealCard } =
@@ -34,7 +36,7 @@ const SingleBattle = ({ index }: { index: number }) => {
         isRevealed={isRevealed}
         result={battles.computer[index]?.result || "draw"}
       />
-      <BattleControls isCurrent={isCurrentBattle} />
+      <BattleControls isCurrent={isCurrentBattle} isMobile={!matches} />
       <PlayerCardMotion
         index={index}
         isFlipped={isFlipped}

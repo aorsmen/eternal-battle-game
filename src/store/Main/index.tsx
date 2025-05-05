@@ -12,7 +12,11 @@ import { MainContextType } from "../../types/main.types";
 import { useQuery } from "@tanstack/react-query";
 import { APIS } from "../../config/api";
 import { calculateSkills, calculateValues } from "../../helpers/hero";
-import { HERO_CARD_WIDTH, HERO_CARD_HEIGHT } from "../../config/general";
+import {
+  HERO_CARD_WIDTH,
+  HERO_CARD_HEIGHT,
+  HEADER_HEIGHT,
+} from "../../config/general";
 
 const initialNodes: Node[] = [];
 const initialEdges: Edge[] = [];
@@ -83,7 +87,7 @@ const MainContextProvider = ({ children }: { children: React.ReactNode }) => {
         if (inx === -1) {
           newNodes.push({
             id: id,
-            position: { x: 0, y: 0 },
+            position: { x: 0, y: HEADER_HEIGHT[windowSize] },
             data: {
               label: hero.name,
               details: hero,

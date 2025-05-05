@@ -29,7 +29,7 @@ const ComparePanel = () => {
             bottom: 0,
             background: "#fff",
             color: "#000",
-            padding: "10px 20px",
+            padding: "10px",
             width: "100%",
             zIndex: 1000,
           }}
@@ -39,7 +39,7 @@ const ComparePanel = () => {
             alignItems="center"
             justifyContent="space-between"
           >
-            <Stack direction="row" alignItems="center" spacing={2}>
+            <Stack direction="row" alignItems="center" spacing={1}>
               {compareList.map((id) => {
                 const hero = getHeroById(id);
 
@@ -54,7 +54,7 @@ const ComparePanel = () => {
                 );
               })}
             </Stack>
-            <Stack direction="row" alignItems="center" spacing={2}>
+            <Stack direction="row" alignItems="center" spacing={1}>
               <Button
                 variant="contained"
                 color="warning"

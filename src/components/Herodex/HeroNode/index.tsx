@@ -42,7 +42,7 @@ const HeroNode = (props: NodeProps<HeroNodeType>) => {
     <HeroNodeWrapper size={windowSize}>
       {selected && (
         <HeroNodeToolbar alignment={data.details.biography.alignment}>
-          <Box sx={{ marginRight: "auto", paddingInline: "9px" }}>
+          <Box sx={{ marginRight: "auto" }}>
             <FormControlLabel
               control={
                 <Checkbox
@@ -56,6 +56,7 @@ const HeroNode = (props: NodeProps<HeroNodeType>) => {
               }
               label="Compare"
               sx={{
+                marginInline: 0,
                 "& .MuiFormControlLabel-label": {
                   fontSize: "14px",
                   color: "#fff",

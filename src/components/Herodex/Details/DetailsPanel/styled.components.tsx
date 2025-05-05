@@ -1,16 +1,22 @@
-import { styled } from "@mui/material";
-import { Box, Avatar } from "@mui/material";
+import { Box, Avatar, styled } from "@mui/material";
+import { HEADER_HEIGHT } from "../../../../config/general";
 
-export const DetailsPanelWrapper = styled(Box)`
-  width: 25vw;
-  max-width: 480px;
-  background: #eee;
-  position: absolute;
-  top: 64px;
-  right: 0;
-  height: calc(100% - 64px);
-  z-index: 1000;
-`;
+export const DetailsPanelWrapper = styled(Box)(({ theme }) => ({
+  width: "25vw",
+  maxWidth: "480px",
+  background: "#eee",
+  position: "absolute",
+  [theme.breakpoints.up("lg")]: {
+    top: `${HEADER_HEIGHT.lg}px`,
+    height: `calc(100dvh - ${HEADER_HEIGHT.lg}px)`,
+  },
+  [theme.breakpoints.down("lg")]: {
+    top: `${HEADER_HEIGHT.sm}px`,
+    height: `calc(100dvh - ${HEADER_HEIGHT.sm}px)`,
+  },
+  right: 0,
+  zIndex: 1000,
+}));
 
 export const ImageWrapper = ({ alt, src }: { alt: string; src: string }) => {
   return (

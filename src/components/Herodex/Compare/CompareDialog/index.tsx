@@ -8,6 +8,8 @@ import {
   Stack,
   Typography,
   ButtonBase,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import useMainContext from "../../../../hooks/useMainContext";
@@ -35,7 +37,7 @@ import {
   SkillGraphDataType,
   SkillNamesType,
 } from "../../../../types/main.types";
-import { BROWN } from "../../../../config/general";
+import { BROWN, TITLE_STYLE } from "../../../../config/general";
 
 const CompareDialog = ({
   isOpen,
@@ -44,6 +46,9 @@ const CompareDialog = ({
   isOpen: boolean;
   onClose: () => void;
 }) => {
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up("lg"));
+  const windowSize = matches ? "lg" : "sm";
   const [statGraphs, setStatGraphs] = useState<StatGraphDataType[]>([]);
   const [skillGraphs, setSkillGraphs] = useState<SkillGraphDataType[]>([]);
   const [heroGraphs, setHeroGraphs] = useState<HeroDataType[]>([]);
@@ -122,7 +127,15 @@ const CompareDialog = ({
       fullWidth
       data-testid="compare-dialog"
     >
-      <DialogTitle sx={{ m: 0, p: 2, background: BROWN, color: "#fff" }}>
+      <DialogTitle
+        sx={{
+          background: BROWN,
+          color: "#fff",
+          ...TITLE_STYLE,
+          fontSize: "20px",
+          padding: "10px 16px",
+        }}
+      >
         Compare
       </DialogTitle>
       <IconButton
@@ -138,8 +151,12 @@ const CompareDialog = ({
         <CloseIcon />
       </IconButton>
       <DialogContent dividers>
-        <Stack direction="row">
-          <Stack spacing={2} sx={{ height: "650px" }}>
+        <Stack direction={matches ? "row" : "column"}>
+          <Stack
+            spacing={2}
+            direction={!matches ? "row" : "column"}
+            sx={matches ? { height: "650px" } : {}}
+          >
             {heroGraphs.map((hero, inx) => (
               <ButtonBase
                 key={hero.id}
@@ -147,7 +164,7 @@ const CompareDialog = ({
                 onClick={() => graphOrderHandler(hero.id)}
               >
                 <HeroAvatar
-                  size={120}
+                  size={matches ? 120 : 55}
                   alt={hero?.name || ""}
                   src={hero?.images.md || ""}
                   variant="rounded"
@@ -168,14 +185,23 @@ const CompareDialog = ({
           <Stack
             direction="row"
             alignItems="center"
-            justifyContent="center"
-            sx={{ flex: 1 }}
+            justifyContent={matches ? "center" : "flex-start"}
+            sx={
+              matches
+                ? { flex: 1 }
+                : {
+                    overflow: "auto",
+                    marginInline: "-24px",
+                    paddingInline: "8px",
+                    marginTop: "10px",
+                  }
+            }
             spacing={5}
           >
             <Box
               sx={{
-                maxWidth: "450px",
-                maxHeight: "450px",
+                maxWidth: matches ? "450px" : "250px",
+                maxHeight: matches ? "450px" : "250px",
                 width: "100%",
                 height: "100%",
               }}
@@ -184,8 +210,8 @@ const CompareDialog = ({
               <ResponsiveContainer
                 width="100%"
                 height="100%"
-                minWidth={300}
-                minHeight={300}
+                minWidth={250}
+                minHeight={250}
                 aspect={1}
               >
                 <RadarChart
@@ -219,14 +245,20 @@ const CompareDialog = ({
             </Box>
             <Box
               sx={{
-                maxWidth: "450px",
-                maxHeight: "450px",
+                maxWidth: matches ? "450px" : "250px",
+                maxHeight: matches ? "450px" : "250px",
                 width: "100%",
                 height: "100%",
               }}
             >
               <Typography sx={{ textAlign: "center" }}>SKILLS</Typography>
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer
+                width="100%"
+                height="100%"
+                minWidth={250}
+                minHeight={250}
+                aspect={1}
+              >
                 <RadarChart
                   cx="50%"
                   cy="50%"

@@ -1,5 +1,4 @@
-import { Dialog } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
+import { Dialog, useMediaQuery, useTheme } from "@mui/material";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import useGameContext from "../../../hooks/useGameContext";
@@ -21,6 +20,9 @@ const GameSummary = ({
   isOpen: boolean;
   onClose: () => void;
 }) => {
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up("lg"));
+  const windowSize = matches ? "lg" : "sm";
   const { sides } = useGameContext();
 
   return (
@@ -29,11 +31,16 @@ const GameSummary = ({
       fullScreen
       sx={{ "& .MuiPaper-root": { background: BG_COLOR } }}
     >
-      <GameSummaryHeader title="GAME SUMMARY" onClose={onClose} />
+      <GameSummaryHeader
+        title="GAME SUMMARY"
+        onClose={onClose}
+        size={windowSize}
+      />
       <GameSummaryBody justifyContent="center">
         <GameSummaryBoards
           computerBoard={<SideBoard side="computer" data={sides.computer} />}
           playerBoard={<SideBoard side="player" data={sides.player} />}
+          isMobile={!matches}
         />
         <GameSummaryRounds />
       </GameSummaryBody>

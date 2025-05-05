@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -7,6 +7,8 @@ import {
   Stack,
   TextField,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import useGameContext from "../../../hooks/useGameContext";
 import { GameSideTypes } from "../../../types/game.types";
@@ -25,6 +27,8 @@ const DEFAULT_ERRORS = {
 };
 
 const SideDialog = () => {
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up("lg"));
   const { setSideSelection, sides } = useGameContext();
   const [inputs, setInputs] = useState(DEFAULT_INPUTS);
   const [errors, setErrors] = useState(DEFAULT_ERRORS);
@@ -59,7 +63,8 @@ const SideDialog = () => {
           color: "#fff",
           textAlign: "center",
           ...TITLE_STYLE,
-          fontSize: "28px",
+          fontSize: "24px",
+          padding: "12px 18px",
         }}
       >
         Player Info
@@ -77,7 +82,7 @@ const SideDialog = () => {
                 label="Player Name"
                 variant="filled"
                 fullWidth
-                sx={{ maxWidth: "50%" }}
+                sx={{ maxWidth: matches ? "50%" : "none" }}
                 error={errors.name !== ""}
                 helperText={errors.name}
                 onChange={(event) => {

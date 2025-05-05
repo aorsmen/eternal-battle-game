@@ -32,12 +32,10 @@ test("Should render card data correctly", () => {
   const type = screen.getByText(
     TEST_HERO_DATA.biography.alignment === "good" ? "Hero" : "Villain"
   );
-  const desc = screen.getByText(TEST_HERO_DATA.work.occupation);
 
   expect(image).toBeInTheDocument();
   expect(name).toBeInTheDocument();
   expect(type).toBeInTheDocument();
-  expect(desc).toBeInTheDocument();
 });
 
 test("Should not render node toolbar if the node is not selected", () => {

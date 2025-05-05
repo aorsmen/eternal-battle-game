@@ -19,7 +19,7 @@ const mockAddHeroHandler = vi.fn();
 TEST_MAIN_CONTEXT.addHero = mockAddHeroHandler;
 
 test("Should render combobox and buttons correctly", () => {
-  renderMainContext(<NodeIndex />, {
+  renderMainContext(<NodeIndex isOpen={true} />, {
     providerProps: TEST_MAIN_CTX,
     withRouter: false,
   });
@@ -40,7 +40,7 @@ test("Should render combobox and buttons correctly", () => {
 });
 
 test("Should suggest hero when type to the combobox and change value when select one of the suggestions", async () => {
-  renderMainContext(<NodeIndex />, {
+  renderMainContext(<NodeIndex isOpen={true} />, {
     providerProps: TEST_MAIN_CTX,
     withRouter: false,
   });
@@ -69,7 +69,7 @@ test("Should suggest hero when type to the combobox and change value when select
 });
 
 test("Add button must be disabled initial state and must be enabled one of the suggestions selected", async () => {
-  renderMainContext(<NodeIndex />, {
+  renderMainContext(<NodeIndex isOpen={true} />, {
     providerProps: TEST_MAIN_CTX,
     withRouter: false,
   });
@@ -104,7 +104,7 @@ test("Add button must be disabled initial state and must be enabled one of the s
 });
 
 test("Should call add hero function and send correct id when click the add button", async () => {
-  renderMainContext(<NodeIndex />, {
+  renderMainContext(<NodeIndex isOpen={true} />, {
     providerProps: TEST_MAIN_CTX,
     withRouter: false,
   });
@@ -146,7 +146,7 @@ test("Should call add hero function and send correct id when click the add butto
 });
 
 test("Should show clear button when select one of the suggestions and clear the input value when click the clear button", async () => {
-  renderMainContext(<NodeIndex />, {
+  renderMainContext(<NodeIndex isOpen={true} />, {
     providerProps: TEST_MAIN_CTX,
     withRouter: false,
   });

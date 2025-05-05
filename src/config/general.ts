@@ -55,3 +55,8 @@ export const HERO_CARD_HEIGHT = {
   lg: 370,
   sm: 250,
 };
+
+export const HEADER_HEIGHT = {
+  lg: 64,
+  sm: 36,
+};
