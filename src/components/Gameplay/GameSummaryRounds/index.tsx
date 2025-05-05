@@ -1,4 +1,4 @@
-import { Box, Stack } from "@mui/material";
+import { Box, Stack, useMediaQuery, useTheme } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
@@ -10,6 +10,8 @@ import { RoundsScoller, RoundWrapper } from "./styled.components";
 gsap.registerPlugin(ScrollTrigger);
 
 const GameSummaryRounds = () => {
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up("lg"));
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [activeRound, setActiveRound] = useState(0);
   const { rounds } = useGameContext();
@@ -50,7 +52,12 @@ const GameSummaryRounds = () => {
   return (
     <RoundsScoller ref={scrollContainerRef}>
       {rounds.map((round, i) => (
-        <RoundWrapper key={i} index={i} active={activeRound}>
+        <RoundWrapper
+          key={i}
+          index={i}
+          active={activeRound}
+          isMobile={!matches}
+        >
           {round.battles.map((battle, j) => {
             const playerStyle =
               battle.winner === "computer" ? DEFEAT_STYLE : {};

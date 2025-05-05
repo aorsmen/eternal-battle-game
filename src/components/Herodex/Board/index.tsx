@@ -1,20 +1,27 @@
-import { Box } from "@mui/material";
+import { Box, useMediaQuery, useTheme } from "@mui/material";
 import { ReactFlow, ConnectionLineType, Background } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import useMainContext from "../../../hooks/useMainContext";
 import HeroNode from "../HeroNode";
-import { BG_COLOR } from "../../../config/general";
+import { BG_COLOR, HEADER_HEIGHT } from "../../../config/general";
 
 const nodeTypes = {
   heroNode: HeroNode,
 };
 
 const Board = () => {
+  const theme = useTheme();
+  const windowSize = useMediaQuery(theme.breakpoints.up("lg")) ? "lg" : "sm";
   const { nodes, edges, onNodesChange, onEdgesChange, setReactFlowInstance } =
     useMainContext();
 
   return (
-    <Box sx={{ width: "100%", height: "calc(100dvh - 64px)" }}>
+    <Box
+      sx={{
+        width: "100%",
+        height: `calc(100dvh - ${HEADER_HEIGHT[windowSize]}px)`,
+      }}
+    >
       <ReactFlow
         colorMode="dark"
         nodes={nodes}

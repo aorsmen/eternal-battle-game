@@ -1,5 +1,12 @@
 import { useEffect, useRef } from "react";
-import { Typography, Stack, Box, Paper } from "@mui/material";
+import {
+  Typography,
+  Stack,
+  Box,
+  Paper,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import gsap from "gsap";
 import { GameSidesItemType, HandSidesType } from "../../../types/game.types";
 import { TITLE_STYLE, VILLAIN_RED, HERO_BLUE } from "../../../config/general";
@@ -16,10 +23,13 @@ const SideBoard = ({
   data: GameSidesItemType;
   onComplete?: () => void;
 }) => {
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up("lg"));
   const { name, score, type, lastScore } = data;
   const pointRef = useRef(null);
   const color = type === "heroes" ? HERO_BLUE : VILLAIN_RED;
   const scoreHasChanged = lastScore !== null && lastScore > 0;
+  const avatarSize = matches ? 42 : 24;
 
   useEffect(() => {
     if (scoreHasChanged) {
@@ -43,10 +53,11 @@ const SideBoard = ({
       {type !== null && (
         <Paper
           sx={{
-            padding: "10px 15px",
-            border: `1px solid ${color}`,
+            padding: matches ? "10px 15px" : "5px 8px",
+            border: `1px solid ${matches ? color : "transparent"}`,
             backgroundColor: "transparent",
           }}
+          elevation={0}
         >
           <Stack
             direction={side === "computer" ? "row" : "row-reverse"}
@@ -58,27 +69,31 @@ const SideBoard = ({
               alignItems="center"
               spacing={2}
             >
-              <Box sx={{ width: "42px", height: "42px" }}>
+              <Box
+                sx={{ flex: `0 0 ${avatarSize}px`, height: `${avatarSize}px` }}
+              >
                 <LazyLoadImage
                   alt={type || ""}
-                  height={42}
-                  width={42}
+                  height={avatarSize}
+                  width={avatarSize}
                   src={type === "heroes" ? heroIcon : villainIcon}
                 />
               </Box>
               <Typography
-                sx={{ ...TITLE_STYLE, fontSize: "24px" }}
+                sx={{ ...TITLE_STYLE, fontSize: matches ? "24px" : "16px" }}
                 color="primary"
               >
                 {name}
               </Typography>
             </Stack>
-            <Typography sx={{ fontSize: "28px", color }}>{score}</Typography>
+            <Typography sx={{ fontSize: matches ? "28px" : "18px", color }}>
+              {score}
+            </Typography>
             {scoreHasChanged && (
               <Typography
                 ref={pointRef}
                 sx={{
-                  fontSize: "24px",
+                  fontSize: matches ? "24px" : "16px",
                   color,
                   fontWeight: "bold",
                   pointerEvents: "none",

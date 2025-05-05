@@ -1,11 +1,14 @@
 import { Stack } from "@mui/material";
+import { HEADER_HEIGHT } from "../../../../config/general";
 
 export const HeaderWrapper = ({
   children,
   bg,
+  size,
 }: {
   children: React.ReactNode;
   bg: string;
+  size: "sm" | "lg";
 }) => {
   return (
     <Stack
@@ -14,7 +17,7 @@ export const HeaderWrapper = ({
       direction="row"
       sx={{
         width: "100%",
-        height: "64px",
+        height: `${HEADER_HEIGHT[size]}px`,
         background: bg,
         paddingInline: "10px",
       }}

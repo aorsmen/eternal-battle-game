@@ -50,7 +50,8 @@ const NextRoundDialog = ({
           color: "#fff",
           textAlign: "center",
           ...TITLE_STYLE,
-          fontSize: "28px",
+          fontSize: "24px",
+          padding: "12px 18px",
         }}
       >
         Round Result

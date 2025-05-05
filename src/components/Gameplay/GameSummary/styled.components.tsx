@@ -1,20 +1,27 @@
 import { styled, Box, Stack, Typography, ButtonBase } from "@mui/material";
-import { TITLE_STYLE, YELLOW } from "../../../config/general";
+import { TITLE_STYLE, YELLOW, HEADER_HEIGHT } from "../../../config/general";
 import CloseIcon from "@mui/icons-material/Close";
 
-export const GameSummaryBody = styled(Stack)({
+export const GameSummaryBody = styled(Stack)(({ theme }) => ({
   position: "relative",
   width: "100%",
-  height: "calc(100% - 64px)",
+  [theme.breakpoints.up("lg")]: {
+    height: `calc(100dvh - ${HEADER_HEIGHT.lg}px)`,
+  },
+  [theme.breakpoints.down("lg")]: {
+    height: `calc(100dvh - ${HEADER_HEIGHT.sm}px)`,
+  },
   overflow: "hidden",
-});
+}));
 
 export const GameSummaryHeader = ({
   title,
   onClose,
+  size,
 }: {
   title: string;
   onClose: () => void;
+  size: "sm" | "lg";
 }) => {
   return (
     <Stack
@@ -23,12 +30,15 @@ export const GameSummaryHeader = ({
       justifyContent="center"
       sx={{
         paddingInline: "20px",
-        height: "64px",
+        height: `${HEADER_HEIGHT[size]}px`,
         background: YELLOW,
         position: "relative",
       }}
     >
-      <Typography variant="h1" sx={{ fontSize: "24px", ...TITLE_STYLE }}>
+      <Typography
+        variant="h1"
+        sx={{ fontSize: size === "sm" ? "18px" : "24px", ...TITLE_STYLE }}
+      >
         {title}
       </Typography>
       <ButtonBase
@@ -36,7 +46,7 @@ export const GameSummaryHeader = ({
         onClick={onClose}
         sx={{ position: "absolute", top: "calc(50% - 12px)", right: "20px" }}
       >
-        <CloseIcon />
+        <CloseIcon fontSize="small" />
       </ButtonBase>
     </Stack>
   );
@@ -45,15 +55,20 @@ export const GameSummaryHeader = ({
 export const GameSummaryBoards = ({
   computerBoard,
   playerBoard,
+  isMobile,
 }: {
   computerBoard: React.ReactNode;
   playerBoard: React.ReactNode;
+  isMobile: boolean;
 }) => {
   return (
     <Stack
       direction="row"
       justifyContent="space-between"
-      sx={{ paddingInline: "20px", marginBottom: "20px" }}
+      sx={{
+        paddingInline: isMobile ? 0 : "20px",
+        marginBottom: isMobile ? "10px" : "20px",
+      }}
     >
       <Box sx={{ flex: 1, maxWidth: "45%" }}>{computerBoard}</Box>
       <Box sx={{ flex: 1, maxWidth: "45%" }}>{playerBoard}</Box>

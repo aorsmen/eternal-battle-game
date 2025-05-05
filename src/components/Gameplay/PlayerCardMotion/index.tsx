@@ -1,4 +1,5 @@
 import { useRef, useEffect } from "react";
+import { useMediaQuery, useTheme } from "@mui/material";
 import gsap from "gsap";
 import { CardSpot } from "./styled.components";
 import HeroCard from "../../HeroCard";
@@ -20,6 +21,9 @@ const PlayerCardMotion = ({
   result: BattleResultType;
   onClick: () => void;
 }) => {
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up("lg"));
+  const windowSize = matches ? "lg" : "sm";
   const { hands } = useGameContext();
   const data = hands.player[index];
   const alignment = data.biography.alignment;
@@ -77,7 +81,7 @@ const PlayerCardMotion = ({
       {isRevealed ? (
         <HeroCard data={data} />
       ) : (
-        <HeroCardBack alignment={data.biography.alignment} />
+        <HeroCardBack alignment={data.biography.alignment} size={windowSize} />
       )}
     </CardSpot>
   );

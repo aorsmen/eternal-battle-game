@@ -1,16 +1,23 @@
 import { Stack } from "@mui/material";
-import { VILLAIN_RED_DARK, HERO_BLUE_DARK } from "../../../config/general";
+import {
+  VILLAIN_RED_DARK,
+  HERO_BLUE_DARK,
+  HERO_CARD_WIDTH,
+  HERO_CARD_HEIGHT,
+} from "../../../config/general";
 
 export const HeroNodeWrapper = ({
   children,
+  size,
 }: {
   children: React.ReactNode;
+  size: "sm" | "lg";
 }) => {
   return (
     <Stack
       sx={{
-        width: "270px",
-        height: "370px",
+        width: `${HERO_CARD_WIDTH[size]}px`,
+        height: `${HERO_CARD_HEIGHT[size]}px`,
         position: "relative",
       }}
     >

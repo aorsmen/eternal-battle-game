@@ -4,6 +4,8 @@ import {
   YELLOW_DARK,
   HERO_BLUE_DARK,
   VILLAIN_RED_DARK,
+  HERO_CARD_WIDTH,
+  HERO_CARD_HEIGHT,
 } from "../../config/general";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -14,15 +16,17 @@ import villainIcon from "../../assets/villain-dark-mini-icon.png";
 export const HeroCardWrapper = ({
   children,
   alignment,
+  size,
 }: {
   children: React.ReactNode;
   alignment: "good" | "bad";
+  size: "sm" | "lg";
 }) => {
   return (
     <Stack
       sx={{
-        width: "270px",
-        height: "370px",
+        width: `${HERO_CARD_WIDTH[size]}px`,
+        height: `${HERO_CARD_HEIGHT[size]}px`,
         position: "relative",
         backgroundColor: YELLOW_DARK,
         borderRadius: "5px",
@@ -102,17 +106,21 @@ export const ImageWrapper = ({
   alt,
   src,
   plc,
+  size,
 }: {
   alt: string;
   src: string;
   plc: string;
+  size: "sm" | "lg";
 }) => {
+  const height = size === "lg" ? 345 : 213;
+  const width = size === "lg" ? 230 : 142;
   return (
     <Box
       sx={{
         overflow: "hidden",
         borderRadius: "5px",
-        height: "175px",
+        height: size === "lg" ? "175px" : "128px",
         position: "relative",
       }}
     >
@@ -126,9 +134,9 @@ export const ImageWrapper = ({
       >
         <LazyLoadImage
           alt={alt}
-          height={345}
+          height={height}
           src={src}
-          width={230}
+          width={width}
           placeholderSrc={plc}
         />
       </Box>
@@ -141,6 +149,7 @@ export const ImagePreview = ({
   src,
   show,
   alignment,
+  size,
   onOpen,
   onClose,
 }: {
@@ -148,13 +157,17 @@ export const ImagePreview = ({
   src: string;
   show: boolean;
   alignment: "good" | "bad";
+  size: "sm" | "lg";
   onOpen: () => void;
   onClose: () => void;
 }) => {
+  const height = size === "lg" ? "350px" : "230px";
+  const width = size === "lg" ? "250px" : "162px";
   return (
     <>
       <VisibilityIcon
         fontSize="small"
+        className="nodrag"
         sx={{
           position: "absolute",
           top: "7px",
@@ -164,19 +177,20 @@ export const ImagePreview = ({
         onClick={onOpen}
       />
       {show && (
-        <Fade in={show}>
+        <Fade in={show} className="nodrag">
           <Paper
             sx={{
-              height: "350px",
-              width: "250px",
+              height,
+              width,
               position: "absolute",
               left: 0,
               top: 0,
+              overflow: "hidden",
             }}
             onClick={onClose}
             onMouseLeave={onClose}
           >
-            <LazyLoadImage alt={alt} height={350} src={src} width={250} />
+            <LazyLoadImage alt={alt} height={height} src={src} width={width} />
             <CloseIcon
               fontSize="small"
               sx={{ position: "absolute", top: "10px", right: "10px" }}
@@ -190,15 +204,22 @@ export const ImagePreview = ({
 
 export const AlignmentWrapper = ({
   alignment,
+  isMobile,
 }: {
   alignment: "good" | "bad";
+  isMobile: boolean;
 }) => {
+  const bottom = isMobile
+    ? {
+        borderBottom: `1px solid rgb(0 0 0 / 40%)`,
+      }
+    : {};
   return (
     <Stack
       direction="row"
       alignItems="center"
       justifyContent="space-between"
-      sx={{ height: "32px" }}
+      sx={{ height: "32px", ...bottom }}
     >
       <Typography sx={{ fontSize: "12px" }}>
         {`${alignment === "good" ? "Hero" : "Villain"}`}

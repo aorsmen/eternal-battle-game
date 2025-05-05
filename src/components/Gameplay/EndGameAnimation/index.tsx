@@ -1,4 +1,11 @@
-import { Stack, Typography, Box, Button } from "@mui/material";
+import {
+  Stack,
+  Typography,
+  Box,
+  Button,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { HandSidesType } from "../../../types/game.types";
@@ -16,6 +23,7 @@ import useGameContext from "../../../hooks/useGameContext";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import heroIcon from "../../../assets/hero-icon.png";
 import villainIcon from "../../../assets/villain-icon.png";
+import { HEADER_HEIGHT } from "../../../config/general";
 
 type ParticleType = {
   id: number;
@@ -35,6 +43,8 @@ const generateParticles = (count: number): ParticleType[] =>
   }));
 
 const EndGameAnimation = ({ onClose }: { onClose: () => void }) => {
+  const theme = useTheme();
+  const windowSize = useMediaQuery(theme.breakpoints.up("lg")) ? "lg" : "sm";
   const overlayRef = useRef(null);
   const heroRef = useRef(null);
   const textRef = useRef(null);
@@ -119,32 +129,33 @@ const EndGameAnimation = ({ onClose }: { onClose: () => void }) => {
       spacing={2}
       style={{
         position: "fixed",
-        top: "64px",
+        top: `${HEADER_HEIGHT[windowSize]}px`,
         left: 0,
         width: "100%",
-        height: "calc(100vh - 64px)",
+        height: `calc(100vh - ${HEADER_HEIGHT[windowSize]}px)`,
         backgroundColor: "rgba(0, 0, 0, 0.6)",
         zIndex: 999,
       }}
     >
-      {particles.map((p, i) => (
-        <Box
-          key={p.id}
-          ref={(el) => {
-            particlesRef.current[i] = el as ParticleType;
-          }}
-          style={{
-            position: "absolute",
-            width: "5px",
-            height: "5px",
-            backgroundColor: i % 2 === 0 ? HERO_BLUE : VILLAIN_RED,
-            borderRadius: "50%",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-          }}
-        />
-      ))}
+      {gameWinner === "player" &&
+        particles.map((p, i) => (
+          <Box
+            key={p.id}
+            ref={(el) => {
+              particlesRef.current[i] = el as ParticleType;
+            }}
+            style={{
+              position: "absolute",
+              width: "5px",
+              height: "5px",
+              backgroundColor: i % 2 === 0 ? HERO_BLUE : VILLAIN_RED,
+              borderRadius: "50%",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+            }}
+          />
+        ))}
       <Typography
         sx={{
           ...TITLE_STYLE,
