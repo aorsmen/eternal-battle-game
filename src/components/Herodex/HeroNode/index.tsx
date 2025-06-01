@@ -6,19 +6,25 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { NodeProps } from "@xyflow/react";
 import { HeroNodeWrapper, HeroNodeToolbar } from "./styled.components";
-import { HeroNodeType } from "../../../types/node.types";
+import { HeroNodeDataType } from "../../../types/main.types";
 import InfoIcon from "@mui/icons-material/Info";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import useMainContext from "../../../hooks/useMainContext";
 import HeroCard from "../../HeroCard";
 
-const HeroNode = (props: NodeProps<HeroNodeType>) => {
+const HeroNode = ({
+  id,
+  data,
+  selected,
+}: {
+  id: string;
+  data: HeroNodeDataType;
+  selected: boolean;
+}) => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("lg"));
   const windowSize = matches ? "lg" : "sm";
-  const { data, id, selected } = props;
   const { setNodeDetails, removeHero, setCompare, compareList } =
     useMainContext();
 

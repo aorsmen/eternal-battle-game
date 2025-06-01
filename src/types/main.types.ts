@@ -87,8 +87,15 @@ export type HeroDataType = {
   bgColor?: string;
 };
 
+export type HeroNodeDataType = {
+  label: string;
+  details: HeroDataType;
+};
+
+export type HeroNodeType = Node<HeroNodeDataType, "heroNode">;
+
 export type MainContextType = {
-  nodes: Node[];
+  nodes: HeroNodeType[];
   edges: Edge[];
   heroesData: HeroDataType[];
   heroesIsLoading: boolean;
@@ -100,7 +107,7 @@ export type MainContextType = {
   setReactFlowInstance: React.Dispatch<
     React.SetStateAction<ReactFlowInstance | undefined>
   >;
-  setNodes: React.Dispatch<React.SetStateAction<Node[]>>;
+  setNodes: React.Dispatch<React.SetStateAction<HeroNodeType[]>>;
   setEdges: React.Dispatch<React.SetStateAction<Edge[]>>;
   addHero: (id: string) => void;
   removeHero: (id: string) => void;

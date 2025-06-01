@@ -39,13 +39,13 @@ const SideHands = () => {
     <Box sx={{ marginBlock: matches ? "30px" : "10px" }}>
       <Splide
         options={{
-          perPage: matches ? 5 : 2,
+          perMove: 1,
           fixedWidth: matches ? HERO_CARD_WIDTH.lg : HERO_CARD_WIDTH.sm,
           gap: matches ? "16px" : "8px",
           pagination: false,
           arrows: false,
           padding: matches ? {} : { left: "8px", right: "8px" },
-          drag: "free",
+          snap: true,
         }}
       >
         {hands.player.map((card, index) => (

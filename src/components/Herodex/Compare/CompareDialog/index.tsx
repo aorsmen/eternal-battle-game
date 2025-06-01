@@ -1,31 +1,17 @@
 import { useState, useEffect } from "react";
 import {
   Dialog,
-  DialogTitle,
   DialogContent,
-  IconButton,
   Box,
   Stack,
-  Typography,
-  ButtonBase,
   useMediaQuery,
   useTheme,
+  Tabs,
+  Tab,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
 import useMainContext from "../../../../hooks/useMainContext";
-import {
-  Radar,
-  RadarChart,
-  PolarGrid,
-  PolarAngleAxis,
-  PolarRadiusAxis,
-  ResponsiveContainer,
-  Tooltip,
-} from "recharts";
 import { HeroDataType } from "../../../../types/main.types";
-import HeroAvatar from "../../HeroAvatar";
 import {
-  graphColors,
   heroStats,
   heroSkills,
   statGraphKeys,
@@ -37,7 +23,12 @@ import {
   SkillGraphDataType,
   SkillNamesType,
 } from "../../../../types/main.types";
-import { BROWN, TITLE_STYLE } from "../../../../config/general";
+import {
+  CustomTabPanel,
+  GraphObject,
+  DialogHeader,
+  HeroThumb,
+} from "./styled.components";
 
 const CompareDialog = ({
   isOpen,
@@ -48,11 +39,11 @@ const CompareDialog = ({
 }) => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("lg"));
-  const windowSize = matches ? "lg" : "sm";
   const [statGraphs, setStatGraphs] = useState<StatGraphDataType[]>([]);
   const [skillGraphs, setSkillGraphs] = useState<SkillGraphDataType[]>([]);
   const [heroGraphs, setHeroGraphs] = useState<HeroDataType[]>([]);
   const [graphOrder, setGraphOrder] = useState<string[]>([]);
+  const [activeTab, setActiveTab] = useState(0);
   const { compareList, getHeroById } = useMainContext();
 
   const graphOrderHandler = (heroId: string) => {
@@ -66,6 +57,10 @@ const CompareDialog = ({
 
       return newList;
     });
+  };
+
+  const tabChangeHandler = (event: React.SyntheticEvent, newValue: number) => {
+    setActiveTab(newValue);
   };
 
   useEffect(() => {
@@ -127,29 +122,7 @@ const CompareDialog = ({
       fullWidth
       data-testid="compare-dialog"
     >
-      <DialogTitle
-        sx={{
-          background: BROWN,
-          color: "#fff",
-          ...TITLE_STYLE,
-          fontSize: "20px",
-          padding: "10px 16px",
-        }}
-      >
-        Compare
-      </DialogTitle>
-      <IconButton
-        onClick={onClose}
-        sx={{
-          position: "absolute",
-          right: 8,
-          top: 8,
-          color: "#fff",
-        }}
-        aria-label="Close"
-      >
-        <CloseIcon />
-      </IconButton>
+      <DialogHeader onClose={onClose} />
       <DialogContent dividers>
         <Stack direction={matches ? "row" : "column"}>
           <Stack
@@ -158,137 +131,52 @@ const CompareDialog = ({
             sx={matches ? { height: "650px" } : {}}
           >
             {heroGraphs.map((hero, inx) => (
-              <ButtonBase
+              <HeroThumb
                 key={hero.id}
-                sx={{ flexDirection: "column" }}
+                name={hero?.name || ""}
+                image={hero?.images.md || ""}
+                index={inx}
+                isMobile={!matches}
                 onClick={() => graphOrderHandler(hero.id)}
-              >
-                <HeroAvatar
-                  size={matches ? 120 : 55}
-                  alt={hero?.name || ""}
-                  src={hero?.images.md || ""}
-                  variant="rounded"
-                />
-                <Typography
-                  sx={{
-                    fontSize: "12px",
-                    marginBlock: "10px 0",
-                    textAlign: "center",
-                    color: graphColors[inx].stroke,
-                  }}
-                >
-                  {hero?.name}
-                </Typography>
-              </ButtonBase>
+              />
             ))}
           </Stack>
-          <Stack
-            direction="row"
-            alignItems="center"
-            justifyContent={matches ? "center" : "flex-start"}
+          <Box
             sx={
               matches
-                ? { flex: 1 }
+                ? { flex: 1, marginLeft: "40px" }
                 : {
-                    overflow: "auto",
-                    marginInline: "-24px",
-                    paddingInline: "8px",
                     marginTop: "10px",
                   }
             }
-            spacing={5}
           >
-            <Box
-              sx={{
-                maxWidth: matches ? "450px" : "250px",
-                maxHeight: matches ? "450px" : "250px",
-                width: "100%",
-                height: "100%",
-              }}
-            >
-              <Typography sx={{ textAlign: "center" }}>STATS</Typography>
-              <ResponsiveContainer
-                width="100%"
-                height="100%"
-                minWidth={250}
-                minHeight={250}
-                aspect={1}
+            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+              <Tabs
+                value={activeTab}
+                onChange={tabChangeHandler}
+                aria-label="Stat & Skill Graphs"
               >
-                <RadarChart
-                  cx="50%"
-                  cy="50%"
-                  outerRadius="80%"
-                  data={statGraphs}
-                  title="Stats"
-                >
-                  <PolarGrid />
-                  <PolarAngleAxis dataKey="subject" />
-                  <PolarRadiusAxis />
-                  {graphOrder.map((heroId) => {
-                    const inx = heroGraphs.findIndex((hr) => hr.id === heroId);
-                    const hero = heroGraphs[inx];
-
-                    return (
-                      <Radar
-                        key={hero?.id}
-                        name={hero?.name}
-                        dataKey={statGraphKeys[inx]}
-                        stroke={graphColors[inx].stroke}
-                        fill={graphColors[inx].fill}
-                        fillOpacity={0.6}
-                      />
-                    );
-                  })}
-                  <Tooltip />
-                </RadarChart>
-              </ResponsiveContainer>
+                <Tab label="STATS" />
+                <Tab label="SKILLS" />
+              </Tabs>
             </Box>
-            <Box
-              sx={{
-                maxWidth: matches ? "450px" : "250px",
-                maxHeight: matches ? "450px" : "250px",
-                width: "100%",
-                height: "100%",
-              }}
-            >
-              <Typography sx={{ textAlign: "center" }}>SKILLS</Typography>
-              <ResponsiveContainer
-                width="100%"
-                height="100%"
-                minWidth={250}
-                minHeight={250}
-                aspect={1}
-              >
-                <RadarChart
-                  cx="50%"
-                  cy="50%"
-                  outerRadius="80%"
-                  data={skillGraphs}
-                  title="Skills"
-                >
-                  <PolarGrid />
-                  <PolarAngleAxis dataKey="subject" />
-                  <PolarRadiusAxis />
-                  {graphOrder.map((heroId) => {
-                    const inx = heroGraphs.findIndex((hr) => hr.id === heroId);
-                    const hero = heroGraphs[inx];
-
-                    return (
-                      <Radar
-                        key={hero?.id}
-                        name={hero?.name}
-                        dataKey={skillGraphKeys[inx]}
-                        stroke={graphColors[inx].stroke}
-                        fill={graphColors[inx].fill}
-                        fillOpacity={0.6}
-                      />
-                    );
-                  })}
-                  <Tooltip />
-                </RadarChart>
-              </ResponsiveContainer>
-            </Box>
-          </Stack>
+            <CustomTabPanel value={activeTab} index={0}>
+              <GraphObject
+                title="Stats"
+                graphData={statGraphs}
+                graphOrder={graphOrder}
+                heroGraphs={heroGraphs}
+              />
+            </CustomTabPanel>
+            <CustomTabPanel value={activeTab} index={1}>
+              <GraphObject
+                title="Skills"
+                graphData={skillGraphs}
+                graphOrder={graphOrder}
+                heroGraphs={heroGraphs}
+              />
+            </CustomTabPanel>
+          </Box>
         </Stack>
       </DialogContent>
     </Dialog>

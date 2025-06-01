@@ -26,7 +26,7 @@ const NodeIndex = ({ isOpen }: { isOpen: boolean }) => {
       setSelectedHero(null);
     }
   };
-  console.log(isOpen);
+
   const heroList = heroesData.map((hero) => {
     return { id: hero.id, label: hero.name };
   });

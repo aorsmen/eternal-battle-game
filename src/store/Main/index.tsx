@@ -1,14 +1,15 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useCallback } from "react";
 import { useMediaQuery, useTheme } from "@mui/material";
-import { ReactFlowProvider } from "@xyflow/react";
+import { applyNodeChanges, ReactFlowProvider } from "@xyflow/react";
 import {
   useNodesState,
   useEdgesState,
-  Node,
   Edge,
   ReactFlowInstance,
+  NodeChange,
+  Node,
 } from "@xyflow/react";
-import { MainContextType } from "../../types/main.types";
+import { MainContextType, HeroNodeType } from "../../types/main.types";
 import { useQuery } from "@tanstack/react-query";
 import { APIS } from "../../config/api";
 import { calculateSkills, calculateValues } from "../../helpers/hero";
@@ -18,7 +19,7 @@ import {
   HEADER_HEIGHT,
 } from "../../config/general";
 
-const initialNodes: Node[] = [];
+const initialNodes: HeroNodeType[] = [];
 const initialEdges: Edge[] = [];
 
 const initState: MainContextType = {
@@ -43,7 +44,7 @@ const initState: MainContextType = {
 export const MainContext = createContext(initState);
 
 const MainContextProvider = ({ children }: { children: React.ReactNode }) => {
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [nodes, setNodes] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [reactFlowInstance, setReactFlowInstance] =
     useState<ReactFlowInstance>();
@@ -62,6 +63,11 @@ const MainContextProvider = ({ children }: { children: React.ReactNode }) => {
     },
   });
 
+  const onNodesChange = useCallback((changes: NodeChange<Node>[]) => {
+    const updates = changes as NodeChange<HeroNodeType>[];
+    setNodes((nds: HeroNodeType[]) => applyNodeChanges(updates, nds));
+  }, []);
+
   const getHeroById = (id: string) => {
     const hero = heroesData.filter((hr) => hr.id === id);
 
@@ -79,15 +85,19 @@ const MainContextProvider = ({ children }: { children: React.ReactNode }) => {
   const addHero = (id: string) => {
     const hero = getHeroById(id);
 
-    if (hero) {
+    if (hero && reactFlowInstance) {
+      const position = reactFlowInstance.screenToFlowPosition({
+        x: 0,
+        y: HEADER_HEIGHT[windowSize],
+      });
       setNodes((prev) => {
-        const newNodes = [...prev];
+        const newNodes = prev.map((nd) => ({ ...nd }));
         const inx = newNodes.findIndex((node) => node.id === id);
 
         if (inx === -1) {
           newNodes.push({
             id: id,
-            position: { x: 0, y: HEADER_HEIGHT[windowSize] },
+            position,
             data: {
               label: hero.name,
               details: hero,
