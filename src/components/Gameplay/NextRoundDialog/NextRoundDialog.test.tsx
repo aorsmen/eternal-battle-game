@@ -1,13 +1,13 @@
 // @ts-nocheck
-import { renderGameContext } from "../../../__fixtures__/renderGameContext";
+import { renderGameContext } from "@/__fixtures__/renderGameContext";
 import { screen, fireEvent } from "@testing-library/react";
 import NextRoundDialog from ".";
 import {
   TEST_GAME_CONTEXT,
   TEST_HERO_DATA,
-} from "../../../__fixtures__/testData";
+} from "@/__fixtures__/testData";
 import { vi } from "vitest";
-import { ROUND_DRAW_MESSAGE, ROUND_WIN_MESSAGE } from "../../../config/game";
+import { ROUND_DRAW_MESSAGE, ROUND_WIN_MESSAGE } from "@/config/game";
 
 const TEST_GAME_CTX = {
   value: TEST_GAME_CONTEXT,

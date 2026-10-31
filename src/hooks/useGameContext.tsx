@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { GameContext } from "../store/Game";
-import { GameContextType } from "../types/game.types";
+import { GameContext } from "@/store/Game";
+import { GameContextType } from "@/types/game.types";
 
 const useGameContext = (): GameContextType => {
   const {

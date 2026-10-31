@@ -2,15 +2,15 @@ import { useRef, useEffect } from "react";
 import { useMediaQuery, useTheme } from "@mui/material";
 import gsap from "gsap";
 import { CardSpot } from "./styled.components";
-import HeroCard from "../../HeroCard";
+import HeroCard from "@/components/HeroCard";
 import { HeroCardBack } from "./styled.components";
-import useGameContext from "../../../hooks/useGameContext";
-import { BattleResultType } from "../../../types/game.types";
+import useGameContext from "@/hooks/useGameContext";
+import { BattleResultType } from "@/types/game.types";
 import {
   VILLAIN_RED_DARK,
   HERO_BLUE_DARK,
   DEFEAT_STYLE,
-} from "../../../config/general";
+} from "@/config/general";
 
 const ComputerCardMotion = ({
   index,

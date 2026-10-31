@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { ButtonBase, useMediaQuery, useTheme } from "@mui/material";
-import Board from "../../components/Herodex/Board";
-import MainContextProvider from "../../store/Main";
-import Header from "../../components/UI/Header";
-import DetailsPanel from "../../components/Herodex/Details/DetailsPanel";
-import ComparePanel from "../../components/Herodex/Compare/ComparePanel";
-import NodeIndex from "../../components/Herodex/NodeIndex";
+import Board from "@/components/Herodex/Board";
+import MainContextProvider from "@/store/Main";
+import Header from "@/components/UI/Header";
+import DetailsPanel from "@/components/Herodex/Details/DetailsPanel";
+import ComparePanel from "@/components/Herodex/Compare/ComparePanel";
+import NodeIndex from "@/components/Herodex/NodeIndex";
 import "./Herodex.css";
 import SearchIcon from "@mui/icons-material/Search";
 

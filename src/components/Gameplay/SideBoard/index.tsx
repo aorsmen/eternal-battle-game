@@ -8,10 +8,10 @@ import {
   useTheme,
 } from "@mui/material";
 import gsap from "gsap";
-import { GameSidesItemType, HandSidesType } from "../../../types/game.types";
-import { TITLE_STYLE, VILLAIN_RED, HERO_BLUE } from "../../../config/general";
-import heroIcon from "../../../assets/hero-icon.png";
-import villainIcon from "../../../assets/villain-icon.png";
+import { GameSidesItemType, HandSidesType } from "@/types/game.types";
+import { TITLE_STYLE, VILLAIN_RED, HERO_BLUE } from "@/config/general";
+import heroIcon from "@/assets/hero-icon.png";
+import villainIcon from "@/assets/villain-icon.png";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const SideBoard = ({
@@ -61,13 +61,13 @@ const SideBoard = ({
         >
           <Stack
             direction={side === "computer" ? "row" : "row-reverse"}
-            alignItems="center"
             spacing={2}
+            sx={{ alignItems: "center" }}
           >
             <Stack
               direction={side === "computer" ? "row" : "row-reverse"}
-              alignItems="center"
               spacing={2}
+              sx={{ alignItems: "center" }}
             >
               <Box
                 sx={{ flex: `0 0 ${avatarSize}px`, height: `${avatarSize}px` }}

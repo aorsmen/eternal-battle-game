@@ -4,16 +4,16 @@ import {
   BattleResultType,
   GameSidesItemType,
   HandSidesType,
-} from "../../types/game.types";
+} from "@/types/game.types";
 import { useQuery } from "@tanstack/react-query";
-import { APIS } from "../../config/api";
-import { HeroDataType } from "../../types/main.types";
-import { sideOptions } from "../../config/game";
+import { APIS } from "@/config/api";
+import { HeroDataType } from "@/types/main.types";
+import { sideOptions } from "@/config/game";
 import {
   calculateSkills,
   calculateValues,
   // getDominantColor,
-} from "../../helpers/hero";
+} from "@/helpers/hero";
 import {
   uniqueNamesGenerator,
   adjectives,

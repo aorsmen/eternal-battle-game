@@ -10,11 +10,11 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import useGameContext from "../../../hooks/useGameContext";
-import { GameSideTypes } from "../../../types/game.types";
-import heroesImage from "../../../assets/heroes.png";
-import villainsImage from "../../../assets/villains.png";
-import { BROWN, TITLE_STYLE } from "../../../config/general";
+import useGameContext from "@/hooks/useGameContext";
+import { GameSideTypes } from "@/types/game.types";
+import heroesImage from "@/assets/heroes.png";
+import villainsImage from "@/assets/villains.png";
+import { BROWN, TITLE_STYLE } from "@/config/general";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const DEFAULT_INPUTS = {
@@ -74,8 +74,7 @@ const SideDialog = () => {
           {!hasName && (
             <Stack
               direction="row"
-              justifyContent="center"
-              sx={{ marginTop: "25px" }}
+              sx={{ justifyContent: "center", marginTop: "25px" }}
             >
               <TextField
                 id="player-name"

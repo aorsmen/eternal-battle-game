@@ -1,5 +1,5 @@
 import { Box, Avatar, styled } from "@mui/material";
-import { HEADER_HEIGHT } from "../../../../config/general";
+import { HEADER_HEIGHT } from "@/config/general";
 
 export const DetailsPanelWrapper = styled(Box)(({ theme }) => ({
   width: "25vw",

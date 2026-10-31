@@ -7,17 +7,17 @@ import {
   Stack,
   Box,
 } from "@mui/material";
-import useGameContext from "../../../hooks/useGameContext";
+import useGameContext from "@/hooks/useGameContext";
 import {
   TITLE_STYLE,
   VILLAIN_RED,
   HERO_BLUE,
   BROWN,
-} from "../../../config/general";
-import { ROUND_DRAW_MESSAGE, ROUND_WIN_MESSAGE } from "../../../config/game";
+} from "@/config/general";
+import { ROUND_DRAW_MESSAGE, ROUND_WIN_MESSAGE } from "@/config/game";
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
-import heroIcon from "../../../assets/hero-icon.png";
-import villainIcon from "../../../assets/villain-icon.png";
+import heroIcon from "@/assets/hero-icon.png";
+import villainIcon from "@/assets/villain-icon.png";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const NextRoundDialog = ({
@@ -58,7 +58,7 @@ const NextRoundDialog = ({
       </DialogTitle>
       <DialogContent>
         {roundWinner !== null && roundWinner !== "draw" && (
-          <Stack alignItems="center">
+          <Stack sx={{ alignItems: "center" }}>
             <Box sx={{ width: "60px", height: "60px", marginTop: "25px" }}>
               <LazyLoadImage
                 alt={sides[roundWinner].type || ""}
@@ -80,7 +80,7 @@ const NextRoundDialog = ({
         >
           {textMsg}
         </Typography>
-        <Stack alignItems="center">
+        <Stack sx={{ alignItems: "center" }}>
           <Button
             variant="contained"
             color="primary"

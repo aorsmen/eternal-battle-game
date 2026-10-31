@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { renderGameContext } from "../../../__fixtures__/renderGameContext";
+import { renderGameContext } from "@/__fixtures__/renderGameContext";
 import {
   screen,
   fireEvent,
@@ -13,14 +13,14 @@ import {
   TEST_HERO_DATA,
   TEST_END_GAME_ROUNDS,
   TEST_END_GAME_ROUND,
-} from "../../../__fixtures__/testData";
+} from "@/__fixtures__/testData";
 import { vi } from "vitest";
 import {
   ROUND_DRAW_MESSAGE,
   ROUND_WIN_MESSAGE,
   GAME_DRAW_MESSAGE,
   GAME_WIN_MESSAGE,
-} from "../../../config/game";
+} from "@/config/game";
 
 const TEST_GAME_CTX = {
   value: TEST_GAME_CONTEXT,

@@ -1,5 +1,5 @@
 import { styled, Box } from "@mui/material";
-import { HERO_CARD_WIDTH } from "../../../config/general";
+import { HERO_CARD_WIDTH } from "@/config/general";
 
 export const SideHandGrid = styled(Box)(({ theme }) => ({
   [theme.breakpoints.up("lg")]: {

@@ -1,12 +1,12 @@
 // @ts-nocheck
-import { renderGameContext } from "../../../__fixtures__/renderGameContext";
+import { renderGameContext } from "@/__fixtures__/renderGameContext";
 import { screen } from "@testing-library/react";
 import GameSummaryRounds from ".";
 import {
   TEST_GAME_CONTEXT,
   TEST_HERO_DATA,
   TEST_END_GAME_ROUNDS,
-} from "../../../__fixtures__/testData";
+} from "@/__fixtures__/testData";
 
 const TEST_GAME_CTX = {
   value: TEST_GAME_CONTEXT,

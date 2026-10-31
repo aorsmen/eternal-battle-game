@@ -1,9 +1,9 @@
 // @ts-nocheck
-import { renderGameContext } from "../../../__fixtures__/renderGameContext";
+import { renderGameContext } from "@/__fixtures__/renderGameContext";
 import { screen, fireEvent, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import SideDialog from ".";
-import { TEST_GAME_CONTEXT } from "../../../__fixtures__/testData";
+import { TEST_GAME_CONTEXT } from "@/__fixtures__/testData";
 import { vi } from "vitest";
 import { act } from "react";
 

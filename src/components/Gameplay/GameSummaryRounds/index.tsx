@@ -2,9 +2,9 @@ import { Box, Stack, useMediaQuery, useTheme } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
-import useGameContext from "../../../hooks/useGameContext";
-import HeroCard from "../../HeroCard";
-import { DEFEAT_STYLE } from "../../../config/general";
+import useGameContext from "@/hooks/useGameContext";
+import HeroCard from "@/components/HeroCard";
+import { DEFEAT_STYLE } from "@/config/general";
 import { RoundsScoller, RoundWrapper } from "./styled.components";
 
 gsap.registerPlugin(ScrollTrigger);

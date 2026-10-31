@@ -10,9 +10,9 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { HeroItemType } from "../../../types/main.types";
-import useMainContext from "../../../hooks/useMainContext";
-import { YELLOW, HEADER_HEIGHT } from "../../../config/general";
+import { HeroItemType } from "@/types/main.types";
+import useMainContext from "@/hooks/useMainContext";
+import { YELLOW, HEADER_HEIGHT } from "@/config/general";
 
 const NodeIndex = ({ isOpen }: { isOpen: boolean }) => {
   const theme = useTheme();
@@ -34,9 +34,8 @@ const NodeIndex = ({ isOpen }: { isOpen: boolean }) => {
   let content = (
     <Stack
       direction="row"
-      alignItems="center"
       spacing={2}
-      sx={{ marginLeft: matches ? "30px !important" : 0 }}
+      sx={{ alignItems: "center", marginLeft: matches ? "30px !important" : 0 }}
     >
       <Autocomplete
         disablePortal

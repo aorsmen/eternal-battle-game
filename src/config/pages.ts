@@ -1,7 +1,7 @@
 import {
   CreditsPageContentType,
   HomePageContentType,
-} from "../types/pages.types";
+} from "@/types/pages.types";
 
 export const CREDITS_CONTENT: CreditsPageContentType[] = [
   {

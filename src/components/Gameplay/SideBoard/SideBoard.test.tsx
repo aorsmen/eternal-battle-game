@@ -1,8 +1,8 @@
 // @ts-nocheck
-import { renderGameContext } from "../../../__fixtures__/renderGameContext";
+import { renderGameContext } from "@/__fixtures__/renderGameContext";
 import { screen, fireEvent } from "@testing-library/react";
 import SideBoard from ".";
-import { TEST_GAME_CONTEXT } from "../../../__fixtures__/testData";
+import { TEST_GAME_CONTEXT } from "@/__fixtures__/testData";
 
 const TEST_GAME_CTX = {
   value: TEST_GAME_CONTEXT,

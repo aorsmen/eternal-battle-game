@@ -1,12 +1,12 @@
 // @ts-nocheck
-import { renderMainContext } from "../../../__fixtures__/renderMainContext";
+import { renderMainContext } from "@/__fixtures__/renderMainContext";
 import { screen, fireEvent } from "@testing-library/react";
 import HeroNode from ".";
 import {
   TEST_HERO_DATA,
   TEST_HERO_NODE_DATA,
   TEST_MAIN_CONTEXT,
-} from "../../../__fixtures__/testData";
+} from "@/__fixtures__/testData";
 import { vi } from "vitest";
 
 const TEST_MAIN_CTX = {

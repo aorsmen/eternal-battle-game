@@ -3,14 +3,14 @@ import {
   HeroAppearanceMapType,
   HeroStatsMapType,
   HeroSkillsMapType,
-} from "../types/node.types";
+} from "@/types/node.types";
 import {
   StatGraphDataType,
   SkillGraphDataType,
   StatsNamesType,
   SkillsType,
   SkillNamesType,
-} from "../types/main.types";
+} from "@/types/main.types";
 import {
   YELLOW_LIGHT,
   YELLOW_DARK,

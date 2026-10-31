@@ -1,10 +1,10 @@
 import { useState } from "react";
-import SideHands from "../../../components/Gameplay/SideHands";
+import SideHands from "@/components/Gameplay/SideHands";
 import { BoardWrapper } from "./styled.components";
-import SideBoard from "../../../components/Gameplay/SideBoard";
-import useGameContext from "../../../hooks/useGameContext";
-import EndGameAnimation from "../EndGameAnimation";
-import GameSummary from "../GameSummary";
+import SideBoard from "@/components/Gameplay/SideBoard";
+import useGameContext from "@/hooks/useGameContext";
+import EndGameAnimation from "@/components/Gameplay/EndGameAnimation";
+import GameSummary from "@/components/Gameplay/GameSummary";
 
 const GameBoard = () => {
   const [showSummary, setShowSummary] = useState(false);

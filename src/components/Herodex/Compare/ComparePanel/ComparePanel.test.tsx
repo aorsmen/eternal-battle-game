@@ -1,12 +1,12 @@
 // @ts-nocheck
-import { renderMainContext } from "../../../../__fixtures__/renderMainContext";
+import { renderMainContext } from "@/__fixtures__/renderMainContext";
 import { screen, fireEvent, waitFor, within } from "@testing-library/react";
 import ComparePanel from ".";
 import {
   TEST_MAIN_CONTEXT,
   TEST_HERO_DATA,
   TEST_HERO_DATA_2,
-} from "../../../../__fixtures__/testData";
+} from "@/__fixtures__/testData";
 import { vi } from "vitest";
 import { act } from "react";
 

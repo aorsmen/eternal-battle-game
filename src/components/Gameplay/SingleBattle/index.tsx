@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Box, useMediaQuery, useTheme } from "@mui/material";
-import useGameContext from "../../../hooks/useGameContext";
-import PlayerCardMotion from "../PlayerCardMotion";
-import ComputerCardMotion from "../ComputerCardMotion";
+import useGameContext from "@/hooks/useGameContext";
+import PlayerCardMotion from "@/components/Gameplay/PlayerCardMotion";
+import ComputerCardMotion from "@/components/Gameplay/ComputerCardMotion";
 import { BattleControls } from "./styled.components";
 
 const SingleBattle = ({ index }: { index: number }) => {

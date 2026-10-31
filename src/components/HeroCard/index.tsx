@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { HeroDataType } from "../../types/main.types";
+import { HeroDataType } from "@/types/main.types";
 import { Typography, useMediaQuery, useTheme } from "@mui/material";
 import {
   HeroCardWrapper,

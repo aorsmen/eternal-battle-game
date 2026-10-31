@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Paper, Stack, Button, Slide } from "@mui/material";
-import useMainContext from "../../../../hooks/useMainContext";
-import HeroAvatar from "../../HeroAvatar";
-import CompareDialog from "../CompareDialog";
+import useMainContext from "@/hooks/useMainContext";
+import HeroAvatar from "@/components/Herodex/HeroAvatar";
+import CompareDialog from "@/components/Herodex/Compare/CompareDialog";
 
 const ComparePanel = () => {
   const [isComparing, setIsComparing] = useState(false);
@@ -36,10 +36,9 @@ const ComparePanel = () => {
         >
           <Stack
             direction="row"
-            alignItems="center"
-            justifyContent="space-between"
+            sx={{ alignItems: "center", justifyContent: "space-between" }}
           >
-            <Stack direction="row" alignItems="center" spacing={1}>
+            <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
               {compareList.map((id) => {
                 const hero = getHeroById(id);
 
@@ -54,7 +53,7 @@ const ComparePanel = () => {
                 );
               })}
             </Stack>
-            <Stack direction="row" alignItems="center" spacing={1}>
+            <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
               <Button
                 variant="contained"
                 color="warning"

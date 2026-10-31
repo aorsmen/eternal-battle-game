@@ -1,15 +1,15 @@
 import { Dialog, useMediaQuery, useTheme } from "@mui/material";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
-import useGameContext from "../../../hooks/useGameContext";
-import { BG_COLOR } from "../../../config/general";
-import SideBoard from "../SideBoard";
+import useGameContext from "@/hooks/useGameContext";
+import { BG_COLOR } from "@/config/general";
+import SideBoard from "@/components/Gameplay/SideBoard";
 import {
   GameSummaryBoards,
   GameSummaryHeader,
   GameSummaryBody,
 } from "./styled.components";
-import GameSummaryRounds from "../GameSummaryRounds";
+import GameSummaryRounds from "@/components/Gameplay/GameSummaryRounds";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -36,7 +36,7 @@ const GameSummary = ({
         onClose={onClose}
         size={windowSize}
       />
-      <GameSummaryBody justifyContent="center">
+      <GameSummaryBody sx={{ justifyContent: "center" }}>
         <GameSummaryBoards
           computerBoard={<SideBoard side="computer" data={sides.computer} />}
           playerBoard={<SideBoard side="player" data={sides.player} />}

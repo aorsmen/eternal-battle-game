@@ -9,20 +9,20 @@ import {
   Tabs,
   Tab,
 } from "@mui/material";
-import useMainContext from "../../../../hooks/useMainContext";
-import { HeroDataType } from "../../../../types/main.types";
+import useMainContext from "@/hooks/useMainContext";
+import { HeroDataType } from "@/types/main.types";
 import {
   heroStats,
   heroSkills,
   statGraphKeys,
   skillGraphKeys,
-} from "../../../../config/hero";
+} from "@/config/hero";
 import {
   StatGraphDataType,
   StatsNamesType,
   SkillGraphDataType,
   SkillNamesType,
-} from "../../../../types/main.types";
+} from "@/types/main.types";
 import {
   CustomTabPanel,
   GraphObject,

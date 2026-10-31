@@ -1,10 +1,10 @@
 import { Slide, Paper, Box } from "@mui/material";
 import { DetailsPanelWrapper, ImageWrapper } from "./styled.components";
-import useMainContext from "../../../../hooks/useMainContext";
-import DetailsPanelHeader from "../DetailsPanelHeader";
-import DetailsPanelTabs from "../DetailsPanelTabs";
-import heroIcon from "../../../../assets/hero-dark-mini-icon.png";
-import villainIcon from "../../../../assets/villain-dark-mini-icon.png";
+import useMainContext from "@/hooks/useMainContext";
+import DetailsPanelHeader from "@/components/Herodex/Details/DetailsPanelHeader";
+import DetailsPanelTabs from "@/components/Herodex/Details/DetailsPanelTabs";
+import heroIcon from "@/assets/hero-dark-mini-icon.png";
+import villainIcon from "@/assets/villain-dark-mini-icon.png";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const DetailsPanel = () => {

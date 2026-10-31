@@ -10,11 +10,18 @@
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
+    "paths": {
+      "@/*": ["./src/*"],
+      // @splidejs/react-splide's package.json "exports" omits its types
+      "@splidejs/react-splide": [
+        "./node_modules/@splidejs/react-splide/dist/types/index.d.ts"
+      ]
+    },
     "types": [
       "vite/client",
       "vitest/globals",

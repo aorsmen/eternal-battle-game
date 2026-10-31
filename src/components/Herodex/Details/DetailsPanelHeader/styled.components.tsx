@@ -1,5 +1,5 @@
 import { Stack } from "@mui/material";
-import { HEADER_HEIGHT } from "../../../../config/general";
+import { HEADER_HEIGHT } from "@/config/general";
 
 export const HeaderWrapper = ({
   children,
@@ -12,10 +12,10 @@ export const HeaderWrapper = ({
 }) => {
   return (
     <Stack
-      alignItems="center"
-      justifyContent="space-between"
       direction="row"
       sx={{
+        alignItems: "center",
+        justifyContent: "space-between",
         width: "100%",
         height: `${HEADER_HEIGHT[size]}px`,
         background: bg,

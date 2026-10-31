@@ -1,11 +1,11 @@
 // @ts-nocheck
-import { renderGameContext } from "../../../__fixtures__/renderGameContext";
+import { renderGameContext } from "@/__fixtures__/renderGameContext";
 import { screen, fireEvent } from "@testing-library/react";
 import ComputerCardMotion from ".";
 import {
   TEST_GAME_CONTEXT,
   TEST_HERO_DATA,
-} from "../../../__fixtures__/testData";
+} from "@/__fixtures__/testData";
 
 const TEST_GAME_CTX = {
   value: TEST_GAME_CONTEXT,

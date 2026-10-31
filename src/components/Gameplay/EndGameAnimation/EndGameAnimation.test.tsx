@@ -1,10 +1,10 @@
 // @ts-nocheck
-import { renderGameContext } from "../../../__fixtures__/renderGameContext";
+import { renderGameContext } from "@/__fixtures__/renderGameContext";
 import { screen, fireEvent } from "@testing-library/react";
 import EndGameAnimation from ".";
-import { TEST_GAME_CONTEXT } from "../../../__fixtures__/testData";
+import { TEST_GAME_CONTEXT } from "@/__fixtures__/testData";
 import { vi } from "vitest";
-import { GAME_DRAW_MESSAGE, GAME_WIN_MESSAGE } from "../../../config/game";
+import { GAME_DRAW_MESSAGE, GAME_WIN_MESSAGE } from "@/config/game";
 
 const TEST_GAME_CTX = {
   value: TEST_GAME_CONTEXT,

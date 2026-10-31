@@ -1,8 +1,8 @@
 // @ts-nocheck
-import { renderWithProviders } from "../../__fixtures__/renderWithProviders";
+import { renderWithProviders } from "@/__fixtures__/renderWithProviders";
 import { screen } from "@testing-library/react";
 import Credits from ".";
-import { CREDITS_CONTENT } from "../../config/pages";
+import { CREDITS_CONTENT } from "@/config/pages";
 
 test("Should render credits page header", () => {
   renderWithProviders(<Credits />, {

@@ -12,13 +12,13 @@ import {
   AppearanceType,
   PowerStatType,
   SkillsType,
-} from "../../../../types/main.types";
+} from "@/types/main.types";
 import {
   biographyDataMap,
   appearanceDataMap,
   statsDataMap,
   skillsDataMap,
-} from "../../../../config/hero";
+} from "@/config/hero";
 
 export const formatValue = (value: string | string[]) => {
   return Array.isArray(value) ? (value as string[]).join(" / ") : value;

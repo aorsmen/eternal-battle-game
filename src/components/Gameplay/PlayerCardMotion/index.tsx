@@ -2,11 +2,11 @@ import { useRef, useEffect } from "react";
 import { useMediaQuery, useTheme } from "@mui/material";
 import gsap from "gsap";
 import { CardSpot } from "./styled.components";
-import HeroCard from "../../HeroCard";
+import HeroCard from "@/components/HeroCard";
 import { HeroCardBack } from "./styled.components";
-import useGameContext from "../../../hooks/useGameContext";
-import { BattleResultType } from "../../../types/game.types";
-import { VILLAIN_RED_DARK, HERO_BLUE_DARK } from "../../../config/general";
+import useGameContext from "@/hooks/useGameContext";
+import { BattleResultType } from "@/types/game.types";
+import { VILLAIN_RED_DARK, HERO_BLUE_DARK } from "@/config/general";
 
 const PlayerCardMotion = ({
   index,

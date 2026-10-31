@@ -1,9 +1,9 @@
 import { Box, useMediaQuery, useTheme } from "@mui/material";
 import { ReactFlow, ConnectionLineType, Background } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-import useMainContext from "../../../hooks/useMainContext";
-import HeroNode from "../HeroNode";
-import { BG_COLOR, HEADER_HEIGHT } from "../../../config/general";
+import useMainContext from "@/hooks/useMainContext";
+import HeroNode from "@/components/Herodex/HeroNode";
+import { BG_COLOR, HEADER_HEIGHT } from "@/config/general";
 
 const nodeTypes = {
   heroNode: HeroNode,

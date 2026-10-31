@@ -1,8 +1,8 @@
 // @ts-nocheck
-import { renderGameContext } from "../../../__fixtures__/renderGameContext";
+import { renderGameContext } from "@/__fixtures__/renderGameContext";
 import { screen, waitFor } from "@testing-library/react";
 import RoundStartDialog from ".";
-import { TEST_GAME_CONTEXT } from "../../../__fixtures__/testData";
+import { TEST_GAME_CONTEXT } from "@/__fixtures__/testData";
 import { vi } from "vitest";
 
 const TEST_GAME_CTX = {

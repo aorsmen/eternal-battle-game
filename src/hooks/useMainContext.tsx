@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { MainContext } from "../store/Main";
-import { MainContextType } from "../types/main.types";
+import { MainContext } from "@/store/Main";
+import { MainContextType } from "@/types/main.types";
 
 const useMainContext = (): MainContextType => {
   const {

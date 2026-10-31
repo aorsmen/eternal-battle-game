@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { YELLOW, YELLOW_DARK } from "../../config/general";
+import { YELLOW, YELLOW_DARK } from "@/config/general";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
 export const LogoWrapper = ({ src }: { src: string }) => {

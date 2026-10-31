@@ -2,11 +2,11 @@ import { useState, useEffect, useCallback } from "react";
 import { useMediaQuery, useTheme, Box } from "@mui/material";
 import "@splidejs/react-splide/css";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
-import useGameContext from "../../../hooks/useGameContext";
-import SingleBattle from "../SingleBattle";
-import NextRoundDialog from "../NextRoundDialog";
-import RoundStartDialog from "../RoundStartDialog";
-import { HERO_CARD_WIDTH } from "../../../config/general";
+import useGameContext from "@/hooks/useGameContext";
+import SingleBattle from "@/components/Gameplay/SingleBattle";
+import NextRoundDialog from "@/components/Gameplay/NextRoundDialog";
+import RoundStartDialog from "@/components/Gameplay/RoundStartDialog";
+import { HERO_CARD_WIDTH } from "@/config/general";
 
 const SideHands = () => {
   const theme = useTheme();

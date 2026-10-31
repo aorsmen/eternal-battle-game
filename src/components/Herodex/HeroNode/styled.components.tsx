@@ -4,7 +4,7 @@ import {
   HERO_BLUE_DARK,
   HERO_CARD_WIDTH,
   HERO_CARD_HEIGHT,
-} from "../../../config/general";
+} from "@/config/general";
 
 export const HeroNodeWrapper = ({
   children,
@@ -36,9 +36,9 @@ export const HeroNodeToolbar = ({
   return (
     <Stack
       direction="row"
-      alignItems="center"
-      justifyContent="flex-end"
       sx={{
+        alignItems: "center",
+        justifyContent: "flex-end",
         position: "absolute",
         top: 0,
         right: 0,

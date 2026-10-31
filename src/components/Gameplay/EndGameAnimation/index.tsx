@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { HandSidesType } from "../../../types/game.types";
+import { HandSidesType } from "@/types/game.types";
 import {
   TITLE_STYLE,
   YELLOW,
@@ -17,13 +17,13 @@ import {
   BROWN_LIGHT,
   HERO_BLUE,
   VILLAIN_RED,
-} from "../../../config/general";
-import { GAME_DRAW_MESSAGE, GAME_WIN_MESSAGE } from "../../../config/game";
-import useGameContext from "../../../hooks/useGameContext";
+} from "@/config/general";
+import { GAME_DRAW_MESSAGE, GAME_WIN_MESSAGE } from "@/config/game";
+import useGameContext from "@/hooks/useGameContext";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import heroIcon from "../../../assets/hero-icon.png";
-import villainIcon from "../../../assets/villain-icon.png";
-import { HEADER_HEIGHT } from "../../../config/general";
+import heroIcon from "@/assets/hero-icon.png";
+import villainIcon from "@/assets/villain-icon.png";
+import { HEADER_HEIGHT } from "@/config/general";
 
 type ParticleType = {
   id: number;
@@ -124,8 +124,6 @@ const EndGameAnimation = ({ onClose }: { onClose: () => void }) => {
   return (
     <Stack
       ref={overlayRef}
-      alignItems="center"
-      justifyContent="center"
       spacing={2}
       style={{
         position: "fixed",
@@ -136,6 +134,7 @@ const EndGameAnimation = ({ onClose }: { onClose: () => void }) => {
         backgroundColor: "rgba(0, 0, 0, 0.6)",
         zIndex: 999,
       }}
+      sx={{ alignItems: "center", justifyContent: "center" }}
     >
       {gameWinner === "player" &&
         particles.map((p, i) => (
@@ -179,18 +178,16 @@ const EndGameAnimation = ({ onClose }: { onClose: () => void }) => {
       )}
       <Stack
         ref={textRef}
-        alignItems="center"
-        justifyContent="center"
         spacing={2}
+        sx={{ alignItems: "center", justifyContent: "center" }}
       >
         <Typography sx={{ color: YELLOW, fontSize: "24px" }}>
           {textMsg}
         </Typography>
         <Stack
           direction="row"
-          alignItems="center"
-          justifyContent="center"
           spacing={1}
+          sx={{ alignItems: "center", justifyContent: "center" }}
         >
           <Button variant="contained" color="primary" onClick={onClose}>
             Game Summary

@@ -1,5 +1,5 @@
 import { Stack, Box } from "@mui/material";
-import battleImage from "../../../assets/battle.png";
+import battleImage from "@/assets/battle.png";
 
 export const BattleControls = ({
   isCurrent,
@@ -11,9 +11,11 @@ export const BattleControls = ({
   return (
     <Stack
       direction="row"
-      alignItems="center"
-      justifyContent="center"
-      sx={{ height: isMobile ? "30px" : "100px" }}
+      sx={{
+        alignItems: "center",
+        justifyContent: "center",
+        height: isMobile ? "30px" : "100px",
+      }}
     >
       <Box
         sx={{

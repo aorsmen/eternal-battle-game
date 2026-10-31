@@ -1,8 +1,8 @@
 import { Typography, IconButton, useMediaQuery, useTheme } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { HeaderWrapper } from "./styled.components";
-import useMainContext from "../../../../hooks/useMainContext";
-import { HERO_BLUE_DARK, VILLAIN_RED_DARK } from "../../../../config/general";
+import useMainContext from "@/hooks/useMainContext";
+import { HERO_BLUE_DARK, VILLAIN_RED_DARK } from "@/config/general";
 
 const DetailsPanelHeader = ({
   title,

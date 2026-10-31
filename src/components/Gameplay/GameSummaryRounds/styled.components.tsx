@@ -1,5 +1,5 @@
 import { Box, Stack, Typography } from "@mui/material";
-import { TITLE_STYLE, YELLOW, BG_COLOR } from "../../../config/general";
+import { TITLE_STYLE, YELLOW, BG_COLOR } from "@/config/general";
 import { RefObject } from "react";
 
 export const RoundWrapper = ({

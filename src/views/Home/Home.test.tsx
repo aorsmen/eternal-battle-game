@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { renderWithProviders } from "../../__fixtures__/renderWithProviders";
+import { renderWithProviders } from "@/__fixtures__/renderWithProviders";
 import { screen } from "@testing-library/react";
 import Home from ".";
 

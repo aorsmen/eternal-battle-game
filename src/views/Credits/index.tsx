@@ -1,9 +1,9 @@
 import { Box, Link, Stack, useMediaQuery, useTheme } from "@mui/material";
-import Header from "../../components/UI/Header";
+import Header from "@/components/UI/Header";
 import { TitleStyle, TextStyle } from "./styled.components";
 import GitHubIcon from "@mui/icons-material/GitHub";
-import { CREDITS_CONTENT } from "../../config/pages";
-import { HEADER_HEIGHT } from "../../config/general";
+import { CREDITS_CONTENT } from "@/config/pages";
+import { HEADER_HEIGHT } from "@/config/general";
 
 const Credits = () => {
   const theme = useTheme();
@@ -12,9 +12,11 @@ const Credits = () => {
     <Box>
       <Header title="CREDITS" />
       <Stack
-        alignItems="center"
-        justifyContent="center"
-        sx={{ height: `calc(100dvh - ${HEADER_HEIGHT[windowSize]}px)` }}
+        sx={{
+          alignItems: "center",
+          justifyContent: "center",
+          height: `calc(100dvh - ${HEADER_HEIGHT[windowSize]}px)`,
+        }}
         spacing="40px"
       >
         {CREDITS_CONTENT.map((section, inx) => {

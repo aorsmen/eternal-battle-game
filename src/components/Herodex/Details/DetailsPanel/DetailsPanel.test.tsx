@@ -1,16 +1,16 @@
 // @ts-nocheck
-import { renderMainContext } from "../../../../__fixtures__/renderMainContext";
+import { renderMainContext } from "@/__fixtures__/renderMainContext";
 import { screen, fireEvent, waitFor } from "@testing-library/react";
 import DetailsPanel from ".";
-import useMainContext from "../../../../hooks/useMainContext";
+import useMainContext from "@/hooks/useMainContext";
 import {
   TEST_MAIN_CONTEXT,
   TEST_MAIN_CONTEXT2,
   TEST_HERO_DATA,
-} from "../../../../__fixtures__/testData";
+} from "@/__fixtures__/testData";
 import { vi } from "vitest";
 import { act } from "react";
-import { formatValue } from "../DetailsPanelTabs/styled.components";
+import { formatValue } from "@/components/Herodex/Details/DetailsPanelTabs/styled.components";
 
 const TEST_MAIN_CTX = {
   value: TEST_MAIN_CONTEXT,

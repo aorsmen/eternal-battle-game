@@ -8,7 +8,7 @@ import {
   StatsSection,
   SkillsSection,
 } from "./styled.components";
-import { HeroDataType } from "../../../../types/main.types";
+import { HeroDataType } from "@/types/main.types";
 
 const DetailsPanelTabs = ({ data }: { data: HeroDataType | null }) => {
   const [tabIndex, setTabIndex] = useState(0);

@@ -1,5 +1,5 @@
-import { PowerStatType, SkillsType, HeroValuesType } from "../types/main.types";
-import { heroSkillModel } from "../config/hero";
+import { PowerStatType, SkillsType, HeroValuesType } from "@/types/main.types";
+import { heroSkillModel } from "@/config/hero";
 
 export const calculateSkills = (stats: PowerStatType): SkillsType => {
   const { intelligence, combat, strength, power, durability, speed } = stats;

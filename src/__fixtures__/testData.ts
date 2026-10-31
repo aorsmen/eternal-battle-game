@@ -1,5 +1,5 @@
-import { GameContextType } from "../types/game.types";
-import { HeroDataType, MainContextType } from "../types/main.types";
+import { GameContextType } from "@/types/game.types";
+import { HeroDataType, MainContextType } from "@/types/main.types";
 
 export const TEST_HERO_DATA: HeroDataType = {
   id: "107",

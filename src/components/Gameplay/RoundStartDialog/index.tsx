@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Dialog, Typography } from "@mui/material";
-import useGameContext from "../../../hooks/useGameContext";
-import { TITLE_STYLE, YELLOW } from "../../../config/general";
+import useGameContext from "@/hooks/useGameContext";
+import { TITLE_STYLE, YELLOW } from "@/config/general";
 
 const RoundStartDialog = ({
   isOpen,

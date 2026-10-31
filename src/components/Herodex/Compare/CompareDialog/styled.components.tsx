@@ -15,14 +15,14 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from "recharts";
-import { HeroDataType } from "../../../../types/main.types";
-import { graphColors, statGraphKeys } from "../../../../config/hero";
+import { HeroDataType } from "@/types/main.types";
+import { graphColors, statGraphKeys } from "@/config/hero";
 import {
   StatGraphDataType,
   SkillGraphDataType,
-} from "../../../../types/main.types";
-import { TITLE_STYLE, BROWN } from "../../../../config/general";
-import HeroAvatar from "../../HeroAvatar";
+} from "@/types/main.types";
+import { TITLE_STYLE, BROWN } from "@/config/general";
+import HeroAvatar from "@/components/Herodex/HeroAvatar";
 
 export const DialogHeader = ({ onClose }: { onClose: () => void }) => {
   return (
@@ -112,7 +112,7 @@ export const GraphObject = ({
   heroGraphs,
 }: {
   title: string;
-  graphData: StatGraphDataType[] | SkillGraphDataType[];
+  graphData: (StatGraphDataType | SkillGraphDataType)[];
   graphOrder: string[];
   heroGraphs: HeroDataType[];
 }) => {

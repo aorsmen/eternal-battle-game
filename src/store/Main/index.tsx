@@ -9,15 +9,15 @@ import {
   NodeChange,
   Node,
 } from "@xyflow/react";
-import { MainContextType, HeroNodeType } from "../../types/main.types";
+import { MainContextType, HeroNodeType } from "@/types/main.types";
 import { useQuery } from "@tanstack/react-query";
-import { APIS } from "../../config/api";
-import { calculateSkills, calculateValues } from "../../helpers/hero";
+import { APIS } from "@/config/api";
+import { calculateSkills, calculateValues } from "@/helpers/hero";
 import {
   HERO_CARD_WIDTH,
   HERO_CARD_HEIGHT,
   HEADER_HEIGHT,
-} from "../../config/general";
+} from "@/config/general";
 
 const initialNodes: HeroNodeType[] = [];
 const initialEdges: Edge[] = [];

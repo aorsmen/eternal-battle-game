@@ -1,8 +1,8 @@
 // @ts-nocheck
-import { renderWithProviders } from "../../__fixtures__/renderWithProviders";
+import { renderWithProviders } from "@/__fixtures__/renderWithProviders";
 import { screen, fireEvent } from "@testing-library/react";
 import HeroCard from ".";
-import { TEST_HERO_DATA } from "../../__fixtures__/testData";
+import { TEST_HERO_DATA } from "@/__fixtures__/testData";
 
 test("Should render card data correctly", () => {
   renderWithProviders(<HeroCard data={TEST_HERO_DATA} />, {

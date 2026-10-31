@@ -6,12 +6,12 @@ import {
   VILLAIN_RED_DARK,
   HERO_CARD_WIDTH,
   HERO_CARD_HEIGHT,
-} from "../../config/general";
+} from "@/config/general";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import CloseIcon from "@mui/icons-material/Close";
-import heroIcon from "../../assets/hero-dark-mini-icon.png";
-import villainIcon from "../../assets/villain-dark-mini-icon.png";
+import heroIcon from "@/assets/hero-dark-mini-icon.png";
+import villainIcon from "@/assets/villain-dark-mini-icon.png";
 
 export const HeroCardWrapper = ({
   children,
@@ -44,9 +44,9 @@ export const HeroCardHeader = ({ name }: { name: string }) => {
   return (
     <Stack
       direction="row"
-      alignItems="center"
-      justifyContent="flex-start"
       sx={{
+        alignItems: "center",
+        justifyContent: "flex-start",
         padding: "5px 10px",
         borderRadius: "5px 5px 0 0",
       }}
@@ -64,9 +64,7 @@ export const HeroCardFooter = ({ children }: { children: React.ReactNode }) => {
   return (
     <Stack
       direction="row"
-      alignItems="center"
-      justifyContent="flex-end"
-      sx={{ padding: "10px" }}
+      sx={{ alignItems: "center", justifyContent: "flex-end", padding: "10px" }}
     >
       {children}
     </Stack>
@@ -217,9 +215,12 @@ export const AlignmentWrapper = ({
   return (
     <Stack
       direction="row"
-      alignItems="center"
-      justifyContent="space-between"
-      sx={{ height: "32px", ...bottom }}
+      sx={{
+        alignItems: "center",
+        justifyContent: "space-between",
+        height: "32px",
+        ...bottom,
+      }}
     >
       <Typography sx={{ fontSize: "12px" }}>
         {`${alignment === "good" ? "Hero" : "Villain"}`}

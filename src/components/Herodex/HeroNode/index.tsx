@@ -7,11 +7,11 @@ import {
   useTheme,
 } from "@mui/material";
 import { HeroNodeWrapper, HeroNodeToolbar } from "./styled.components";
-import { HeroNodeDataType } from "../../../types/main.types";
+import { HeroNodeDataType } from "@/types/main.types";
 import InfoIcon from "@mui/icons-material/Info";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import useMainContext from "../../../hooks/useMainContext";
-import HeroCard from "../../HeroCard";
+import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
+import useMainContext from "@/hooks/useMainContext";
+import HeroCard from "@/components/HeroCard";
 
 const HeroNode = ({
   id,
@@ -35,7 +35,7 @@ const HeroNode = ({
 
   const checkHandler = (
     event: React.ChangeEvent<HTMLInputElement>,
-    checked: boolean
+    checked: boolean,
   ) => {
     const action = checked ? "add" : "remove";
 
@@ -79,7 +79,7 @@ const HeroNode = ({
             />
           </IconButton>
           <IconButton onClick={deleteNodeHandler} aria-label="remove">
-            <DeleteOutlineIcon
+            <DeleteOutlinedIcon
               fontSize="small"
               sx={{
                 color: "#fff",

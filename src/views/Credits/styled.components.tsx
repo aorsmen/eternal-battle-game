@@ -1,5 +1,5 @@
 import { styled, Typography } from "@mui/material";
-import { YELLOW } from "../../config/general";
+import { YELLOW } from "@/config/general";
 
 export const TitleStyle = styled(Typography)({
   fontSize: "32px",

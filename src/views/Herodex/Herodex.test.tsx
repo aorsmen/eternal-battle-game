@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { renderWithProviders } from "../../__fixtures__/renderWithProviders";
+import { renderWithProviders } from "@/__fixtures__/renderWithProviders";
 import { screen, fireEvent, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Herodex from ".";

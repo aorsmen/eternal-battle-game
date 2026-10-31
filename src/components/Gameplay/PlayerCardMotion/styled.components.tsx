@@ -1,5 +1,5 @@
 import { ButtonBase, Box, styled } from "@mui/material";
-import { HERO_CARD_WIDTH, HERO_CARD_HEIGHT } from "../../../config/general";
+import { HERO_CARD_WIDTH, HERO_CARD_HEIGHT } from "@/config/general";
 
 export const CardSpot = styled(ButtonBase)(({ theme }) => ({
   position: "relative",

@@ -1,5 +1,5 @@
 import { styled, Box, Stack, Typography, ButtonBase } from "@mui/material";
-import { TITLE_STYLE, YELLOW, HEADER_HEIGHT } from "../../../config/general";
+import { TITLE_STYLE, YELLOW, HEADER_HEIGHT } from "@/config/general";
 import CloseIcon from "@mui/icons-material/Close";
 
 export const GameSummaryBody = styled(Stack)(({ theme }) => ({
@@ -26,9 +26,9 @@ export const GameSummaryHeader = ({
   return (
     <Stack
       direction="row"
-      alignItems="center"
-      justifyContent="center"
       sx={{
+        alignItems: "center",
+        justifyContent: "center",
         paddingInline: "20px",
         height: `${HEADER_HEIGHT[size]}px`,
         background: YELLOW,
@@ -64,8 +64,8 @@ export const GameSummaryBoards = ({
   return (
     <Stack
       direction="row"
-      justifyContent="space-between"
       sx={{
+        justifyContent: "space-between",
         paddingInline: isMobile ? 0 : "20px",
         marginBottom: isMobile ? "10px" : "20px",
       }}
