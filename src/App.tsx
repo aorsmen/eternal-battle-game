@@ -6,6 +6,8 @@ import { gameTheme } from "./config/general";
 
 const Home = lazy(() => import("./views/Home"));
 const Herodex = lazy(() => import("./views/Herodex"));
+const Battle = lazy(() => import("./views/Battle"));
+const SideSelect = lazy(() => import("./views/SideSelect"));
 const Gameplay = lazy(() => import("./views/Gameplay"));
 const Credits = lazy(() => import("./views/Credits"));
 
@@ -20,7 +22,10 @@ const App = () => {
           <Routes>
             <Route index element={<Home />} />
             <Route path="herodex" element={<Herodex />} />
-            <Route path="battle" element={<Gameplay />} />
+            <Route path="battle" element={<Battle />}>
+              <Route index element={<SideSelect />} />
+              <Route path="play" element={<Gameplay />} />
+            </Route>
             <Route path="credits" element={<Credits />} />
           </Routes>
         </BrowserRouter>

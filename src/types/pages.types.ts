@@ -6,4 +6,5 @@ export type CreditsPageContentType = {
 export type HomePageContentType = {
   text: string;
   link: string;
+  primary?: boolean;
 };

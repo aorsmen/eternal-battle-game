@@ -7,7 +7,7 @@ Guidance for Claude Code when working in this repository.
 **Eternal Battle** (package name `hero-flow`) is a client-only React 19 + TypeScript SPA built with Vite. It has two main features:
 
 - **Herodex** (`/herodex`): an interactive canvas (`@xyflow/react`) where users add hero cards as nodes, view details (biography, appearance, stats/skills radar charts via Recharts), and compare up to 4 heroes.
-- **Battle** (`/battle`): a card game where the player picks heroes or villains and plays against the computer: 5 rounds × 5 card battles, with GSAP animations.
+- **Battle**: a card game where the player picks heroes or villains on `/battle` (side selection page), then plays against the computer on `/battle/play`: 5 rounds × 5 card battles, with GSAP animations.
 
 Other routes: `/` (Home menu) and `/credits`. There is no backend. All hero data is static JSON in `public/data/all-heroes.json`, fetched with TanStack Query (`src/config/api.ts`).
 
@@ -29,7 +29,7 @@ Coverage scripts (`test:coverage*`) need `@vitest/coverage-v8`, which is not cur
 ```
 src/
   App.tsx            # ThemeProvider + QueryClientProvider + BrowserRouter; views are lazy-loaded
-  views/             # Route-level pages: Home, Herodex, Gameplay, Credits
+  views/             # Route-level pages: Home, Herodex, Battle (layout), SideSelect, Gameplay, Credits
   components/
     Herodex/         # Board, HeroNode, NodeIndex, HeroAvatar, Details/*, Compare/*
     Gameplay/        # GameBoard, SideBoard, SideHands, *CardMotion, dialogs, GameSummary*
@@ -46,7 +46,7 @@ src/
 ```
 
 Key points:
-- **State is React Context, scoped per view.** `MainContextProvider` wraps only the Herodex view and `GameContextProvider` wraps only the Gameplay view. Components read state through `useMainContext()` / `useGameContext()`. When you add a field to a context, update all four places: the type in `src/types/`, `initState` in the store, the provider `value`, and the hook's destructure/return.
+- **State is React Context, scoped per view.** `MainContextProvider` wraps only the Herodex view and `GameContextProvider` lives in the `Battle` layout route (`views/Battle`), so `/battle` (SideSelect) and `/battle/play` (Gameplay) share one game state. Gameplay redirects to `/battle` while `sides.player.type` is `null`. Components read state through `useMainContext()` / `useGameContext()`. When you add a field to a context, update all four places: the type in `src/types/`, `initState` in the store, the provider `value`, and the hook's destructure/return.
 - **Game flow** (`store/Game`): `setSideSelection` → `startNewRound` → the effect auto-draws cards until each hand holds 5 → `revealCard(i)` → `setBattleResult(i)` → once 5 battles are done, an effect calls `setRoundScore` → `completeRound` → `goToNextRound`. The game ends after round index 4 (`isGameOver`). A battle is won when attack ≥ the opponent's defense **and** defense > the opponent's attack.
 - **Hero skills/values are computed at runtime** from `powerstats` via `helpers/hero.ts`. They are not stored in the JSON.
 - The Herodex custom node type is `"heroNode"` (`HeroNodeType` in `main.types.ts`).
@@ -58,6 +58,7 @@ Key points:
 - Each component lives in its own folder: `index.tsx` (default export), an optional `styled.components.tsx` (MUI-based wrapper components that use `sx`/props, not `@emotion/styled` templates), an optional `.css` file, and a co-located `<Name>.test.tsx`.
 - Arrow-function components with a default export. Props are typed inline.
 - MUI 9: `Stack` no longer accepts layout props like `alignItems`/`justifyContent`; put them in `sx`. Only `direction`, `spacing`, etc. stay as props.
+- Redesign in progress: Home and SideSelect use the new look (`EB_*` colors and Anton/Barlow fonts in `config/general.ts`, from the "Eternal Battle Redesign" design canvas). The other pages still use the original theme. Migrate a page only when asked.
 - Styling uses MUI components with `sx`. Use the color and size constants from `config/general.ts` instead of hard-coding values. Title font: `TITLE_STYLE` (Rakkas, loaded in `index.html`).
 - Imports: use the `@/` alias (→ `src/`) for anything outside the current folder, e.g. `import { YELLOW } from "@/config/general"`. Keep `./` only for files in the same folder, e.g. `./styled.components`. The alias is defined in both `tsconfig.json` (`paths`) and `vite.config.ts` (`resolve.alias`). Keep the two in sync.
 - Formatting: double quotes, semicolons, 2-space indent (Prettier-style).

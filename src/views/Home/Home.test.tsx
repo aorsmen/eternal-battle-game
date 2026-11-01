@@ -3,18 +3,20 @@ import { renderWithProviders } from "@/__fixtures__/renderWithProviders";
 import { screen } from "@testing-library/react";
 import Home from ".";
 
-test("Should render logo and home menu", () => {
+test("Should render title and home menu", () => {
   renderWithProviders(<Home />, {
     withRouter: true,
   });
 
-  const logo = screen.getByAltText(/eternal battle/i);
-  const menuItem1 = screen.getByText(/battle/i);
-  const menuItem2 = screen.getByText(/herodex/i);
-  const menuItem3 = screen.getByText(/credits/i);
+  const title = screen.getByRole("heading", { name: /eternal\s*battle/i });
+  const menu = screen.getByRole("navigation", { name: /main menu/i });
+  const battle = screen.getByRole("link", { name: /battle/i });
+  const herodex = screen.getByRole("link", { name: /herodex/i });
+  const credits = screen.getByRole("link", { name: /credits/i });
 
-  expect(logo).toBeInTheDocument();
-  expect(menuItem1).toBeInTheDocument();
-  expect(menuItem2).toBeInTheDocument();
-  expect(menuItem3).toBeInTheDocument();
+  expect(title).toBeInTheDocument();
+  expect(menu).toBeInTheDocument();
+  expect(battle).toHaveAttribute("href", "/battle");
+  expect(herodex).toHaveAttribute("href", "/herodex");
+  expect(credits).toHaveAttribute("href", "/credits");
 });

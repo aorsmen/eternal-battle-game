@@ -16,6 +16,23 @@ export const VILLAIN_RED_DARK = "#62201a";
 export const HERO_BLUE = "#0a79bf";
 export const HERO_BLUE_DARK = "#154376";
 
+// Redesign palette (Eternal Battle Redesign canvas), used by Home and SideSelect
+export const EB_BG = "#0E1116";
+export const EB_SURFACE = "#171B22";
+export const EB_BORDER = "#2A303A";
+export const EB_BORDER_STRONG = "#5B6474";
+export const EB_TEXT = "#EDEFF3";
+export const EB_TEXT_MUTED = "#C5CBD6";
+export const EB_GOLD = "#F5B83D";
+export const EB_GOLD_LIGHT = "#FFD27A";
+export const EB_HERO = "#3D8BFF";
+export const EB_HERO_LIGHT = "#6FA8FF";
+export const EB_HERO_BG = "#101C30";
+export const EB_VILLAIN = "#FF4D5E";
+export const EB_VILLAIN_LIGHT = "#FF6B79";
+export const EB_VILLAIN_BG = "#2A1217";
+export const EB_VILLAIN_TEXT_MUTED = "#E4C5C9";
+
 export const DEFEAT_COLOR = "#e91509";
 export const VICTORY_COLOR = YELLOW_LIGHT;
 
@@ -45,6 +62,10 @@ export const TITLE_STYLE = {
   fontStyle: "normal",
   letterSpacing: 3,
 };
+
+export const EB_DISPLAY_FONT = '"Anton", sans-serif';
+export const EB_LABEL_FONT = '"Barlow Condensed", sans-serif';
+export const EB_BODY_FONT = '"Barlow", sans-serif';
 
 export const DEFEAT_STYLE = { opacity: 0.3, filter: "grayscale(1)" };
 export const HERO_CARD_WIDTH = {

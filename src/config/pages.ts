@@ -25,6 +25,7 @@ export const HOME_PAGE_CONTENT: HomePageContentType[] = [
   {
     text: "BATTLE",
     link: "/battle",
+    primary: true,
   },
   {
     text: "HERODEX",
