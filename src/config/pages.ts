@@ -12,7 +12,7 @@ export const CREDITS_CONTENT: CreditsPageContentType[] = [
     title: "Technology Stack",
     text: [
       "React.js. React Router, Tanstack React Query",
-      "Material UI, GSAP, xyflow, Recharts",
+      "Material UI, GSAP, Recharts",
     ],
   },
   {

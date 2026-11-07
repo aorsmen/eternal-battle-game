@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { HeroDataType } from "@/types/main.types";
+import { getHeroRole } from "@/helpers/hero";
 import { useMediaQuery, useTheme } from "@mui/material";
 import {
   HeroCardWrapper,
@@ -15,13 +16,8 @@ const HeroCard = ({ data }: { data: HeroDataType }) => {
   const matches = useMediaQuery(theme.breakpoints.up("lg"));
   const windowSize = matches ? "lg" : "sm";
   const [imgPreview, setImgPreview] = useState(false);
-  const { name, images, biography, values, work } = data;
-  const role =
-    work.occupation && work.occupation !== "-"
-      ? work.occupation
-      : biography.alignment === "good"
-        ? "Hero"
-        : "Villain";
+  const { name, images, biography, values } = data;
+  const role = getHeroRole(data);
 
   return (
     <HeroCardWrapper alignment={biography.alignment} size={windowSize}>

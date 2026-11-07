@@ -49,6 +49,11 @@ export const EB_HERO_BACK_PATTERN = "rgb(111 168 255 / 28%)";
 export const EB_VILLAIN_BACK = "#3D1219";
 export const EB_VILLAIN_BORDER = "#A3303D";
 export const EB_VILLAIN_BACK_PATTERN = "rgb(255 107 121 / 28%)";
+export const EB_TEXT_PLACEHOLDER = "#8B93A1";
+export const EB_TRAY_BG = "#12161C";
+export const EB_SLOT_BORDER = "#3A414D";
+// One accent per compare slot, in pick order
+export const EB_COMPARE_COLORS = [EB_GOLD, "#4FD1C5", "#B794F6", "#F2F4F7"];
 
 export const DEFEAT_COLOR = "#e91509";
 export const VICTORY_COLOR = YELLOW_LIGHT;

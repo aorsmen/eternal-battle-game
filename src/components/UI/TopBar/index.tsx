@@ -7,7 +7,14 @@ import {
   EB_VILLAIN_LIGHT,
 } from "@/config/general";
 
-const TopBar = () => {
+// The back link goes Home unless a page passes its own parent
+const TopBar = ({
+  backTo = "/",
+  backLabel = "Home",
+}: {
+  backTo?: string;
+  backLabel?: string;
+}) => {
   return (
     <Stack
       direction="row"
@@ -20,7 +27,7 @@ const TopBar = () => {
     >
       <Box
         component={Link}
-        to="/"
+        to={backTo}
         sx={{
           display: "inline-flex",
           alignItems: "center",
@@ -45,7 +52,7 @@ const TopBar = () => {
         >
           <path d="M15 18l-6-6 6-6" />
         </svg>
-        Home
+        {backLabel}
       </Box>
       <Box
         component="span"
