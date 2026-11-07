@@ -1,74 +1,83 @@
 // @ts-nocheck
-import { renderGameContext } from "../../../__fixtures__/renderGameContext";
+import { renderGameContext } from "@/__fixtures__/renderGameContext";
 import { screen, fireEvent } from "@testing-library/react";
-import EndGameAnimation from ".";
-import { TEST_GAME_CONTEXT } from "../../../__fixtures__/testData";
 import { vi } from "vitest";
-import { GAME_DRAW_MESSAGE, GAME_WIN_MESSAGE } from "../../../config/game";
+import EndGameAnimation from ".";
+import { TEST_GAME_CONTEXT } from "@/__fixtures__/testData";
+import {
+  GAME_DEFEAT_TITLE,
+  GAME_DRAW_MESSAGE,
+  GAME_DRAW_TITLE,
+  GAME_VICTORY_TITLE,
+} from "@/config/game";
 
-const TEST_GAME_CTX = {
-  value: TEST_GAME_CONTEXT,
+// player = heroes ("test user 1"), computer = villains ("test user 2")
+const renderOverlay = (scores, overrides = {}) => {
+  const onClose = vi.fn();
+  const startNewGame = vi.fn();
+
+  renderGameContext(<EndGameAnimation onClose={onClose} />, {
+    providerProps: {
+      value: {
+        ...TEST_GAME_CONTEXT,
+        sides: {
+          player: { ...TEST_GAME_CONTEXT.sides.player, score: scores[0] },
+          computer: { ...TEST_GAME_CONTEXT.sides.computer, score: scores[1] },
+        },
+        startNewGame,
+        ...overrides,
+      },
+    },
+    withRouter: false,
+  });
+
+  return { onClose, startNewGame };
 };
 
-const mockCloseHandler = vi.fn();
+test("Should render the stalemate title and message", () => {
+  renderOverlay([3, 3]);
 
-test("Should render the animation, draw end message and the summary button correctly", () => {
-  renderGameContext(<EndGameAnimation onClose={mockCloseHandler} />, {
-    providerProps: TEST_GAME_CTX,
-    withRouter: false,
-  });
-
-  const title = screen.getByText(/draw!/i);
-  const endMsg = screen.getByText(GAME_DRAW_MESSAGE);
-  const summaryBtn = screen.getByRole("button", { name: /game summary/i });
-
-  expect(title).toBeInTheDocument();
-  expect(endMsg).toBeInTheDocument();
-  expect(summaryBtn).toBeInTheDocument();
+  expect(
+    screen.getByRole("heading", { name: GAME_DRAW_TITLE })
+  ).toBeInTheDocument();
+  expect(screen.getByText(GAME_DRAW_MESSAGE)).toBeInTheDocument();
 });
 
-test("Should render the animation, icon, victory end message and the summary button correctly", () => {
-  TEST_GAME_CONTEXT.sides.player.score = 1;
+test("Should render victory with the player's side and name", () => {
+  renderOverlay([7, 6]);
 
-  renderGameContext(<EndGameAnimation onClose={mockCloseHandler} />, {
-    providerProps: TEST_GAME_CTX,
-    withRouter: false,
-  });
-
-  const title = screen.getByText(/victory!/i);
-  const endMsg = screen.getByText(
-    GAME_WIN_MESSAGE.replace("{WINNER}", TEST_GAME_CONTEXT.sides.player.name)
-  );
-  const icon = screen.getByRole("img", {
-    name: TEST_GAME_CONTEXT.sides.player.type,
-  });
-  const summaryBtn = screen.getByRole("button", { name: /game summary/i });
-
-  expect(title).toBeInTheDocument();
-  expect(endMsg).toBeInTheDocument();
-  expect(icon).toBeInTheDocument();
-  expect(summaryBtn).toBeInTheDocument();
+  expect(
+    screen.getByRole("heading", { name: GAME_VICTORY_TITLE })
+  ).toBeInTheDocument();
+  expect(
+    screen.getByText("The heroes hold the line. Well played, test user 1.")
+  ).toBeInTheDocument();
 });
 
-test("Should render the animation, icon, failed end message and the summary button correctly", () => {
-  TEST_GAME_CONTEXT.sides.computer.score = 999;
+test("Should render defeat with the winning side", () => {
+  renderOverlay([2, 6]);
 
-  renderGameContext(<EndGameAnimation onClose={mockCloseHandler} />, {
-    providerProps: TEST_GAME_CTX,
-    withRouter: false,
-  });
+  expect(
+    screen.getByRole("heading", { name: GAME_DEFEAT_TITLE })
+  ).toBeInTheDocument();
+  expect(
+    screen.getByText("The villains rule the realm this time.")
+  ).toBeInTheDocument();
+});
 
-  const title = screen.getByText(/defeat!/i);
-  const endMsg = screen.getByText(
-    GAME_WIN_MESSAGE.replace("{WINNER}", TEST_GAME_CONTEXT.sides.computer.name)
-  );
-  const icon = screen.getByRole("img", {
-    name: TEST_GAME_CONTEXT.sides.computer.type,
-  });
-  const summaryBtn = screen.getByRole("button", { name: /game summary/i });
+test("Should open the game summary", () => {
+  const { onClose } = renderOverlay([1, 0]);
 
-  expect(title).toBeInTheDocument();
-  expect(endMsg).toBeInTheDocument();
-  expect(icon).toBeInTheDocument();
-  expect(summaryBtn).toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: /see game summary/i }));
+
+  expect(onClose).toHaveBeenCalledTimes(1);
+});
+
+test("Should start a new game without keeping the sides", () => {
+  const { startNewGame } = renderOverlay([1, 0]);
+
+  fireEvent.click(screen.getByRole("button", { name: /new game/i }));
+
+  expect(startNewGame).toHaveBeenCalledTimes(1);
+  expect(startNewGame).toHaveBeenCalledWith();
 });

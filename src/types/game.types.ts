@@ -58,5 +58,5 @@ export type GameContextType = {
   goToNextRound: () => void;
   completeRound: () => void;
   startNewRound: () => void;
-  startNewGame: () => void;
+  startNewGame: (keepSides?: boolean) => void;
 };

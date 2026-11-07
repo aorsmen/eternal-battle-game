@@ -1,29 +1,21 @@
-import {
-  Stack,
-  Typography,
-  Box,
-  Button,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
-import { useEffect, useRef } from "react";
+import { Box, Stack } from "@mui/material";
+import { useEffect, useMemo, useRef } from "react";
 import gsap from "gsap";
-import { HandSidesType } from "../../../types/game.types";
 import {
-  TITLE_STYLE,
-  YELLOW,
-  VICTORY_COLOR,
-  DEFEAT_COLOR,
-  BROWN_LIGHT,
-  HERO_BLUE,
-  VILLAIN_RED,
-} from "../../../config/general";
-import { GAME_DRAW_MESSAGE, GAME_WIN_MESSAGE } from "../../../config/game";
-import useGameContext from "../../../hooks/useGameContext";
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import heroIcon from "../../../assets/hero-icon.png";
-import villainIcon from "../../../assets/villain-icon.png";
-import { HEADER_HEIGHT } from "../../../config/general";
+  EB_BODY_FONT,
+  EB_DISPLAY_FONT,
+  EB_GOLD,
+  EB_HERO,
+  EB_LABEL_FONT,
+  EB_OVERLAY,
+  EB_TEXT,
+  EB_TEXT_SUBTLE,
+  EB_VILLAIN,
+} from "@/config/general";
+import { ROUND_COUNT } from "@/config/game";
+import useGameContext from "@/hooks/useGameContext";
+import { getGameResult } from "@/helpers/game";
+import ActionButton, { ArrowIcon, PlusIcon } from "@/components/UI/ActionButton";
 
 type ParticleType = {
   id: number;
@@ -33,171 +25,165 @@ type ParticleType = {
   delay: number;
 };
 
+const PARTICLE_COUNT = 120;
+
 const generateParticles = (count: number): ParticleType[] =>
   Array.from({ length: count }, (_, i) => ({
     id: i,
-    x: Math.random() * 200 - 100,
-    y: Math.random() * 200 - 100,
-    scale: Math.random() * 0.5 + 0.5,
+    x: Math.random() * 640 - 320,
+    y: Math.random() * 400 - 200,
+    scale: Math.random() * 0.8 + 0.6,
     delay: Math.random() * 0.3,
   }));
 
 const EndGameAnimation = ({ onClose }: { onClose: () => void }) => {
-  const theme = useTheme();
-  const windowSize = useMediaQuery(theme.breakpoints.up("lg")) ? "lg" : "sm";
   const overlayRef = useRef(null);
-  const heroRef = useRef(null);
+  const titleRef = useRef(null);
   const textRef = useRef(null);
-  const particlesRef = useRef<ParticleType[]>([]);
-  const particles = generateParticles(500);
+  const particlesRef = useRef<(HTMLDivElement | null)[]>([]);
   const { sides, startNewGame } = useGameContext();
-  let textMsg = GAME_DRAW_MESSAGE;
-  let textColor = BROWN_LIGHT;
-  let gameWinner: HandSidesType | "draw" = "draw";
-  let heroText = "Draw!";
-
-  if (sides.player.score > sides.computer.score) {
-    gameWinner = "player";
-    textMsg = GAME_WIN_MESSAGE.replace("{WINNER}", sides.player.name);
-    textColor = VICTORY_COLOR;
-    heroText = "Victory!";
-  } else if (sides.player.score < sides.computer.score) {
-    gameWinner = "computer";
-    textMsg = GAME_WIN_MESSAGE.replace("{WINNER}", sides.computer.name);
-    textColor = DEFEAT_COLOR;
-    heroText = "Defeat!";
-  }
-
-  const animationCompleteHandler = () => {};
+  const { winner, title, message } = getGameResult(sides);
+  const isVictory = winner === "player";
+  const particles = useMemo(() => generateParticles(PARTICLE_COUNT), []);
 
   useEffect(() => {
-    const tl = gsap.timeline({ onComplete: animationCompleteHandler });
+    const tl = gsap.timeline();
 
     tl.fromTo(
       overlayRef.current,
       { opacity: 0 },
       { opacity: 1, duration: 0.5, ease: "power2.out" }
-    );
+    )
+      .fromTo(
+        titleRef.current,
+        { scale: 0.2, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 1, ease: "back.out(1.7)" },
+        "-=0.2"
+      )
+      .fromTo(
+        textRef.current,
+        { opacity: 0, y: 12 },
+        { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }
+      );
 
-    tl.fromTo(
-      heroRef.current,
-      { scale: 0.2, opacity: 0 },
-      {
-        scale: 1.5,
-        opacity: 1,
-        duration: 1,
-        ease: "back.out(1.7)",
-      },
-      "-=0.2"
-    );
-
-    tl.fromTo(
-      textRef.current,
-      { opacity: 0 },
-      { opacity: 1, duration: 1, ease: "power2.out" }
-    );
-
-    if (gameWinner === "player") {
+    if (isVictory) {
       particles.forEach((p, i) => {
         gsap.fromTo(
           particlesRef.current[i],
-          {
-            x: 0,
-            y: 0,
-            opacity: 1,
-            scale: 1,
-          },
+          { x: 0, y: 0, opacity: 1, scale: 1 },
           {
             x: p.x,
             y: p.y,
             scale: p.scale,
             opacity: 0,
             duration: 2,
-            delay: p.delay,
+            delay: 0.6 + p.delay,
             ease: "power2.out",
           }
         );
       });
     }
-  }, []);
+
+    return () => {
+      tl.kill();
+    };
+  }, [isVictory, particles]);
 
   return (
     <Stack
       ref={overlayRef}
-      alignItems="center"
-      justifyContent="center"
-      spacing={2}
-      style={{
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="end-game-title"
+      data-testid="end-game"
+      sx={{
         position: "fixed",
-        top: `${HEADER_HEIGHT[windowSize]}px`,
-        left: 0,
-        width: "100%",
-        height: `calc(100vh - ${HEADER_HEIGHT[windowSize]}px)`,
-        backgroundColor: "rgba(0, 0, 0, 0.6)",
-        zIndex: 999,
+        inset: 0,
+        zIndex: 1300,
+        alignItems: "center",
+        justifyContent: "center",
+        gap: "20px",
+        padding: "24px",
+        backgroundColor: EB_OVERLAY,
+        color: EB_TEXT,
+        fontFamily: EB_BODY_FONT,
+        textAlign: "center",
+        overflow: "hidden",
       }}
     >
-      {gameWinner === "player" &&
+      {isVictory &&
         particles.map((p, i) => (
           <Box
             key={p.id}
-            ref={(el) => {
-              particlesRef.current[i] = el as ParticleType;
+            aria-hidden="true"
+            ref={(el: HTMLDivElement | null) => {
+              particlesRef.current[i] = el;
             }}
-            style={{
+            sx={{
               position: "absolute",
-              width: "5px",
-              height: "5px",
-              backgroundColor: i % 2 === 0 ? HERO_BLUE : VILLAIN_RED,
-              borderRadius: "50%",
               top: "50%",
               left: "50%",
-              transform: "translate(-50%, -50%)",
+              width: "6px",
+              height: "6px",
+              marginTop: "-3px",
+              marginLeft: "-3px",
+              borderRadius: "50%",
+              opacity: 0,
+              backgroundColor: [EB_HERO, EB_VILLAIN, EB_GOLD][i % 3],
+              pointerEvents: "none",
             }}
           />
         ))}
-      <Typography
+      <Box
+        component="span"
         sx={{
-          ...TITLE_STYLE,
-          fontSize: "48px",
-          color: textColor,
-          textTransform: "uppercase",
+          fontFamily: EB_LABEL_FONT,
+          fontWeight: 700,
+          fontSize: { xs: "14px", sm: "16px" },
+          letterSpacing: "0.24em",
+          color: EB_TEXT_SUBTLE,
         }}
-        ref={heroRef}
       >
-        {heroText}
-      </Typography>
-      {gameWinner !== "draw" && (
-        <Box ref={textRef} sx={{ width: "60px", height: "60px" }}>
-          <LazyLoadImage
-            alt={sides[gameWinner].type || ""}
-            height={60}
-            width={60}
-            src={sides[gameWinner].type === "heroes" ? heroIcon : villainIcon}
-          />
+        {`FINAL RESULT · ${ROUND_COUNT} ROUNDS`}
+      </Box>
+      <Box
+        ref={titleRef}
+        component="h1"
+        id="end-game-title"
+        sx={{
+          margin: 0,
+          fontFamily: EB_DISPLAY_FONT,
+          fontWeight: 400,
+          fontSize: "clamp(64px, 14vw, 160px)",
+          lineHeight: 0.95,
+          letterSpacing: "0.02em",
+          textTransform: "uppercase",
+          color: EB_GOLD,
+        }}
+      >
+        {title}
+      </Box>
+      <Stack ref={textRef} sx={{ alignItems: "center", gap: "28px" }}>
+        <Box
+          component="p"
+          sx={{ margin: 0, fontSize: { xs: "17px", sm: "20px" } }}
+        >
+          {message}
         </Box>
-      )}
-      <Stack
-        ref={textRef}
-        alignItems="center"
-        justifyContent="center"
-        spacing={2}
-      >
-        <Typography sx={{ color: YELLOW, fontSize: "24px" }}>
-          {textMsg}
-        </Typography>
         <Stack
           direction="row"
-          alignItems="center"
-          justifyContent="center"
-          spacing={1}
+          sx={{ justifyContent: "center", gap: "14px", flexWrap: "wrap" }}
         >
-          <Button variant="contained" color="primary" onClick={onClose}>
-            Game Summary
-          </Button>
-          <Button variant="contained" color="warning" onClick={startNewGame}>
-            Start New Game
-          </Button>
+          <ActionButton onClick={onClose} icon={<ArrowIcon />}>
+            See game summary
+          </ActionButton>
+          <ActionButton
+            variant="ghost"
+            onClick={() => startNewGame()}
+            icon={<PlusIcon />}
+          >
+            New game
+          </ActionButton>
         </Stack>
       </Stack>
     </Stack>

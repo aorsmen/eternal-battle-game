@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { Link as RouterLink } from "react-router";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { BG_COLOR, TITLE_STYLE, HEADER_HEIGHT } from "../../../config/general";
+import { BG_COLOR, TITLE_STYLE, HEADER_HEIGHT } from "@/config/general";
 
 const Header = ({
   title,
@@ -36,9 +36,8 @@ const Header = ({
           >
             <Stack
               direction="row"
-              alignItems="center"
               spacing={1}
-              sx={{ width: "100%" }}
+              sx={{ alignItems: "center", width: "100%" }}
             >
               <Link
                 component={RouterLink}

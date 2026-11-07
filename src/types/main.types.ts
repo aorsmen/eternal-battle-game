@@ -1,13 +1,3 @@
-import {
-  Node,
-  Edge,
-  NodeChange,
-  EdgeChange,
-  ReactFlowInstance,
-} from "@xyflow/react";
-
-type OnChange<ChangeType> = (changes: ChangeType[]) => void;
-
 export type HeroItemType = {
   id: string;
   label: string;
@@ -87,44 +77,48 @@ export type HeroDataType = {
   bgColor?: string;
 };
 
-export type MainContextType = {
-  nodes: Node[];
-  edges: Edge[];
-  heroesData: HeroDataType[];
-  heroesIsLoading: boolean;
-  reactFlowInstance?: ReactFlowInstance;
-  nodeDetails: string;
-  compareList: string[];
-  onNodesChange: OnChange<NodeChange>;
-  onEdgesChange: OnChange<EdgeChange>;
-  setReactFlowInstance: React.Dispatch<
-    React.SetStateAction<ReactFlowInstance | undefined>
-  >;
-  setNodes: React.Dispatch<React.SetStateAction<Node[]>>;
-  setEdges: React.Dispatch<React.SetStateAction<Edge[]>>;
-  addHero: (id: string) => void;
-  removeHero: (id: string) => void;
-  setNodeDetails: React.Dispatch<React.SetStateAction<string>>;
+export type HerodexSideType = "heroes" | "villains";
+export type HerodexSideFilterType = "all" | HerodexSideType;
+export type HerodexSortType = "name" | "nameDesc" | "attack" | "defense";
+export type CompareTabType = "stats" | "skills";
+
+// One character on the compare page; values follow the chart's axis order
+export type CompareSeriesType = {
+  id: string;
+  name: string;
+  color: string;
+  values: number[];
+};
+
+export type RosterHeroType = {
+  id: string;
+  name: string;
+  role: string;
+  aliases: string[];
+  side: HerodexSideType;
+  images: HeroDataType["images"];
+  values: HeroValuesType;
+};
+
+export type HerodexContextType = {
+  roster: RosterHeroType[];
+  isLoading: boolean;
+  query: string;
+  side: HerodexSideFilterType;
+  sort: HerodexSortType;
+  shown: RosterHeroType[];
+  page: number;
+  pageCount: number;
+  pageItems: RosterHeroType[];
+  counts: { [key in HerodexSideFilterType]: number };
+  compareIds: string[];
+  picked: RosterHeroType[];
+  compareFull: boolean;
+  setQuery: (value: string) => void;
+  setSide: (value: HerodexSideFilterType) => void;
+  setSort: (value: HerodexSortType) => void;
+  setPage: (value: number) => void;
+  toggleCompare: (id: string) => void;
+  clearCompare: () => void;
   getHeroById: (id: string) => HeroDataType | null;
-  setCompare: (id: string, action: "add" | "remove" | "clear") => void;
-};
-
-export type StatGraphDataType = {
-  def: StatsNamesType;
-  subject: string;
-  fullMark: number;
-  a?: number;
-  b?: number;
-  c?: number;
-  d?: number;
-};
-
-export type SkillGraphDataType = {
-  def: SkillNamesType;
-  subject: string;
-  fullMark: number;
-  a?: number;
-  b?: number;
-  c?: number;
-  d?: number;
 };

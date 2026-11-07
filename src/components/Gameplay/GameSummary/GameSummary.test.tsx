@@ -1,122 +1,116 @@
 // @ts-nocheck
-import { renderGameContext } from "../../../__fixtures__/renderGameContext";
-import { screen, fireEvent } from "@testing-library/react";
+import { renderGameContext } from "@/__fixtures__/renderGameContext";
+import { screen, fireEvent, within } from "@testing-library/react";
+import { vi } from "vitest";
 import GameSummary from ".";
 import {
   TEST_GAME_CONTEXT,
   TEST_HERO_DATA,
-  TEST_END_GAME_ROUNDS,
-} from "../../../__fixtures__/testData";
-import { vi } from "vitest";
+  TEST_HERO_DATA_2,
+} from "@/__fixtures__/testData";
+import { GAME_VICTORY_TITLE } from "@/config/game";
 
-const TEST_GAME_CTX = {
-  value: TEST_GAME_CONTEXT,
+// player = heroes ("test user 1"), computer = villains ("test user 2")
+const battle = (winner) => ({
+  winner,
+  cards: { player: TEST_HERO_DATA, computer: TEST_HERO_DATA_2 },
+});
+const round = (...winners) => ({
+  result: null,
+  battles: winners.map(battle),
+  isStarted: true,
+  isEnded: true,
+});
+// Player wins 7 battles and 3 rounds, loses 5 battles, 13 draws
+const ROUNDS = [
+  round("player", "player", "computer", "draw", "draw"),
+  round("player", "computer", "computer", "draw", "draw"),
+  round("player", "player", "draw", "draw", "draw"),
+  round("computer", "computer", "draw", "draw", "draw"),
+  round("player", "player", "draw", "draw", "draw"),
+];
+
+const renderSummary = (overrides = {}) => {
+  const onRestart = vi.fn();
+  const startNewGame = vi.fn();
+
+  renderGameContext(<GameSummary onRestart={onRestart} />, {
+    providerProps: {
+      value: {
+        ...TEST_GAME_CONTEXT,
+        isGameOver: true,
+        rounds: ROUNDS,
+        sides: {
+          player: { ...TEST_GAME_CONTEXT.sides.player, score: 7 },
+          computer: { ...TEST_GAME_CONTEXT.sides.computer, score: 5 },
+        },
+        startNewGame,
+        ...overrides,
+      },
+    },
+    withRouter: true,
+  });
+
+  return { onRestart, startNewGame };
 };
 
-const mockCloseHandler = vi.fn();
+test("Should render the result banner with the final score", () => {
+  renderSummary();
 
-TEST_END_GAME_ROUNDS[0].battles[0] = {
-  winner: "draw",
-  cards: { player: TEST_HERO_DATA, computer: TEST_HERO_DATA },
-};
-
-TEST_GAME_CONTEXT.rounds = TEST_END_GAME_ROUNDS;
-
-test("Should not render the dialog", () => {
-  renderGameContext(<GameSummary isOpen={false} onClose={mockCloseHandler} />, {
-    providerProps: TEST_GAME_CTX,
-    withRouter: false,
-  });
-
-  const title = screen.queryByText(/game summary/i);
-
-  expect(title).not.toBeInTheDocument();
-});
-
-test("Should render the dialog, title and close button", () => {
-  renderGameContext(<GameSummary isOpen={true} onClose={mockCloseHandler} />, {
-    providerProps: TEST_GAME_CTX,
-    withRouter: false,
-  });
-
-  const title = screen.getByText(/game summary/i);
-  const closeBtn = screen.getByRole("button", {
-    name: /close/i,
-  });
-
-  expect(title).toBeInTheDocument();
-  expect(closeBtn).toBeInTheDocument();
-});
-
-test("Should render the sides boards correctly", () => {
-  TEST_GAME_CONTEXT.sides.computer.score = 6;
-  TEST_GAME_CONTEXT.sides.player.score = 7;
-
-  renderGameContext(<GameSummary isOpen={true} onClose={mockCloseHandler} />, {
-    providerProps: TEST_GAME_CTX,
-    withRouter: false,
-  });
-
-  const computerLogo = screen.getByRole("img", {
-    name: TEST_GAME_CONTEXT.sides.computer.type,
-  });
-  const playerLogo = screen.getByRole("img", {
-    name: TEST_GAME_CONTEXT.sides.player.type,
-  });
-  const computerName = screen.getByText(TEST_GAME_CONTEXT.sides.computer.name);
-  const playerName = screen.getByText(TEST_GAME_CONTEXT.sides.player.name);
-  const computerScore = screen.getByText(
-    TEST_GAME_CONTEXT.sides.computer.score
+  expect(screen.getByText("FINAL RESULT · 5 ROUNDS")).toBeInTheDocument();
+  expect(
+    screen.getByRole("heading", { level: 1, name: GAME_VICTORY_TITLE })
+  ).toHaveFocus();
+  expect(screen.getByTestId("final-score")).toHaveTextContent(
+    "5test user 2 · Villains–7test user 1 · Heroes"
   );
-  const playerScore = screen.getByText(TEST_GAME_CONTEXT.sides.player.score);
-
-  expect(computerLogo).toBeInTheDocument();
-  expect(playerLogo).toBeInTheDocument();
-  expect(computerName).toBeInTheDocument();
-  expect(playerName).toBeInTheDocument();
-  expect(computerScore).toBeInTheDocument();
-  expect(playerScore).toBeInTheDocument();
 });
 
-test("Should render the computer and player cards in round 1", () => {
-  renderGameContext(<GameSummary isOpen={true} onClose={mockCloseHandler} />, {
-    providerProps: TEST_GAME_CTX,
-    withRouter: false,
-  });
+test("Should render the match stats", () => {
+  renderSummary();
 
-  const cardTitles = screen.getAllByText(TEST_HERO_DATA.name);
-  const cardImages = screen.getAllByRole("img", { name: TEST_HERO_DATA.name });
+  const tiles = screen.getAllByTestId("stat-tile").map((t) => t.textContent);
 
-  expect(cardTitles).toHaveLength(10);
-  expect(cardImages).toHaveLength(10);
+  expect(tiles).toEqual([
+    "7Battles you won",
+    "5Battles you lost",
+    "13Draws",
+    "3Rounds you won",
+  ]);
 });
 
-test("Should render all the round wrappers", () => {
-  renderGameContext(<GameSummary isOpen={true} onClose={mockCloseHandler} />, {
-    providerProps: TEST_GAME_CTX,
-    withRouter: false,
-  });
+test("Should render every round with its battles", () => {
+  renderSummary();
 
-  for (let i = 0; i < 5; i++) {
-    const roundTitle = screen.getByText(`Round ${i + 1}`);
+  for (let i = 1; i <= 5; i++) {
+    const section = screen.getByRole("region", { name: `Round ${i}` });
 
-    expect(roundTitle).toBeInTheDocument();
+    expect(within(section).getAllByTestId("battle-tile")).toHaveLength(5);
   }
 });
 
-test("Should call the correct function when click the close button", () => {
-  renderGameContext(<GameSummary isOpen={true} onClose={mockCloseHandler} />, {
-    providerProps: TEST_GAME_CTX,
-    withRouter: false,
-  });
+test("Should start a rematch keeping the sides", () => {
+  const { onRestart, startNewGame } = renderSummary();
 
-  const closeBtn = screen.getByRole("button", {
-    name: /close/i,
-  });
+  fireEvent.click(screen.getAllByRole("button", { name: /rematch/i })[0]);
 
-  expect(closeBtn).toBeInTheDocument();
+  expect(startNewGame).toHaveBeenCalledWith(true);
+  expect(onRestart).toHaveBeenCalledTimes(1);
+});
 
-  fireEvent.click(closeBtn);
+test("Should start a new game from side selection", () => {
+  const { onRestart, startNewGame } = renderSummary();
 
-  expect(mockCloseHandler).toHaveBeenCalledTimes(1);
+  fireEvent.click(screen.getAllByRole("button", { name: /new game/i })[0]);
+
+  expect(startNewGame).toHaveBeenCalledWith();
+  expect(onRestart).toHaveBeenCalledTimes(1);
+});
+
+test("Should link home", () => {
+  renderSummary();
+
+  screen
+    .getAllByRole("link", { name: /home/i })
+    .forEach((link) => expect(link).toHaveAttribute("href", "/"));
 });

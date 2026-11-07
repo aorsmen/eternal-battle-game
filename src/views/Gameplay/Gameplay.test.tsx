@@ -1,60 +1,85 @@
 // @ts-nocheck
-import { renderWithProviders } from "../../__fixtures__/renderWithProviders";
-import { screen, fireEvent, within } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { renderGameContext } from "@/__fixtures__/renderGameContext";
+import { screen, fireEvent } from "@testing-library/react";
+import { MemoryRouter, Routes, Route } from "react-router";
 import Gameplay from ".";
-import { act } from "react";
+import { TEST_GAME_CONTEXT } from "@/__fixtures__/testData";
 
-test("Should render title and back link in the header", () => {
-  renderWithProviders(<Gameplay />, {
-    withRouter: true,
-  });
+const renderGameplay = (value) => {
+  renderGameContext(
+    <MemoryRouter initialEntries={["/battle/play"]}>
+      <Routes>
+        <Route path="battle">
+          <Route index element={<div>Side selection page</div>} />
+          <Route path="play" element={<Gameplay />} />
+        </Route>
+      </Routes>
+    </MemoryRouter>,
+    { providerProps: { value }, withRouter: false }
+  );
+};
 
-  const container = screen.getByRole("banner", {
-    hidden: true,
-  });
-  const title = within(container).getByText(/battle/i);
-  const backLink = within(container).getByRole("link", {
-    name: /back/i,
-    hidden: true,
-  });
+test("Should render the home link and the game board", () => {
+  renderGameplay(TEST_GAME_CONTEXT);
 
-  expect(title).toBeInTheDocument();
-  expect(backLink).toBeInTheDocument();
+  expect(screen.getByRole("link", { name: /home/i })).toHaveAttribute(
+    "href",
+    "/"
+  );
+  expect(screen.getByRole("main")).toBeInTheDocument();
+  expect(screen.getByTestId("round-indicator")).toBeInTheDocument();
 });
 
-test("Should render the dialog, name input and selections", () => {
-  renderWithProviders(<Gameplay />, {
-    withRouter: true,
+test("Should redirect to side selection when no side is chosen", () => {
+  renderGameplay({
+    ...TEST_GAME_CONTEXT,
+    sides: {
+      ...TEST_GAME_CONTEXT.sides,
+      player: { ...TEST_GAME_CONTEXT.sides.player, type: null },
+    },
   });
 
-  const title = screen.getByText(/player info/i);
-  const hero = screen.getByRole("img", { name: /heroes/i });
-  const villain = screen.getByRole("img", { name: /villains/i });
-  const input = screen.getByRole("textbox", {
-    name: /player name/i,
-  });
-
-  expect(title).toBeInTheDocument();
-  expect(hero).toBeInTheDocument();
-  expect(villain).toBeInTheDocument();
-  expect(input).toBeInTheDocument();
+  expect(screen.getByText(/side selection page/i)).toBeInTheDocument();
 });
 
-test("Should show the error message if name field is empty", () => {
-  renderWithProviders(<Gameplay />, {
-    withRouter: true,
+test("Should show the round summary instead of the board when a round ends", () => {
+  renderGameplay({
+    ...TEST_GAME_CONTEXT,
+    roundWinner: "draw",
+    rounds: [{ result: "draw", battles: [], isStarted: true, isEnded: true }],
   });
 
-  const heroBtn = screen.getByRole("button", {
-    name: /heroes/i,
+  expect(screen.getByTestId("round-summary")).toBeInTheDocument();
+  expect(screen.queryByTestId("round-indicator")).not.toBeInTheDocument();
+});
+
+test("Should keep the board after the last round so the end game can play", () => {
+  const ended = { result: "draw", battles: [], isStarted: true, isEnded: true };
+
+  renderGameplay({
+    ...TEST_GAME_CONTEXT,
+    roundWinner: "draw",
+    rounds: Array(5).fill(ended),
   });
 
-  expect(heroBtn).toBeInTheDocument();
+  expect(screen.queryByTestId("round-summary")).not.toBeInTheDocument();
+  expect(screen.getByTestId("round-indicator")).toBeInTheDocument();
+});
 
-  fireEvent.click(heroBtn);
+test("Should replace the board with the game summary after the end game overlay", () => {
+  const ended = { result: "draw", battles: [], isStarted: true, isEnded: true };
 
-  const errorMsg = screen.getByText(/please enter a proper name/i);
+  renderGameplay({
+    ...TEST_GAME_CONTEXT,
+    isGameOver: true,
+    roundWinner: "draw",
+    rounds: Array(5).fill(ended),
+  });
 
-  expect(errorMsg).toBeInTheDocument();
+  expect(screen.getByTestId("end-game")).toBeInTheDocument();
+
+  fireEvent.click(screen.getByRole("button", { name: /see game summary/i }));
+
+  expect(screen.getByTestId("game-summary")).toBeInTheDocument();
+  expect(screen.queryByTestId("round-indicator")).not.toBeInTheDocument();
 });

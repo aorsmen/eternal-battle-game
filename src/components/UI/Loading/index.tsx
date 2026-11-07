@@ -1,5 +1,4 @@
 import { CircularProgress, Box } from "@mui/material";
-import zIndex from "@mui/material/styles/zIndex";
 
 const Loading = ({
   type = "fixed",

@@ -1,11 +1,11 @@
 // @ts-nocheck
-import { renderGameContext } from "../../../__fixtures__/renderGameContext";
+import { renderGameContext } from "@/__fixtures__/renderGameContext";
 import { screen, fireEvent } from "@testing-library/react";
 import PlayerCardMotion from ".";
 import {
   TEST_GAME_CONTEXT,
   TEST_HERO_DATA,
-} from "../../../__fixtures__/testData";
+} from "@/__fixtures__/testData";
 import { vi } from "vitest";
 
 const TEST_GAME_CTX = {
@@ -32,6 +32,8 @@ test("Should render the player card back", () => {
   const cardBack = screen.getByTestId("player-card-back");
 
   expect(cardBack).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "Reveal card 1" })).toBeInTheDocument();
+  expect(screen.getByText("REVEAL")).toBeInTheDocument();
 });
 
 test("Should render the player card data", () => {
@@ -51,9 +53,7 @@ test("Should render the player card data", () => {
 
   const image = screen.getByAltText(TEST_HERO_DATA.name);
   const name = screen.getByText(TEST_HERO_DATA.name);
-  const type = screen.getByText(
-    TEST_HERO_DATA.biography.alignment === "good" ? "Hero" : "Villain"
-  );
+  const type = screen.getByText(TEST_HERO_DATA.work.occupation);
 
   expect(image).toBeInTheDocument();
   expect(name).toBeInTheDocument();
@@ -101,11 +101,12 @@ test("Should render attack/defense correctly", () => {
     }
   );
 
-  const values = screen.getByText(
-    `${TEST_HERO_DATA.values.attack}/${TEST_HERO_DATA.values.defense}`
+  expect(screen.getByTestId("hero-card-atk")).toHaveTextContent(
+    String(TEST_HERO_DATA.values.attack)
   );
-
-  expect(values).toBeInTheDocument();
+  expect(screen.getByTestId("hero-card-def")).toHaveTextContent(
+    String(TEST_HERO_DATA.values.defense)
+  );
 });
 
 test("Should call the correct function when click the player card", () => {

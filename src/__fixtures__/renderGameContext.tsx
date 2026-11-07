@@ -2,9 +2,9 @@ import { render } from "@testing-library/react";
 import React from "react";
 import { ThemeProvider } from "@mui/material";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
-import { GameContext } from "../store/Game";
-import { GameContextType } from "../types/game.types";
-import { gameTheme } from "../config/general";
+import { GameContext } from "@/store/Game";
+import { GameContextType } from "@/types/game.types";
+import { gameTheme } from "@/config/general";
 import { BrowserRouter } from "react-router";
 
 const queryClient = new QueryClient();

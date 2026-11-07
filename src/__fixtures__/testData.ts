@@ -1,5 +1,5 @@
-import { GameContextType, RoundItemType } from "../types/game.types";
-import { HeroDataType, MainContextType } from "../types/main.types";
+import { GameContextType } from "@/types/game.types";
+import { HeroDataType } from "@/types/main.types";
 
 export const TEST_HERO_DATA: HeroDataType = {
   id: "107",
@@ -183,45 +183,6 @@ export const TEST_GAME_CONTEXT: GameContextType = {
   startNewGame: () => {},
 };
 
-export const TEST_HERO_NODE_DATA = {
-  id: TEST_HERO_DATA.id,
-  data: {
-    label: TEST_HERO_DATA.name,
-    details: TEST_HERO_DATA,
-  },
-  type: "heroNode",
-  positionAbsoluteX: 0,
-  positionAbsoluteY: 0,
-  selected: false,
-  selectable: true,
-  draggable: true,
-  deletable: true,
-  isConnectable: true,
-  dragging: false,
-  zIndex: 0,
-  width: 270,
-  height: 370,
-};
-
-export const TEST_MAIN_CONTEXT: MainContextType = {
-  nodes: [],
-  edges: [],
-  heroesData: [TEST_HERO_DATA],
-  heroesIsLoading: false,
-  nodeDetails: "",
-  compareList: [],
-  onNodesChange: () => {},
-  onEdgesChange: () => {},
-  setReactFlowInstance: () => {},
-  setNodes: () => {},
-  setEdges: () => {},
-  addHero: () => {},
-  removeHero: () => {},
-  setNodeDetails: () => {},
-  getHeroById: () => null,
-  setCompare: () => {},
-};
-
 export const TEST_END_GAME_ROUND = {
   result: null,
   battles: [],
@@ -235,4 +196,25 @@ export const TEST_END_GAME_ROUNDS = [
   TEST_END_GAME_ROUND,
   TEST_END_GAME_ROUND,
   TEST_END_GAME_ROUND,
+];
+
+// Herodex roster data: one hero, one villain, one neutral (left out of the roster)
+export const TEST_VILLAIN_DATA: HeroDataType = {
+  ...TEST_HERO_DATA_2,
+  id: "999",
+  name: "Test Villain",
+  biography: { ...TEST_HERO_DATA_2.biography, alignment: "bad" },
+};
+
+export const TEST_NEUTRAL_DATA = {
+  ...TEST_HERO_DATA,
+  id: "998",
+  name: "Test Neutral",
+  biography: { ...TEST_HERO_DATA.biography, alignment: "neutral" },
+};
+
+export const TEST_HERODEX_DATA = [
+  TEST_HERO_DATA,
+  TEST_VILLAIN_DATA,
+  TEST_NEUTRAL_DATA,
 ];

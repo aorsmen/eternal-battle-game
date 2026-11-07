@@ -1,41 +1,36 @@
-import { useState } from "react";
-import { ButtonBase, useMediaQuery, useTheme } from "@mui/material";
-import Board from "../../components/Herodex/Board";
-import MainContextProvider from "../../store/Main";
-import Header from "../../components/UI/Header";
-import DetailsPanel from "../../components/Herodex/Details/DetailsPanel";
-import ComparePanel from "../../components/Herodex/Compare/ComparePanel";
-import NodeIndex from "../../components/Herodex/NodeIndex";
-import "./Herodex.css";
-import SearchIcon from "@mui/icons-material/Search";
+import { Outlet, useMatch } from "react-router";
+import HerodexContextProvider from "@/store/Herodex";
+import useHerodexContext from "@/hooks/useHerodexContext";
+import CompareTray from "@/components/Herodex/CompareTray";
+import { PageShell } from "./styled.components";
 
-const Herodex = () => {
-  const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up("lg"));
-  const [searchActive, setSearchActive] = useState(false);
+// Reads the context, so it has to sit inside the provider
+const HerodexShell = () => {
+  const { picked, toggleCompare, clearCompare } = useHerodexContext();
+  // The compare page lists the picks itself
+  const onComparePage = useMatch("/herodex/compare") !== null;
 
   return (
-    <MainContextProvider>
-      <Header
-        title="HERODEX"
-        addon={!matches && <NodeIndex isOpen={searchActive} />}
-      >
-        {!matches ? (
-          <ButtonBase
-            sx={{ marginLeft: "auto !important" }}
-            onClick={() => setSearchActive((prev) => !prev)}
-            aria-label="Search"
-          >
-            <SearchIcon fontSize="small" />
-          </ButtonBase>
-        ) : (
-          <NodeIndex isOpen={searchActive} />
-        )}
-      </Header>
-      <Board />
-      <DetailsPanel />
-      <ComparePanel />
-    </MainContextProvider>
+    <PageShell>
+      <Outlet />
+      {picked.length > 0 && !onComparePage && (
+        <CompareTray
+          picked={picked}
+          onRemove={toggleCompare}
+          onClear={clearCompare}
+        />
+      )}
+    </PageShell>
+  );
+};
+
+// Layout for the roster (/herodex) and character pages (/herodex/:id): they
+// share filters and compare picks, and the compare tray sits under both
+const Herodex = () => {
+  return (
+    <HerodexContextProvider>
+      <HerodexShell />
+    </HerodexContextProvider>
   );
 };
 

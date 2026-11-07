@@ -4,16 +4,16 @@ import {
   BattleResultType,
   GameSidesItemType,
   HandSidesType,
-} from "../../types/game.types";
+} from "@/types/game.types";
 import { useQuery } from "@tanstack/react-query";
-import { APIS } from "../../config/api";
-import { HeroDataType } from "../../types/main.types";
-import { sideOptions } from "../../config/game";
+import { APIS } from "@/config/api";
+import { HeroDataType } from "@/types/main.types";
+import { sideOptions } from "@/config/game";
 import {
   calculateSkills,
   calculateValues,
   // getDominantColor,
-} from "../../helpers/hero";
+} from "@/helpers/hero";
 import {
   uniqueNamesGenerator,
   adjectives,
@@ -119,44 +119,34 @@ const GameContextProvider = ({ children }: { children: React.ReactNode }) => {
     if (player && computer) {
       const playerCards = decks[player].filter((card) => !card?.used);
       const computerCards = decks[computer].filter((card) => !card?.used);
-      const pInx = Math.floor(Math.random() * playerCards.length);
-      const cInx = Math.floor(Math.random() * computerCards.length);
-      const pID = playerCards[pInx].id;
-      const cID = computerCards[cInx].id;
-      const pdInx = decks[player].findIndex((c) => c.id === pID);
-      const cdInx = decks[computer].findIndex((c) => c.id === cID);
 
-      setDecks((prev) => {
-        const newDecks = {
-          heroes: [...prev.heroes],
-          villains: [...prev.villains],
-        };
-        newDecks[player][pdInx].used = true;
-        newDecks[computer][cdInx].used = true;
+      // Decks not loaded yet (or used up): the effect retries when they change
+      if (playerCards.length === 0 || computerCards.length === 0) {
+        return;
+      }
 
-        return newDecks;
-      });
+      const pPick = playerCards[Math.floor(Math.random() * playerCards.length)];
+      const cPick =
+        computerCards[Math.floor(Math.random() * computerCards.length)];
+      const pSkills = calculateSkills(pPick.powerstats);
+      const cSkills = calculateSkills(cPick.powerstats);
+      const pCard = { ...pPick, skills: pSkills, values: calculateValues(pSkills) };
+      const cCard = { ...cPick, skills: cSkills, values: calculateValues(cSkills) };
+      const markUsed = (deck: HeroDataType[], id: HeroDataType["id"]) =>
+        deck.map((card) => (card.id === id ? { ...card, used: true } : card));
 
-      playerCards[pInx].skills = calculateSkills(playerCards[pInx].powerstats);
-      playerCards[pInx].values = calculateValues(playerCards[pInx].skills);
-      computerCards[cInx].skills = calculateSkills(
-        computerCards[cInx].powerstats
-      );
-      computerCards[cInx].values = calculateValues(computerCards[cInx].skills);
-
-      // getDominantColor(playerCards[pInx].images.xs)
-      //   .then((color) => {
-      //     if(color){
-      //       const bgColor = color as string;
-      //       playerCards[pInx].bgColor = bgColor;
-      //     }
-      //   })
-      //   .catch((err) => console.error(err));
+      // Copy instead of mutating: deck cards must never be the query cache's
+      // hero objects, or "used" would stick across games
+      setDecks((prev) => ({
+        ...prev,
+        [player]: markUsed(prev[player], pPick.id),
+        [computer]: markUsed(prev[computer], cPick.id),
+      }));
 
       setHands((prev) => {
         return {
-          player: [...prev.player, ...[playerCards[pInx]]],
-          computer: [...prev.computer, ...[computerCards[cInx]]],
+          player: [...prev.player, pCard],
+          computer: [...prev.computer, cCard],
         };
       });
     }
@@ -328,29 +318,40 @@ const GameContextProvider = ({ children }: { children: React.ReactNode }) => {
   const startNewRound = () => {
     setRounds((prev) => {
       const newRounds = [...prev];
-      newRounds[currentRound].isStarted = true;
+      // Copy the round rather than mutate it: round 1 is the object from
+      // initState, and mutating it would mark round 1 of every later game as
+      // already started (so its RoundStartDialog would never open)
+      newRounds[currentRound] = { ...newRounds[currentRound], isStarted: true };
 
       return newRounds;
     });
   };
 
+  // Fresh copies per game so the cached hero data is never marked as used
   const prepareDecks = () => {
-    const heroList = data.filter(
-      (hr: HeroDataType) => hr.biography.alignment === "good"
-    );
-    const villainList = data.filter(
-      (hr: HeroDataType) => hr.biography.alignment === "bad"
-    );
+    const heroList = data
+      .filter((hr: HeroDataType) => hr.biography.alignment === "good")
+      .map((hr: HeroDataType) => ({ ...hr, used: false }));
+    const villainList = data
+      .filter((hr: HeroDataType) => hr.biography.alignment === "bad")
+      .map((hr: HeroDataType) => ({ ...hr, used: false }));
 
     setDecks({ heroes: heroList, villains: villainList });
   };
 
-  const startNewGame = () => {
+  // keepSides: rematch with the same names and sides; otherwise the sides are
+  // cleared and Gameplay sends the player back to side selection
+  const startNewGame = (keepSides = false) => {
     setSides((prev) => {
-      const playerSide = { ...initState.sides.player, name: prev.player.name };
+      const playerSide = {
+        ...initState.sides.player,
+        name: prev.player.name,
+        type: keepSides ? prev.player.type : initState.sides.player.type,
+      };
       const computerSide = {
         ...initState.sides.computer,
         name: prev.computer.name,
+        type: keepSides ? prev.computer.type : initState.sides.computer.type,
       };
 
       return { player: playerSide, computer: computerSide };

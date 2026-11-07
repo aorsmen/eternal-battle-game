@@ -1,87 +1,8 @@
 import {
-  HeroBiographyMapType,
-  HeroAppearanceMapType,
-  HeroStatsMapType,
-  HeroSkillsMapType,
-} from "../types/node.types";
-import {
-  StatGraphDataType,
-  SkillGraphDataType,
   StatsNamesType,
   SkillsType,
   SkillNamesType,
-} from "../types/main.types";
-import {
-  YELLOW_LIGHT,
-  YELLOW_DARK,
-  ORANGE_LIGHT,
-  ORANGE_DARK,
-  BROWN_LIGHT,
-  BROWN_DARK,
-  BG_COLOR,
-} from "./general";
-
-export const heroDataMap = {
-  biography: {
-    title: "Biography",
-    rows: [{ label: "Full Name", key: "fullName" }],
-  },
-};
-
-export const biographyDataMap: HeroBiographyMapType = {
-  title: "Biography",
-  rows: [
-    { label: "Full Name", key: "fullName" },
-    { label: "Place of Birth", key: "placeOfBirth" },
-    { label: "Alignment", key: "alignment" },
-    { label: "Publisher", key: "publisher" },
-    { label: "Alter Egos", key: "alterEgos" },
-    { label: "Aliases", key: "aliases" },
-  ],
-};
-
-export const appearanceDataMap: HeroAppearanceMapType = {
-  title: "Appearance",
-  rows: [
-    { label: "Race", key: "race" },
-    { label: "Gender", key: "gender" },
-    { label: "Hair Color", key: "hairColor" },
-    { label: "Eye Color", key: "eyeColor" },
-    { label: "Height", key: "height" },
-    { label: "Weight", key: "weight" },
-  ],
-};
-
-export const statsDataMap: HeroStatsMapType = {
-  title: "Stats",
-  rows: [
-    { label: "Intelligence", key: "intelligence" },
-    { label: "Strength", key: "strength" },
-    { label: "Speed", key: "speed" },
-    { label: "Durability", key: "durability" },
-    { label: "Power", key: "power" },
-    { label: "Combat", key: "combat" },
-  ],
-};
-
-export const skillsDataMap: HeroSkillsMapType = {
-  title: "Skills",
-  rows: [
-    { label: "Attack Power", key: "attackPower" },
-    { label: "Acuracy", key: "acuracy" },
-    { label: "Attack Speed", key: "attackSpeed" },
-    { label: "Defense Rating", key: "defenseRating" },
-    { label: "Evasion", key: "evasion" },
-    { label: "Survival", key: "survival" },
-  ],
-};
-
-export const graphColors = [
-  { fill: YELLOW_LIGHT, stroke: YELLOW_DARK },
-  { fill: ORANGE_LIGHT, stroke: ORANGE_DARK },
-  { fill: BROWN_LIGHT, stroke: BROWN_DARK },
-  { fill: "#1c1b19", stroke: BG_COLOR },
-];
+} from "@/types/main.types";
 
 export const heroStats: { [key in StatsNamesType]: string } = {
   intelligence: "Intelligence",
@@ -101,14 +22,6 @@ export const heroSkills: { [key in SkillNamesType]: string } = {
   survival: "Survival",
 };
 
-export const statGraphKeys: (keyof StatGraphDataType)[] = ["a", "b", "c", "d"];
-export const skillGraphKeys: (keyof SkillGraphDataType)[] = [
-  "a",
-  "b",
-  "c",
-  "d",
-];
-
 export const heroSkillModel: SkillsType = {
   attackPower: 0,
   acuracy: 0,
@@ -117,3 +30,38 @@ export const heroSkillModel: SkillsType = {
   evasion: 0,
   survival: 0,
 };
+
+export const COMPARE_LIMIT = 4;
+
+// Divides evenly into the 2, 3, 4 and 6 column grid layouts
+export const HERODEX_PAGE_SIZE = 24;
+
+// Swatch colours for the hair/eye colour names used in the hero data
+export const APPEARANCE_COLORS: { [key in string]: string } = {
+  amber: "#FFB000",
+  auburn: "#8C3B1F",
+  black: "#111318",
+  blond: "#E8C872",
+  blue: "#3D7BE0",
+  bown: "#7A4A2A",
+  brown: "#7A4A2A",
+  brownn: "#7A4A2A",
+  gold: "#D4A72C",
+  green: "#3FBF6B",
+  grey: "#8B93A1",
+  hazel: "#8E7240",
+  indigo: "#4B4FC4",
+  magenta: "#D63AAF",
+  orange: "#F08A24",
+  pink: "#F28CB8",
+  purple: "#8E5BD9",
+  red: "#D9363E",
+  silver: "#C0C6CF",
+  "strawberry blond": "#E3A06B",
+  violet: "#7F4FD0",
+  white: "#F2F4F7",
+  yellow: "#F2C94C",
+};
+
+// Reference figure for the height comparison: 6 ft
+export const REFERENCE_HEIGHT_CM = 183;

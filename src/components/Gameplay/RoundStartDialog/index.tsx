@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Dialog, Typography } from "@mui/material";
-import useGameContext from "../../../hooks/useGameContext";
-import { TITLE_STYLE, YELLOW } from "../../../config/general";
+import useGameContext from "@/hooks/useGameContext";
+import { EB_BACKDROP, EB_DISPLAY_FONT, EB_GOLD } from "@/config/general";
 
 const RoundStartDialog = ({
   isOpen,
@@ -28,18 +28,28 @@ const RoundStartDialog = ({
   return (
     <Dialog
       open={isOpen}
-      maxWidth="xs"
+      maxWidth="sm"
       fullWidth
       sx={{
-        "& .MuiPaper-root": { background: "transparent", boxShadow: "none" },
+        "& .MuiPaper-root": {
+          background: "transparent",
+          boxShadow: "none",
+          overflow: "hidden",
+        },
+        "& .MuiBackdrop-root": { backgroundColor: EB_BACKDROP },
       }}
     >
       <Typography
         sx={{
-          ...TITLE_STYLE,
+          fontFamily: EB_DISPLAY_FONT,
+          fontWeight: 400,
+          fontSize: "clamp(56px, 10vw, 96px)",
+          lineHeight: 1,
+          letterSpacing: "0.02em",
+          textTransform: "uppercase",
           textAlign: "center",
-          color: YELLOW,
-          fontSize: "48px",
+          color: EB_GOLD,
+          margin: 0,
         }}
       >
         {roundText}
