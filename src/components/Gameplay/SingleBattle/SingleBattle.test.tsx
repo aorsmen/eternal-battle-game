@@ -160,3 +160,43 @@ test("Should render the player and computer card attack/defense correctly", asyn
     expect(computerValues).toBeInTheDocument();
   });
 });
+
+const endedBattle = (result) => ({ result, isEnded: true, isDead: false });
+const renderWithResult = (playerResult, computerResult) =>
+  renderGameContext(<SingleBattle index={0} />, {
+    providerProps: {
+      value: {
+        ...TEST_GAME_CONTEXT,
+        battles: {
+          player: { 0: endedBattle(playerResult) },
+          computer: { 0: endedBattle(computerResult) },
+        },
+      },
+    },
+    withRouter: false,
+  });
+
+test("Should show VS before the battle is revealed", () => {
+  renderGameContext(<SingleBattle index={0} />, {
+    providerProps: TEST_GAME_CTX,
+    withRouter: false,
+  });
+
+  expect(screen.getByTestId("battle-chip")).toHaveTextContent("VS");
+});
+
+test("Should credit the winning side in the battle chip", () => {
+  // player = heroes, computer = villains in the test context
+  renderWithResult("lose", "win");
+
+  const chip = screen.getByTestId("battle-chip");
+
+  expect(chip).toHaveTextContent("+1 Villains");
+  expect(chip).toHaveAttribute("data-variant", "villains");
+});
+
+test("Should show a draw in the battle chip", () => {
+  renderWithResult("draw", "draw");
+
+  expect(screen.getByTestId("battle-chip")).toHaveTextContent("Draw");
+});

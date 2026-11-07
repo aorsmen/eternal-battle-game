@@ -4,8 +4,8 @@ import { useNavigate } from "react-router";
 import useGameContext from "@/hooks/useGameContext";
 import { GameSideTypes } from "@/types/game.types";
 import { EB_BG, EB_BODY_FONT, EB_TEXT, EB_VILLAIN_LIGHT } from "@/config/general";
+import TopBar from "@/components/UI/TopBar";
 import {
-  TopBar,
   PageHeader,
   NameField,
   SideCard,

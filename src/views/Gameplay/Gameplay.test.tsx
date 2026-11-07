@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { renderGameContext } from "@/__fixtures__/renderGameContext";
-import { screen, within } from "@testing-library/react";
+import { screen, fireEvent } from "@testing-library/react";
 import { MemoryRouter, Routes, Route } from "react-router";
 import Gameplay from ".";
 import { TEST_GAME_CONTEXT } from "@/__fixtures__/testData";
@@ -19,20 +19,15 @@ const renderGameplay = (value) => {
   );
 };
 
-test("Should render title and back link in the header", () => {
+test("Should render the home link and the game board", () => {
   renderGameplay(TEST_GAME_CONTEXT);
 
-  const container = screen.getByRole("banner", {
-    hidden: true,
-  });
-  const title = within(container).getByText(/battle/i);
-  const backLink = within(container).getByRole("link", {
-    name: /back/i,
-    hidden: true,
-  });
-
-  expect(title).toBeInTheDocument();
-  expect(backLink).toBeInTheDocument();
+  expect(screen.getByRole("link", { name: /home/i })).toHaveAttribute(
+    "href",
+    "/"
+  );
+  expect(screen.getByRole("main")).toBeInTheDocument();
+  expect(screen.getByTestId("round-indicator")).toBeInTheDocument();
 });
 
 test("Should redirect to side selection when no side is chosen", () => {
@@ -45,4 +40,46 @@ test("Should redirect to side selection when no side is chosen", () => {
   });
 
   expect(screen.getByText(/side selection page/i)).toBeInTheDocument();
+});
+
+test("Should show the round summary instead of the board when a round ends", () => {
+  renderGameplay({
+    ...TEST_GAME_CONTEXT,
+    roundWinner: "draw",
+    rounds: [{ result: "draw", battles: [], isStarted: true, isEnded: true }],
+  });
+
+  expect(screen.getByTestId("round-summary")).toBeInTheDocument();
+  expect(screen.queryByTestId("round-indicator")).not.toBeInTheDocument();
+});
+
+test("Should keep the board after the last round so the end game can play", () => {
+  const ended = { result: "draw", battles: [], isStarted: true, isEnded: true };
+
+  renderGameplay({
+    ...TEST_GAME_CONTEXT,
+    roundWinner: "draw",
+    rounds: Array(5).fill(ended),
+  });
+
+  expect(screen.queryByTestId("round-summary")).not.toBeInTheDocument();
+  expect(screen.getByTestId("round-indicator")).toBeInTheDocument();
+});
+
+test("Should replace the board with the game summary after the end game overlay", () => {
+  const ended = { result: "draw", battles: [], isStarted: true, isEnded: true };
+
+  renderGameplay({
+    ...TEST_GAME_CONTEXT,
+    isGameOver: true,
+    roundWinner: "draw",
+    rounds: Array(5).fill(ended),
+  });
+
+  expect(screen.getByTestId("end-game")).toBeInTheDocument();
+
+  fireEvent.click(screen.getByRole("button", { name: /see game summary/i }));
+
+  expect(screen.getByTestId("game-summary")).toBeInTheDocument();
+  expect(screen.queryByTestId("round-indicator")).not.toBeInTheDocument();
 });

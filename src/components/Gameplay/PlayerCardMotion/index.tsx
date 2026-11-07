@@ -1,12 +1,12 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useLayoutEffect } from "react";
 import { useMediaQuery, useTheme } from "@mui/material";
 import gsap from "gsap";
 import { CardSpot } from "./styled.components";
 import HeroCard from "@/components/HeroCard";
-import { HeroCardBack } from "./styled.components";
+import HeroCardBack from "@/components/HeroCardBack";
 import useGameContext from "@/hooks/useGameContext";
 import { BattleResultType } from "@/types/game.types";
-import { VILLAIN_RED_DARK, HERO_BLUE_DARK } from "@/config/general";
+import { EB_GOLD, EB_GOLD_GLOW } from "@/config/general";
 
 const PlayerCardMotion = ({
   index,
@@ -26,27 +26,41 @@ const PlayerCardMotion = ({
   const windowSize = matches ? "lg" : "sm";
   const { hands } = useGameContext();
   const data = hands.player[index];
-  const alignment = data.biography.alignment;
   const cardRef = useRef(null);
 
-  useEffect(() => {
-    gsap.fromTo(
+  // Layout effect, not a plain effect: cards are dealt by the store's draw
+  // effects, and React paints those renders before running useEffect, so the
+  // card would flash at its final spot before jumping off-screen to fly in
+  useLayoutEffect(() => {
+    const tween = gsap.fromTo(
       cardRef.current,
       { y: "100vw" },
       { y: 0, duration: 1, ease: "power3.out" }
     );
+
+    return () => {
+      tween.kill();
+    };
   }, []);
 
   useEffect(() => {
     if (result === "win") {
-      gsap.to(cardRef.current, {
-        boxShadow: `0 0 5px 5px ${
-          alignment === "good" ? HERO_BLUE_DARK : VILLAIN_RED_DARK
-        }`,
-        duration: 0.5,
-        repeat: 3,
-        yoyo: true,
-      });
+      gsap
+        .timeline()
+        .fromTo(
+          cardRef.current,
+          { boxShadow: `0 0 0 0px ${EB_GOLD}, 0 0 0px ${EB_GOLD_GLOW}` },
+          {
+            boxShadow: `0 0 0 3px ${EB_GOLD}, 0 0 28px ${EB_GOLD_GLOW}`,
+            duration: 0.5,
+            repeat: 3,
+            yoyo: true,
+          }
+        )
+        .to(cardRef.current, {
+          boxShadow: `0 0 0 3px ${EB_GOLD}, 0 0 0px ${EB_GOLD_GLOW}`,
+          duration: 0.3,
+        });
     } else if (result === "lose") {
       const tl = gsap.timeline();
       tl.to(cardRef.current, {
@@ -76,12 +90,18 @@ const PlayerCardMotion = ({
     <CardSpot
       data-testid="player-card-wrapper"
       ref={cardRef}
+      aria-label={!isRevealed ? `Reveal card ${index + 1}` : undefined}
       onClick={!isFlipped ? flipCard : undefined}
     >
       {isRevealed ? (
         <HeroCard data={data} />
       ) : (
-        <HeroCardBack alignment={data.biography.alignment} size={windowSize} />
+        <HeroCardBack
+          alignment={data.biography.alignment}
+          size={windowSize}
+          testId="player-card-back"
+          revealable={!isFlipped}
+        />
       )}
     </CardSpot>
   );

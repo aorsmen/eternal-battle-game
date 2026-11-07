@@ -1,18 +1,55 @@
 import { useEffect, useRef } from "react";
-import {
-  Typography,
-  Stack,
-  Box,
-  Paper,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import { Box, useMediaQuery, useTheme } from "@mui/material";
 import gsap from "gsap";
+import { SCORE_ANIMATION_MS } from "@/config/game";
 import { GameSidesItemType, HandSidesType } from "@/types/game.types";
-import { TITLE_STYLE, VILLAIN_RED, HERO_BLUE } from "@/config/general";
-import heroIcon from "@/assets/hero-icon.png";
-import villainIcon from "@/assets/villain-icon.png";
-import { LazyLoadImage } from "react-lazy-load-image-component";
+import {
+  EB_DISPLAY_FONT,
+  EB_HERO_BORDER,
+  EB_HERO_LIGHT,
+  EB_LABEL_FONT,
+  EB_SURFACE,
+  EB_TEXT_SUBTLE,
+  EB_VILLAIN_BORDER,
+  EB_VILLAIN_LIGHT,
+  EB_VILLAIN_TEXT_MUTED,
+} from "@/config/general";
+
+const SideIcon = ({ isHero, size }: { isHero: boolean; size: number }) =>
+  isHero ? (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={EB_HERO_LIGHT}
+      strokeWidth="1.8"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      style={{ flex: "none" }}
+    >
+      <path d="M2 10c0-2.2 1.8-3.5 4-3.5h12c2.2 0 4 1.3 4 3.5 0 4-2.8 7-5.8 7-2 0-3-2-4.2-2s-2.2 2-4.2 2C4.8 17 2 14 2 10z" />
+      <ellipse cx="7.5" cy="11" rx="2" ry="1.4" />
+      <ellipse cx="16.5" cy="11" rx="2" ry="1.4" />
+    </svg>
+  ) : (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={EB_VILLAIN_LIGHT}
+      strokeWidth="1.8"
+      strokeLinejoin="round"
+      strokeLinecap="round"
+      aria-hidden="true"
+      style={{ flex: "none" }}
+    >
+      <path d="M3 3l4 5h10l4-5v7.5C21 16.5 16.8 21 12 21S3 16.5 3 10.5z" />
+      <path d="M7.5 12.5l3 1.2" />
+      <path d="M16.5 12.5l-3 1.2" />
+    </svg>
+  );
 
 const SideBoard = ({
   side,
@@ -27,9 +64,10 @@ const SideBoard = ({
   const matches = useMediaQuery(theme.breakpoints.up("lg"));
   const { name, score, type, lastScore } = data;
   const pointRef = useRef(null);
-  const color = type === "heroes" ? HERO_BLUE : VILLAIN_RED;
+  const isHero = type === "heroes";
+  const isPlayer = side === "player";
+  const accent = isHero ? EB_HERO_LIGHT : EB_VILLAIN_LIGHT;
   const scoreHasChanged = lastScore !== null && lastScore > 0;
-  const avatarSize = matches ? 42 : 24;
 
   useEffect(() => {
     if (scoreHasChanged) {
@@ -40,7 +78,7 @@ const SideBoard = ({
           x: side === "computer" ? 48 : -48,
           scale: 1.5,
           opacity: 0,
-          duration: 1.5,
+          duration: SCORE_ANIMATION_MS / 1000,
           ease: "power2.out",
           onComplete,
         }
@@ -48,62 +86,97 @@ const SideBoard = ({
     }
   }, [onComplete, scoreHasChanged, side]);
 
+  if (type === null) {
+    return null;
+  }
+
   return (
-    <>
-      {type !== null && (
-        <Paper
+    <Box
+      data-testid={`${side}-plate`}
+      sx={{
+        display: "flex",
+        flexDirection: isPlayer ? "row-reverse" : "row",
+        alignItems: "center",
+        gap: matches ? "14px" : "8px",
+        padding: matches ? "12px 18px" : "8px 10px",
+        minWidth: 0,
+        borderRadius: matches ? "14px" : "10px",
+        backgroundColor: EB_SURFACE,
+        border: `2px solid ${isHero ? EB_HERO_BORDER : EB_VILLAIN_BORDER}`,
+        textAlign: isPlayer ? "right" : "left",
+      }}
+    >
+      <SideIcon isHero={isHero} size={matches ? 36 : 24} />
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          minWidth: 0,
+          flex: 1,
+        }}
+      >
+        <Box
+          component="span"
+          title={name}
           sx={{
-            padding: matches ? "10px 15px" : "5px 8px",
-            border: `1px solid ${matches ? color : "transparent"}`,
-            backgroundColor: "transparent",
+            fontFamily: EB_LABEL_FONT,
+            fontWeight: 700,
+            fontSize: matches ? "22px" : "16px",
+            letterSpacing: "0.04em",
+            lineHeight: 1.15,
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
           }}
-          elevation={0}
         >
-          <Stack
-            direction={side === "computer" ? "row" : "row-reverse"}
-            spacing={2}
-            sx={{ alignItems: "center" }}
-          >
-            <Stack
-              direction={side === "computer" ? "row" : "row-reverse"}
-              spacing={2}
-              sx={{ alignItems: "center" }}
-            >
-              <Box
-                sx={{ flex: `0 0 ${avatarSize}px`, height: `${avatarSize}px` }}
-              >
-                <LazyLoadImage
-                  alt={type || ""}
-                  height={avatarSize}
-                  width={avatarSize}
-                  src={type === "heroes" ? heroIcon : villainIcon}
-                />
-              </Box>
-              <Typography
-                sx={{ ...TITLE_STYLE, fontSize: matches ? "24px" : "16px" }}
-                color="primary"
-              >
-                {name}
-              </Typography>
-            </Stack>
-            <Typography sx={{ fontSize: matches ? "28px" : "18px", color }}>
-              {score}
-            </Typography>
-            {scoreHasChanged && (
-              <Typography
-                ref={pointRef}
-                sx={{
-                  fontSize: matches ? "24px" : "16px",
-                  color,
-                  fontWeight: "bold",
-                  pointerEvents: "none",
-                }}
-              >{`+${lastScore}`}</Typography>
-            )}
-          </Stack>
-        </Paper>
-      )}
-    </>
+          {name}
+        </Box>
+        <Box
+          component="span"
+          sx={{
+            fontSize: matches ? "13px" : "11px",
+            color: isHero ? EB_TEXT_SUBTLE : EB_VILLAIN_TEXT_MUTED,
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+          }}
+        >
+          {`${isHero ? "Heroes" : "Villains"} · ${isPlayer ? "You" : "Opponent"}`}
+        </Box>
+      </Box>
+      <Box sx={{ position: "relative", flex: "none" }}>
+        <Box
+          component="span"
+          data-testid={`${side}-score`}
+          sx={{
+            fontFamily: EB_DISPLAY_FONT,
+            fontSize: matches ? "40px" : "26px",
+            lineHeight: 1,
+            color: accent,
+          }}
+        >
+          {score}
+        </Box>
+        {scoreHasChanged && (
+          <Box
+            ref={pointRef}
+            component="span"
+            aria-hidden="true"
+            sx={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              fontFamily: EB_DISPLAY_FONT,
+              fontSize: matches ? "28px" : "18px",
+              lineHeight: 1,
+              whiteSpace: "nowrap",
+              color: accent,
+              pointerEvents: "none",
+            }}
+          >{`+${lastScore}`}</Box>
+        )}
+      </Box>
+    </Box>
   );
 };
 

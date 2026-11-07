@@ -15,12 +15,7 @@ import {
   TEST_END_GAME_ROUND,
 } from "@/__fixtures__/testData";
 import { vi } from "vitest";
-import {
-  ROUND_DRAW_MESSAGE,
-  ROUND_WIN_MESSAGE,
-  GAME_DRAW_MESSAGE,
-  GAME_WIN_MESSAGE,
-} from "@/config/game";
+import { GAME_DRAW_MESSAGE, GAME_DRAW_TITLE } from "@/config/game";
 
 const TEST_GAME_CTX = {
   value: TEST_GAME_CONTEXT,
@@ -174,76 +169,6 @@ test("Should render the player and computer card attack/defense correctly", asyn
   });
 });
 
-test("Should not render the dialog", () => {
-  renderGameContext(<GameBoard />, {
-    providerProps: TEST_GAME_CTX,
-    withRouter: false,
-  });
-
-  const title = screen.queryByText(/round result/i);
-
-  expect(title).not.toBeInTheDocument();
-});
-
-test("Should render the dialog, content and draw message correctly", () => {
-  renderGameContext(<GameBoard />, {
-    providerProps: {
-      value: {
-        ...TEST_GAME_CTX.value,
-        roundWinner: "draw",
-        rounds: [{ ...TEST_END_GAME_ROUND, isEnded: false }],
-      },
-    },
-    withRouter: false,
-  });
-
-  const title = screen.getByText(/round result/i);
-  const nextBtn = screen.getByRole("button", {
-    name: /next round/i,
-  });
-  const drawMsg = screen.getByText(ROUND_DRAW_MESSAGE);
-
-  expect(title).toBeInTheDocument();
-  expect(nextBtn).toBeInTheDocument();
-  expect(drawMsg).toBeInTheDocument();
-});
-
-test("Should render the dialog, content and win message correctly", () => {
-  renderGameContext(<GameBoard />, {
-    providerProps: { value: { ...TEST_GAME_CTX.value, roundWinner: "player" } },
-    withRouter: false,
-  });
-
-  const title = screen.getByText(/round result/i);
-  const nextBtn = screen.getByRole("button", {
-    name: /next round/i,
-  });
-  const winMsg = screen.getByText(
-    ROUND_WIN_MESSAGE.replace("{WINNER}", TEST_GAME_CONTEXT.sides.player.name)
-  );
-
-  expect(title).toBeInTheDocument();
-  expect(nextBtn).toBeInTheDocument();
-  expect(winMsg).toBeInTheDocument();
-});
-
-test("Should call the correct function when click the button", () => {
-  renderGameContext(<GameBoard />, {
-    providerProps: { value: { ...TEST_GAME_CTX.value, roundWinner: "player" } },
-    withRouter: false,
-  });
-
-  const nextBtn = screen.getByRole("button", {
-    name: /next round/i,
-  });
-
-  expect(nextBtn).toBeInTheDocument();
-
-  fireEvent.click(nextBtn);
-
-  expect(mockNextRoundHandler).toHaveBeenCalledTimes(1);
-});
-
 test("Should render player info in the side board", () => {
   renderGameContext(<GameBoard />, {
     providerProps: {
@@ -253,8 +178,9 @@ test("Should render player info in the side board", () => {
           ...TEST_GAME_CTX.value.sides,
           player: {
             name: "test user",
-            type: "hero",
+            type: "heroes",
             score: 99,
+            lastScore: null,
           },
         },
       },
@@ -264,161 +190,128 @@ test("Should render player info in the side board", () => {
 
   const name = screen.getByText("test user");
   const score = screen.getByText(99);
-  const avatar = screen.getByRole("img", {
-    name: "hero",
-  });
+  const subtitle = screen.getByText("Heroes · You");
 
   expect(name).toBeInTheDocument();
   expect(score).toBeInTheDocument();
-  expect(avatar).toBeInTheDocument();
+  expect(subtitle).toBeInTheDocument();
 });
 
-test("Should render the end game animation and the draw end message correctly", () => {
+test("Should render the round indicator, battle chip and round footer", () => {
+  renderGameContext(<GameBoard />, {
+    providerProps: TEST_GAME_CTX,
+    withRouter: false,
+  });
+
+  expect(screen.getByTestId("round-indicator")).toBeInTheDocument();
+  expect(screen.getByTestId("battle-chip")).toHaveTextContent("VS");
+  expect(screen.getByTestId("round-score")).toBeInTheDocument();
+});
+
+test("Should render the end game overlay with the stalemate result", () => {
   renderGameContext(<GameBoard />, {
     providerProps: {
       value: {
         ...TEST_GAME_CTX.value,
-        sides: {
-          ...TEST_GAME_CTX.value.sides,
-          player: { ...TEST_GAME_CTX.value.sides.player, score: 0 },
+        isGameOver: true,
+        rounds: TEST_END_GAME_ROUNDS,
+      },
+    },
+    withRouter: false,
+  });
+
+  expect(
+    screen.getByRole("heading", { name: GAME_DRAW_TITLE })
+  ).toBeInTheDocument();
+  expect(screen.getByText(GAME_DRAW_MESSAGE)).toBeInTheDocument();
+});
+
+test("Should ask for the game summary from the end game overlay", () => {
+  const onShowGameSummary = vi.fn();
+
+  renderGameContext(<GameBoard onShowGameSummary={onShowGameSummary} />, {
+    providerProps: {
+      value: {
+        ...TEST_GAME_CTX.value,
+        isGameOver: true,
+        rounds: TEST_END_GAME_ROUNDS,
+      },
+    },
+    withRouter: false,
+  });
+
+  fireEvent.click(screen.getByRole("button", { name: /see game summary/i }));
+
+  expect(onShowGameSummary).toHaveBeenCalledTimes(1);
+});
+
+describe("Scoreless round", () => {
+  const ENDED_ROUND = {
+    result: "draw",
+    battles: [],
+    isStarted: true,
+    isEnded: true,
+  };
+  const renderBoard = (overrides) => {
+    const completeRound = vi.fn();
+    renderGameContext(<GameBoard />, {
+      providerProps: {
+        value: {
+          ...TEST_GAME_CTX.value,
+          roundWinner: null,
+          currentRound: 0,
+          rounds: [ENDED_ROUND],
+          sides: {
+            player: { ...TEST_GAME_CTX.value.sides.player, lastScore: 0 },
+            computer: { ...TEST_GAME_CTX.value.sides.computer, lastScore: 0 },
+          },
+          completeRound,
+          ...overrides,
         },
-        isGameOver: true,
-        rounds: TEST_END_GAME_ROUNDS,
       },
-    },
-    withRouter: false,
+      withRouter: false,
+    });
+    return completeRound;
+  };
+
+  beforeEach(() => vi.useFakeTimers());
+  afterEach(() => vi.useRealTimers());
+
+  test("Should complete an all-draws round after the score pause", () => {
+    const completeRound = renderBoard();
+
+    vi.advanceTimersByTime(1499);
+    expect(completeRound).not.toHaveBeenCalled();
+
+    vi.advanceTimersByTime(1);
+    expect(completeRound).toHaveBeenCalledTimes(1);
   });
 
-  const title = screen.getByText(/draw!/i);
-  const endMsg = screen.getByText(GAME_DRAW_MESSAGE);
+  test("Should not complete a round that is still being played", () => {
+    const completeRound = renderBoard({
+      rounds: [{ ...ENDED_ROUND, isEnded: false }],
+    });
 
-  expect(title).toBeInTheDocument();
-  expect(endMsg).toBeInTheDocument();
-});
+    vi.advanceTimersByTime(5000);
+    expect(completeRound).not.toHaveBeenCalled();
+  });
 
-// test("Should render the end game animation, icon and victory end message correctly", () => {
-//   renderGameContext(<GameBoard />, {
-//     providerProps: {
-//       value: {
-//         ...TEST_GAME_CTX.value,
-//         sides: {
-//           ...TEST_GAME_CTX.value.sides,
-//           player: { ...TEST_GAME_CTX.value.sides.player, score: 1 },
-//         },
-//         isGameOver: true,
-//         rounds: TEST_END_GAME_ROUNDS,
-//       },
-//     },
-//     withRouter: false,
-//   });
+  test("Should not complete a round that already has a winner", () => {
+    const completeRound = renderBoard({ roundWinner: "draw" });
 
-//   const title = screen.getByText(/victory!/i);
-//   const endMsg = screen.getByText(
-//     GAME_WIN_MESSAGE.replace("{WINNER}", TEST_GAME_CONTEXT.sides.player.name)
-//   );
-//   const icon = screen.getAllByRole("img", {
-//     name: TEST_GAME_CONTEXT.sides.player.type,
-//   });
+    vi.advanceTimersByTime(5000);
+    expect(completeRound).not.toHaveBeenCalled();
+  });
 
-//   expect(title).toBeInTheDocument();
-//   expect(endMsg).toBeInTheDocument();
-//   expect(icon).toHaveLength(2);
-// });
-
-// test("Should render the end game animation, icon and failed end message correctly", () => {
-//   renderGameContext(<GameBoard />, {
-//     providerProps: {
-//       value: {
-//         ...TEST_GAME_CTX.value,
-//         sides: {
-//           ...TEST_GAME_CTX.value.sides,
-//           computer: { ...TEST_GAME_CTX.value.sides.computer, score: 1 },
-//         },
-//         isGameOver: true,
-//         rounds: TEST_END_GAME_ROUNDS,
-//       },
-//     },
-//     withRouter: false,
-//   });
-
-//   const title = screen.getByText(/defeat!/i);
-//   const endMsg = screen.getByText(
-//     GAME_WIN_MESSAGE.replace("{WINNER}", TEST_GAME_CONTEXT.sides.computer.name)
-//   );
-//   const icon = screen.getAllByRole("img", {
-//     name: TEST_GAME_CONTEXT.sides.computer.type,
-//   });
-
-//   expect(title).toBeInTheDocument();
-//   expect(endMsg).toBeInTheDocument();
-//   expect(icon).toHaveLength(2);
-// });
-
-test("Should not render the game summary dialog", () => {
-  renderGameContext(<GameBoard />, {
-    providerProps: {
-      value: {
-        ...TEST_GAME_CTX.value,
-        isGameOver: true,
-        rounds: TEST_END_GAME_ROUNDS,
+  test("Should leave scored rounds to the score animation", () => {
+    const completeRound = renderBoard({
+      sides: {
+        player: { ...TEST_GAME_CTX.value.sides.player, lastScore: 2 },
+        computer: { ...TEST_GAME_CTX.value.sides.computer, lastScore: 0 },
       },
-    },
-    withRouter: false,
+    });
+
+    vi.advanceTimersByTime(1500);
+    expect(completeRound).not.toHaveBeenCalled();
   });
-
-  const title = screen.queryByRole("heading", { name: /game summary/i });
-
-  expect(title).not.toBeInTheDocument();
 });
-
-test("Should render the game summary dialog, title and close button", () => {
-  renderGameContext(<GameBoard />, {
-    providerProps: {
-      value: {
-        ...TEST_GAME_CTX.value,
-        isGameOver: true,
-        rounds: TEST_END_GAME_ROUNDS,
-      },
-    },
-    withRouter: false,
-  });
-
-  const summaryBtn = screen.getByRole("button", { name: /game summary/i });
-
-  expect(summaryBtn).toBeInTheDocument();
-
-  fireEvent.click(summaryBtn);
-
-  const title = screen.getByRole("heading", { name: /game summary/i });
-  const closeBtn = screen.getByRole("button", {
-    name: /close/i,
-  });
-
-  expect(title).toBeInTheDocument();
-  expect(closeBtn).toBeInTheDocument();
-});
-
-// test("Should render all the round wrappers in the game summary", () => {
-//   renderGameContext(<GameBoard />, {
-//     providerProps: {
-//       value: {
-//         ...TEST_GAME_CTX.value,
-//         isGameOver: true,
-//         rounds: TEST_END_GAME_ROUNDS,
-//       },
-//     },
-//     withRouter: false,
-//   });
-
-//   const summaryBtn = screen.getByRole("button", { name: /game summary/i });
-
-//   expect(summaryBtn).toBeInTheDocument();
-
-//   fireEvent.click(summaryBtn);
-
-//   for (let i = 0; i < 5; i++) {
-//     const roundTitle = screen.getByText(`Round ${i + 1}`);
-
-//     expect(roundTitle).toBeInTheDocument();
-//   }
-// });

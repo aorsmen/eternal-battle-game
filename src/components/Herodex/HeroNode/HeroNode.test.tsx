@@ -29,9 +29,7 @@ test("Should render card data correctly", () => {
 
   const image = screen.getByAltText(TEST_HERO_DATA.name);
   const name = screen.getByText(TEST_HERO_DATA.name);
-  const type = screen.getByText(
-    TEST_HERO_DATA.biography.alignment === "good" ? "Hero" : "Villain"
-  );
+  const type = screen.getByText(TEST_HERO_DATA.work.occupation);
 
   expect(image).toBeInTheDocument();
   expect(name).toBeInTheDocument();
@@ -93,11 +91,12 @@ test("Should render attack/defense correctly", () => {
     withRouter: false,
   });
 
-  const values = screen.getByText(
-    `${TEST_HERO_DATA.values.attack}/${TEST_HERO_DATA.values.defense}`
+  expect(screen.getByTestId("hero-card-atk")).toHaveTextContent(
+    String(TEST_HERO_DATA.values.attack)
   );
-
-  expect(values).toBeInTheDocument();
+  expect(screen.getByTestId("hero-card-def")).toHaveTextContent(
+    String(TEST_HERO_DATA.values.defense)
+  );
 });
 
 test("Should call the details handler with the node id when click the details button", () => {

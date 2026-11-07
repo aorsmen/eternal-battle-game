@@ -1,17 +1,28 @@
-import { Stack, Typography, Box, Paper, Fade } from "@mui/material";
+import { useState } from "react";
+import { Stack, Typography, Box, Fade } from "@mui/material";
 import {
-  YELLOW_LIGHT,
-  YELLOW_DARK,
-  HERO_BLUE_DARK,
-  VILLAIN_RED_DARK,
+  EB_BG,
+  EB_HERO,
+  EB_VILLAIN,
+  EB_TEXT,
+  EB_TEXT_SUBTLE,
+  EB_CARD_FACE,
+  EB_HERO_ART_BG,
+  EB_VILLAIN_ART_BG,
+  EB_LABEL_FONT,
+  EB_DISPLAY_FONT,
+  EB_BODY_FONT,
   HERO_CARD_WIDTH,
   HERO_CARD_HEIGHT,
 } from "@/config/general";
-import { LazyLoadImage } from "react-lazy-load-image-component";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import CloseIcon from "@mui/icons-material/Close";
-import heroIcon from "@/assets/hero-dark-mini-icon.png";
-import villainIcon from "@/assets/villain-dark-mini-icon.png";
+
+type Alignment = "good" | "bad";
+type Size = "sm" | "lg";
+
+const accentColor = (alignment: Alignment) =>
+  alignment === "good" ? EB_HERO : EB_VILLAIN;
 
 export const HeroCardWrapper = ({
   children,
@@ -19,8 +30,8 @@ export const HeroCardWrapper = ({
   size,
 }: {
   children: React.ReactNode;
-  alignment: "good" | "bad";
-  size: "sm" | "lg";
+  alignment: Alignment;
+  size: Size;
 }) => {
   return (
     <Stack
@@ -28,11 +39,16 @@ export const HeroCardWrapper = ({
         width: `${HERO_CARD_WIDTH[size]}px`,
         height: `${HERO_CARD_HEIGHT[size]}px`,
         position: "relative",
-        backgroundColor: YELLOW_DARK,
-        borderRadius: "5px",
-        border: `10px solid ${
-          alignment === "good" ? HERO_BLUE_DARK : VILLAIN_RED_DARK
-        }`,
+        boxSizing: "border-box",
+        overflow: "hidden",
+        gap: size === "lg" ? "8px" : "5px",
+        padding: size === "lg" ? "10px" : "6px",
+        backgroundColor: EB_CARD_FACE,
+        borderRadius: size === "lg" ? "14px" : "10px",
+        border: `2px solid ${accentColor(alignment)}`,
+        color: EB_TEXT,
+        fontFamily: EB_BODY_FONT,
+        textAlign: "left",
       }}
     >
       {children}
@@ -40,104 +56,223 @@ export const HeroCardWrapper = ({
   );
 };
 
-export const HeroCardHeader = ({ name }: { name: string }) => {
+export const HeroCardName = ({ name, size }: { name: string; size: Size }) => {
   return (
-    <Stack
-      direction="row"
+    <Typography
+      component="span"
+      title={name}
       sx={{
-        alignItems: "center",
-        justifyContent: "flex-start",
-        padding: "5px 10px",
-        borderRadius: "5px 5px 0 0",
+        fontFamily: EB_LABEL_FONT,
+        fontWeight: 700,
+        fontSize: size === "lg" ? "19px" : "13px",
+        textTransform: "uppercase",
+        letterSpacing: "0.03em",
+        lineHeight: 1.1,
+        whiteSpace: "nowrap",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
       }}
     >
-      <Typography sx={{ fontSize: "14px" }}>{name}</Typography>
-    </Stack>
+      {name}
+    </Typography>
   );
 };
 
-export const HeroCardBody = ({ children }: { children: React.ReactNode }) => {
-  return <Stack sx={{ paddingInline: "10px", flex: 1 }}>{children}</Stack>;
-};
+const FILL_IMAGE = {
+  position: "absolute",
+  inset: 0,
+  display: "block",
+  width: "100%",
+  height: "100%",
+  objectFit: "cover",
+  objectPosition: "top",
+} as const;
 
-export const HeroCardFooter = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <Stack
-      direction="row"
-      sx={{ alignItems: "center", justifyContent: "flex-end", padding: "10px" }}
-    >
-      {children}
-    </Stack>
-  );
-};
-
-export const InfoWrapper = ({ text }: { text: string }) => {
-  return (
-    <Box
-      sx={{
-        borderRadius: "4px",
-        backgroundColor: YELLOW_LIGHT,
-        flex: 1,
-        padding: "5px",
-      }}
-    >
-      {text !== "-" && (
-        <Typography
-          sx={{
-            fontSize: "12px",
-            fontStyle: "italic",
-            overflow: "auto",
-            height: "60px",
-            textAlign: "center",
-            scrollbarColor: `${YELLOW_DARK} ${YELLOW_LIGHT}`,
-            scrollbarWidth: "thin",
-          }}
-        >
-          {text}
-        </Typography>
-      )}
-    </Box>
-  );
-};
-
-export const ImageWrapper = ({
+export const HeroCardArt = ({
   alt,
   src,
   plc,
-  size,
+  alignment,
 }: {
   alt: string;
   src: string;
   plc: string;
-  size: "sm" | "lg";
+  alignment: Alignment;
 }) => {
-  const height = size === "lg" ? 345 : 213;
-  const width = size === "lg" ? 230 : 142;
+  // Track which src has loaded, so a new src starts hidden again
+  const [loadedSrc, setLoadedSrc] = useState<string | null>(null);
+  const isLoaded = loadedSrc === src;
+
   return (
     <Box
       sx={{
+        flex: 1,
+        minHeight: 0,
+        borderRadius: "9px",
         overflow: "hidden",
-        borderRadius: "5px",
-        height: size === "lg" ? "175px" : "128px",
         position: "relative",
+        backgroundColor:
+          alignment === "good" ? EB_HERO_ART_BG : EB_VILLAIN_ART_BG,
+      }}
+    >
+      {/* Small image shows at once; both images fill the box absolutely, so
+          neither can change its size while loading */}
+      <Box component="img" src={plc} alt="" aria-hidden="true" sx={FILL_IMAGE} />
+      <Box
+        component="img"
+        src={src}
+        alt={alt}
+        loading="lazy"
+        decoding="async"
+        data-loaded={isLoaded}
+        onLoad={() => setLoadedSrc(src)}
+        sx={{
+          ...FILL_IMAGE,
+          opacity: isLoaded ? 1 : 0,
+          transition: "opacity 0.3s ease",
+        }}
+      />
+    </Box>
+  );
+};
+
+export const HeroCardRole = ({ text, size }: { text: string; size: Size }) => {
+  return (
+    <Typography
+      component="span"
+      title={text}
+      sx={{
+        fontFamily: EB_BODY_FONT,
+        fontSize: size === "lg" ? "13px" : "11px",
+        lineHeight: 1.25,
+        color: EB_TEXT_SUBTLE,
+        whiteSpace: "nowrap",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+      }}
+    >
+      {text}
+    </Typography>
+  );
+};
+
+const AttackIcon = ({ size }: { size: number }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.4"
+    strokeLinecap="round"
+    aria-hidden="true"
+  >
+    <path d="M14.5 17.5L3 6V3h3l11.5 11.5M13 19l6-6M16 16l4 4M19 21l2-2" />
+  </svg>
+);
+
+const DefenseIcon = ({ size }: { size: number }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.4"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+  </svg>
+);
+
+const StatTile = ({
+  label,
+  value,
+  icon,
+  size,
+}: {
+  label: string;
+  value: number;
+  icon: React.ReactNode;
+  size: Size;
+}) => {
+  return (
+    <Box
+      sx={{
+        backgroundColor: EB_BG,
+        borderRadius: size === "lg" ? "8px" : "6px",
+        padding: size === "lg" ? "5px 8px" : "3px 6px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        gap: "4px",
+        minWidth: 0,
       }}
     >
       <Box
+        component="small"
         sx={{
-          position: "absolute",
-          left: 0,
-          top: "50%",
-          transform: "translateY(-50%)",
+          fontFamily: EB_LABEL_FONT,
+          fontWeight: 700,
+          fontSize: size === "lg" ? "12px" : "10px",
+          letterSpacing: "0.1em",
+          color: EB_TEXT_SUBTLE,
+          display: "flex",
+          alignItems: "center",
+          gap: "4px",
         }}
       >
-        <LazyLoadImage
-          alt={alt}
-          height={height}
-          src={src}
-          width={width}
-          placeholderSrc={plc}
-        />
+        {icon}
+        {label}
       </Box>
+      <Box
+        component="b"
+        data-testid={`hero-card-${label.toLowerCase()}`}
+        sx={{
+          fontFamily: EB_DISPLAY_FONT,
+          fontWeight: 400,
+          fontSize: size === "lg" ? "28px" : "18px",
+          lineHeight: 1,
+          color: "#FFFFFF",
+        }}
+      >
+        {value}
+      </Box>
+    </Box>
+  );
+};
+
+export const HeroCardStats = ({
+  attack,
+  defense,
+  size,
+}: {
+  attack: number;
+  defense: number;
+  size: Size;
+}) => {
+  const iconSize = size === "lg" ? 12 : 10;
+  return (
+    <Box
+      sx={{
+        display: "grid",
+        gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+        gap: size === "lg" ? "6px" : "4px",
+      }}
+    >
+      <StatTile
+        label="ATK"
+        value={attack}
+        icon={<AttackIcon size={iconSize} />}
+        size={size}
+      />
+      <StatTile
+        label="DEF"
+        value={defense}
+        icon={<DefenseIcon size={iconSize} />}
+        size={size}
+      />
     </Box>
   );
 };
@@ -146,7 +281,6 @@ export const ImagePreview = ({
   alt,
   src,
   show,
-  alignment,
   size,
   onOpen,
   onClose,
@@ -154,85 +288,64 @@ export const ImagePreview = ({
   alt: string;
   src: string;
   show: boolean;
-  alignment: "good" | "bad";
-  size: "sm" | "lg";
+  size: Size;
   onOpen: () => void;
   onClose: () => void;
 }) => {
-  const height = size === "lg" ? "350px" : "230px";
-  const width = size === "lg" ? "250px" : "162px";
+  const top = size === "lg" ? "40px" : "26px";
+  const right = size === "lg" ? "16px" : "10px";
   return (
     <>
-      <VisibilityIcon
-        fontSize="small"
+      <Box
         className="nodrag"
+        onClick={onOpen}
         sx={{
           position: "absolute",
-          top: "7px",
-          right: "10px",
-          color: alignment === "good" ? HERO_BLUE_DARK : VILLAIN_RED_DARK,
+          top,
+          right,
+          width: size === "lg" ? "28px" : "22px",
+          height: size === "lg" ? "28px" : "22px",
+          borderRadius: "999px",
+          backgroundColor: "rgb(14 17 22 / 70%)",
+          color: EB_TEXT,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          cursor: "pointer",
+          zIndex: 1,
         }}
-        onClick={onOpen}
-      />
+      >
+        <VisibilityIcon sx={{ fontSize: size === "lg" ? "18px" : "14px" }} />
+      </Box>
       {show && (
         <Fade in={show} className="nodrag">
-          <Paper
+          <Box
             sx={{
-              height,
-              width,
               position: "absolute",
-              left: 0,
-              top: 0,
+              inset: 0,
               overflow: "hidden",
+              backgroundColor: EB_BG,
+              zIndex: 2,
             }}
             onClick={onClose}
             onMouseLeave={onClose}
           >
-            <LazyLoadImage alt={alt} height={height} src={src} width={width} />
+            <Box component="img" src={src} alt={alt} sx={FILL_IMAGE} />
             <CloseIcon
               fontSize="small"
-              sx={{ position: "absolute", top: "10px", right: "10px" }}
+              sx={{
+                position: "absolute",
+                top: "10px",
+                right: "10px",
+                color: EB_TEXT,
+                backgroundColor: "rgb(14 17 22 / 70%)",
+                borderRadius: "999px",
+                padding: "2px",
+              }}
             />
-          </Paper>
+          </Box>
         </Fade>
       )}
     </>
-  );
-};
-
-export const AlignmentWrapper = ({
-  alignment,
-  isMobile,
-}: {
-  alignment: "good" | "bad";
-  isMobile: boolean;
-}) => {
-  const bottom = isMobile
-    ? {
-        borderBottom: `1px solid rgb(0 0 0 / 40%)`,
-      }
-    : {};
-  return (
-    <Stack
-      direction="row"
-      sx={{
-        alignItems: "center",
-        justifyContent: "space-between",
-        height: "32px",
-        ...bottom,
-      }}
-    >
-      <Typography sx={{ fontSize: "12px" }}>
-        {`${alignment === "good" ? "Hero" : "Villain"}`}
-      </Typography>
-      <Box sx={{ width: "24px", height: "24px" }}>
-        <LazyLoadImage
-          alt={alignment === "good" ? "Hero" : "Villain"}
-          height={24}
-          width={24}
-          src={alignment === "good" ? heroIcon : villainIcon}
-        />
-      </Box>
-    </Stack>
   );
 };

@@ -4,7 +4,6 @@ import "@splidejs/react-splide/css";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import useGameContext from "@/hooks/useGameContext";
 import SingleBattle from "@/components/Gameplay/SingleBattle";
-import NextRoundDialog from "@/components/Gameplay/NextRoundDialog";
 import RoundStartDialog from "@/components/Gameplay/RoundStartDialog";
 import { HERO_CARD_WIDTH } from "@/config/general";
 
@@ -12,7 +11,6 @@ const SideHands = () => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("lg"));
   const { hands, roundWinner, rounds, currentRound, sides } = useGameContext();
-  const [nextIsOpen, setNextIsOpen] = useState(false);
   const [startIsOpen, setStartIsOpen] = useState(false);
 
   const startRoundHandler = useCallback(() => {
@@ -20,23 +18,25 @@ const SideHands = () => {
   }, []);
 
   useEffect(() => {
-    if (roundWinner !== null) {
-      if (rounds && rounds.length < 5) {
-        setNextIsOpen(true);
-      }
-    } else {
-      if (
-        rounds.length > 0 &&
-        !rounds[currentRound].isStarted &&
-        sides.player.type !== null
-      ) {
-        setStartIsOpen(true);
-      }
+    if (
+      roundWinner === null &&
+      rounds.length > 0 &&
+      !rounds[currentRound].isStarted &&
+      sides.player.type !== null
+    ) {
+      setStartIsOpen(true);
     }
   }, [roundWinner, rounds, currentRound, sides.player.type]);
 
   return (
-    <Box sx={{ marginBlock: matches ? "30px" : "10px" }}>
+    <Box
+      component="section"
+      aria-label="Battlefield"
+      sx={{
+        // Let the win ring and reveal glow show outside the carousel track
+        "& .splide__track": { overflow: matches ? "visible" : "hidden" },
+      }}
+    >
       <Splide
         options={{
           perMove: 1,
@@ -54,10 +54,6 @@ const SideHands = () => {
           </SplideSlide>
         ))}
       </Splide>
-      <NextRoundDialog
-        isOpen={nextIsOpen}
-        onClose={() => setNextIsOpen(false)}
-      />
       <RoundStartDialog isOpen={startIsOpen} onClose={startRoundHandler} />
     </Box>
   );

@@ -1,46 +1,73 @@
 // @ts-nocheck
 import { renderGameContext } from "@/__fixtures__/renderGameContext";
-import { screen } from "@testing-library/react";
+import { screen, within } from "@testing-library/react";
 import GameSummaryRounds from ".";
 import {
   TEST_GAME_CONTEXT,
   TEST_HERO_DATA,
-  TEST_END_GAME_ROUNDS,
+  TEST_HERO_DATA_2,
 } from "@/__fixtures__/testData";
 
-const TEST_GAME_CTX = {
-  value: TEST_GAME_CONTEXT,
+// player = heroes, computer = villains
+const battle = (winner) => ({
+  winner,
+  cards: { player: TEST_HERO_DATA, computer: TEST_HERO_DATA_2 },
+});
+const ROUND = {
+  result: "player",
+  battles: [
+    battle("player"),
+    battle("computer"),
+    battle("player"),
+    battle("draw"),
+    battle("draw"),
+  ],
+  isStarted: true,
+  isEnded: true,
 };
 
-TEST_END_GAME_ROUNDS[0].battles[0] = {
-  winner: "draw",
-  cards: { player: TEST_HERO_DATA, computer: TEST_HERO_DATA },
-};
-
-TEST_GAME_CONTEXT.rounds = TEST_END_GAME_ROUNDS;
-
-test("Should render the computer and player cards in round 1", () => {
+const renderRounds = (rounds) =>
   renderGameContext(<GameSummaryRounds />, {
-    providerProps: TEST_GAME_CTX,
+    providerProps: { value: { ...TEST_GAME_CONTEXT, rounds } },
     withRouter: false,
   });
 
-  const cardTitles = screen.getAllByText(TEST_HERO_DATA.name);
-  const cardImages = screen.getAllByRole("img", { name: TEST_HERO_DATA.name });
+test("Should render a section per round with its tally", () => {
+  renderRounds([ROUND, ROUND]);
 
-  expect(cardTitles).toHaveLength(10);
-  expect(cardImages).toHaveLength(10);
+  const round1 = screen.getByRole("region", { name: "Round 1" });
+
+  expect(screen.getByRole("region", { name: "Round 2" })).toBeInTheDocument();
+  expect(within(round1).getByTestId("round-tally")).toHaveTextContent(
+    "Villains 1 – 2 Heroes"
+  );
 });
 
-test("Should render all the round wrappers", () => {
-  renderGameContext(<GameSummaryRounds />, {
-    providerProps: TEST_GAME_CTX,
-    withRouter: false,
-  });
+test("Should render both cards with ATK / DEF in each tile", () => {
+  renderRounds([ROUND]);
 
-  for (let i = 0; i < 5; i++) {
-    const roundTitle = screen.getByText(`Round ${i + 1}`);
+  const tile = screen.getAllByTestId("battle-tile")[0];
+  const { attack, defense } = TEST_HERO_DATA.values;
 
-    expect(roundTitle).toBeInTheDocument();
-  }
+  expect(within(tile).getByText(TEST_HERO_DATA.name)).toBeInTheDocument();
+  expect(within(tile).getByText(TEST_HERO_DATA_2.name)).toBeInTheDocument();
+  expect(
+    within(tile).getAllByText(`${attack} / ${defense}`).length
+  ).toBeGreaterThan(0);
+});
+
+test("Should tag each battle with its result", () => {
+  renderRounds([ROUND]);
+
+  const tags = screen
+    .getAllByTestId("battle-tile")
+    .map((tile) => tile.lastChild.textContent);
+
+  expect(tags).toEqual([
+    "+1 Heroes",
+    "+1 Villains",
+    "+1 Heroes",
+    "Draw",
+    "Draw",
+  ]);
 });

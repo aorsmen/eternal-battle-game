@@ -1,77 +1,97 @@
-import { styled, Box, Stack, Typography, ButtonBase } from "@mui/material";
-import { TITLE_STYLE, YELLOW, HEADER_HEIGHT } from "@/config/general";
-import CloseIcon from "@mui/icons-material/Close";
+import { Box, Stack } from "@mui/material";
+import {
+  EB_DISPLAY_FONT,
+  EB_LABEL_FONT,
+  EB_SURFACE,
+  EB_TEXT_MUTED,
+  EB_TEXT_SUBTLE,
+} from "@/config/general";
 
-export const GameSummaryBody = styled(Stack)(({ theme }) => ({
-  position: "relative",
-  width: "100%",
-  [theme.breakpoints.up("lg")]: {
-    height: `calc(100dvh - ${HEADER_HEIGHT.lg}px)`,
-  },
-  [theme.breakpoints.down("lg")]: {
-    height: `calc(100dvh - ${HEADER_HEIGHT.sm}px)`,
-  },
-  overflow: "hidden",
-}));
-
-export const GameSummaryHeader = ({
-  title,
-  onClose,
-  size,
+export const FinalScore = ({
+  value,
+  label,
+  color,
 }: {
-  title: string;
-  onClose: () => void;
-  size: "sm" | "lg";
+  value: number;
+  label: string;
+  color: string;
 }) => {
   return (
-    <Stack
-      direction="row"
-      sx={{
-        alignItems: "center",
-        justifyContent: "center",
-        paddingInline: "20px",
-        height: `${HEADER_HEIGHT[size]}px`,
-        background: YELLOW,
-        position: "relative",
-      }}
-    >
-      <Typography
-        variant="h1"
-        sx={{ fontSize: size === "sm" ? "18px" : "24px", ...TITLE_STYLE }}
+    <Stack sx={{ alignItems: "center", minWidth: 0 }}>
+      <Box
+        component="span"
+        sx={{
+          fontFamily: EB_DISPLAY_FONT,
+          fontSize: { xs: "56px", sm: "72px" },
+          lineHeight: 1,
+          color,
+        }}
       >
-        {title}
-      </Typography>
-      <ButtonBase
-        aria-label="Close"
-        onClick={onClose}
-        sx={{ position: "absolute", top: "calc(50% - 12px)", right: "20px" }}
+        {value}
+      </Box>
+      <Box
+        component="span"
+        sx={{
+          fontSize: "15px",
+          color: EB_TEXT_MUTED,
+          maxWidth: "200px",
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+        }}
       >
-        <CloseIcon fontSize="small" />
-      </ButtonBase>
+        {label}
+      </Box>
     </Stack>
   );
 };
 
-export const GameSummaryBoards = ({
-  computerBoard,
-  playerBoard,
-  isMobile,
+export const StatTile = ({
+  value,
+  label,
+  color,
 }: {
-  computerBoard: React.ReactNode;
-  playerBoard: React.ReactNode;
-  isMobile: boolean;
+  value: number;
+  label: string;
+  color: string;
 }) => {
   return (
     <Stack
-      direction="row"
+      data-testid="stat-tile"
       sx={{
-        justifyContent: "space-between",
-        paddingInline: isMobile ? 0 : "20px",
-        marginBottom: isMobile ? "10px" : "20px",
+        alignItems: "center",
+        gap: "4px",
+        padding: "16px 12px",
+        borderRadius: "14px",
+        backgroundColor: EB_SURFACE,
+        textAlign: "center",
       }}
     >
-      <Box sx={{ flex: 1, maxWidth: "45%" }}>{computerBoard}</Box>
-      <Box sx={{ flex: 1, maxWidth: "45%" }}>{playerBoard}</Box>
+      <Box
+        component="b"
+        sx={{
+          fontFamily: EB_DISPLAY_FONT,
+          fontWeight: 400,
+          fontSize: "40px",
+          lineHeight: 1,
+          color,
+        }}
+      >
+        {value}
+      </Box>
+      <Box
+        component="span"
+        sx={{
+          fontFamily: EB_LABEL_FONT,
+          fontWeight: 700,
+          fontSize: "14px",
+          letterSpacing: "0.14em",
+          textTransform: "uppercase",
+          color: EB_TEXT_SUBTLE,
+        }}
+      >
+        {label}
+      </Box>
     </Stack>
   );
 };
