@@ -4,7 +4,6 @@ import {
   EB_BORDER,
   EB_GOLD,
   EB_GOLD_LIGHT,
-  EB_HERO,
   EB_HERO_BG,
   EB_HERO_LIGHT,
   EB_LABEL_FONT,
@@ -12,7 +11,6 @@ import {
   EB_SURFACE,
   EB_TEXT,
   EB_TEXT_MUTED,
-  EB_VILLAIN,
   EB_VILLAIN_BG,
   EB_VILLAIN_LIGHT,
 } from "@/config/general";
@@ -46,31 +44,6 @@ export const HomeBackground = () => {
         }}
       />
     </>
-  );
-};
-
-export const VersusEmblem = () => {
-  return (
-    <svg width="112" height="112" viewBox="0 0 112 112" aria-hidden="true">
-      <path d="M56 6 L106 56 L56 106 Z" fill={EB_VILLAIN} />
-      <path d="M56 6 L6 56 L56 106 Z" fill={EB_HERO} />
-      <path
-        d="M56 6 L106 56 L56 106 L6 56 Z"
-        fill="none"
-        stroke={EB_GOLD}
-        strokeWidth="4"
-      />
-      <text
-        x="56"
-        y="70"
-        textAnchor="middle"
-        fontFamily={EB_DISPLAY_FONT}
-        fontSize="38"
-        fill={EB_BG}
-      >
-        VS
-      </text>
-    </svg>
   );
 };
 

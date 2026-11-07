@@ -3,6 +3,7 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router";
 import { gameTheme } from "./config/general";
+import UpdatePrompt from "./components/UI/UpdatePrompt";
 
 const Home = lazy(() => import("./views/Home"));
 const Herodex = lazy(() => import("./views/Herodex"));
@@ -37,6 +38,7 @@ const App = () => {
           </Routes>
         </BrowserRouter>
       </QueryClientProvider>
+      <UpdatePrompt />
     </ThemeProvider>
   );
 };

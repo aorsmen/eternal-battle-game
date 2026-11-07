@@ -2,7 +2,6 @@ import { Stack, Box } from "@mui/material";
 import { Link } from "react-router";
 import {
   HomeBackground,
-  VersusEmblem,
   HomeTitle,
   HomeTagline,
   HomeMenu,
@@ -10,6 +9,7 @@ import {
 } from "./styled.components";
 import { EB_BG, EB_BODY_FONT, EB_TEXT, EB_TEXT_MUTED } from "@/config/general";
 import { HOME_PAGE_CONTENT } from "@/config/pages";
+import VersusEmblem from "@/components/UI/VersusEmblem";
 
 const Home = () => {
   return (

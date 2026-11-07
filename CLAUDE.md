@@ -77,3 +77,4 @@ Key points:
 
 - `html/` is a committed production build snapshot (not the Vite output dir, which is `build/`). Don't edit it by hand.
 - `vite.config.ts` defines `process.env` as `{}` to satisfy libraries that reference it.
+- **PWA:** `vite-plugin-pwa` in `vite.config.ts` generates the manifest and a Workbox service worker (`build/sw.js`). It precaches the app shell, icons and `public/data/*.json`, and runtime-caches Google Fonts and hero images. The service worker only runs in a production build (`npm run build && npm run preview`). `registerType: "prompt"`: `components/UI/UpdatePrompt` asks before loading a new version. Tests that render it mock `virtual:pwa-register/react`. Icons live in `public/` (`favicon.svg`/`.ico`, `apple-touch-icon.png`, `icon-192/512.png`, `icon-maskable-512.png`).
